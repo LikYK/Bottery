@@ -81,7 +81,12 @@ int32 ABotteryCharacter::GetMaxHealth()
 	return HealthComponent->GetMaxHealth();
 }
 
-void ABotteryCharacter::BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth)
+float ABotteryCharacter::GetHealthBarFill()
 {
-	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
+	return HealthComponent->GetHealthBarFill();
+}
+
+void ABotteryCharacter::BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth, float Fill)
+{
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth, Fill);
 }

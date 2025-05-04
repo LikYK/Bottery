@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	int32 GetMaxHealth();
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthBarFill();
+
 	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthChangedSignature OnHealthChanged;
 
@@ -55,6 +58,6 @@ protected:
 
 private:
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth);
+	void BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth, float Fill);
 };
 
