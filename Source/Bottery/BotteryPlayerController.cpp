@@ -26,6 +26,16 @@ void ABotteryPlayerController::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	// Create and add HUD widget
+	if (HUDWidgetClass)
+	{
+		HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
+		if (HUDWidgetInstance)
+		{
+			HUDWidgetInstance->AddToViewport();
+		}
+	}
 }
 
 void ABotteryPlayerController::SetupInputComponent()

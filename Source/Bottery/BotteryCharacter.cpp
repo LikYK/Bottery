@@ -43,9 +43,45 @@ ABotteryCharacter::ABotteryCharacter()
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	// Add a default health component
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+}
+
+void ABotteryCharacter::BeginPlay()
+{
+	// Call the base class  
+	Super::BeginPlay();
+
+	// Link the OnHealthChange broadcast
+	// this is done so that the delegate can be bound to from outside without directly accessing health component
+	if (HealthComponent)
+	{
+		HealthComponent->OnHealthChanged.AddUniqueDynamic(this, &ABotteryCharacter::BroadcastHealthChangedInternal);
+	}
 }
 
 void ABotteryCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+}
+
+void ABotteryCharacter::TakeDamage(int32 Damage)
+{
+	HealthComponent->TakeDamage(Damage);
+}
+
+int32 ABotteryCharacter::GetCurrentHealth()
+{
+	return HealthComponent->GetCurrentHealth();
+}
+
+int32 ABotteryCharacter::GetMaxHealth()
+{
+	return HealthComponent->GetMaxHealth();
+}
+
+void ABotteryCharacter::BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth)
+{
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 }

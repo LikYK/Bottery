@@ -2,6 +2,7 @@
 
 
 #include "DestroyOnOverlapComponent.h"
+#include "BotteryCharacter.h"
 
 // Sets default values for this component's properties
 UDestroyOnOverlapComponent::UDestroyOnOverlapComponent()
@@ -49,6 +50,12 @@ void UDestroyOnOverlapComponent::DestroyOnOverlap(UPrimitiveComponent* Overlappe
 			// Only destroy when the other actor is controlled by player
 			if (AActor* Owner = GetOwner())
 			{
+				// Health comp test
+				if (ABotteryCharacter* Character = Cast<ABotteryCharacter>(Pawn))
+				{
+					Character->TakeDamage(10);
+				}
+
 				Owner->Destroy();
 			}
 		}
