@@ -51,11 +51,11 @@ void UHealthComponent::TakeDamage(float Damage)
 		// broadcast death event here
 	}
 
-	if (GEngine)
+	/*if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
 			FString::Printf(TEXT("Damage: %f, %f"), GetCurrentHealth(), GetMaxHealth())
 		);
-	}
+	}*/
 }
 
