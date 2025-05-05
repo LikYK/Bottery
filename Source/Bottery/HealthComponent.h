@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnHealthChangedSignature, int, CurrentHealth, int, MaxHealth, float, Fill);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, CurrentHealth, float, MaxHealth);
 
 UCLASS( ClassGroup=(Health), meta=(BlueprintSpawnableComponent) )
 class BOTTERY_API UHealthComponent : public UActorComponent
@@ -25,24 +25,21 @@ protected:
 
 public:	
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	int32 GetCurrentHealth();
+	float GetCurrentHealth();
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	int32 GetMaxHealth();
-
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetHealthBarFill();
+	float GetMaxHealth();
 
 	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthChangedSignature OnHealthChanged;
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void TakeDamage(int32 Damage);
+	void TakeDamage(float Damage);
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	int32 MaxHealth = 100;
+	float MaxHealth = 100;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Health")
-	int32 CurrentHealth = 0;
+	float CurrentHealth;
 };

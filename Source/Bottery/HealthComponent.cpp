@@ -10,7 +10,7 @@ UHealthComponent::UHealthComponent()
 	// off to improve performance if you don't need them.
 	//PrimaryComponentTick.bCanEverTick = true;
 
-	
+	CurrentHealth = MaxHealth;
 }
 
 // Called when the game starts
@@ -29,29 +29,21 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-int32 UHealthComponent::GetCurrentHealth()
+float UHealthComponent::GetCurrentHealth()
 {
 	return CurrentHealth;
 }
 
-int32 UHealthComponent::GetMaxHealth()
+float UHealthComponent::GetMaxHealth()
 {
 	return MaxHealth;
 }
 
-float UHealthComponent::GetHealthBarFill()
+void UHealthComponent::TakeDamage(float Damage)
 {
-	// The whole health bar should be 2 * MaxHealth long, from -MaxHealth to MaxHealth
-	// Shift everything to the right by MaxHealth so we get minimum 0 on the bar
-	// * 1.0f to make result float
-	return (CurrentHealth * 1.0f + MaxHealth)/(MaxHealth + MaxHealth);
-}
+	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0, MaxHealth);
 
-void UHealthComponent::TakeDamage(int32 Damage)
-{
-	CurrentHealth = FMath::Clamp(CurrentHealth + Damage, 0, MaxHealth);
-
-	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth, GetHealthBarFill());
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 
 	// Check if owner is dead after taking damage
 	if (CurrentHealth <= -MaxHealth || CurrentHealth >= MaxHealth)
@@ -62,7 +54,7 @@ void UHealthComponent::TakeDamage(int32 Damage)
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-			FString::Printf(TEXT("Damage: %d, %d, %f"), GetCurrentHealth(), GetMaxHealth(), GetHealthBarFill())
+			FString::Printf(TEXT("Damage: %f, %f"), GetCurrentHealth(), GetMaxHealth())
 		);
 	}
 }

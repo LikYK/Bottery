@@ -46,6 +46,6 @@ void UTriggerEffectComponent::HandleOwnerOverlapBegin(AActor* OverlappedActor, A
 		}*/
 	}
 
-	ApplyEffect(OtherActor, Magnitude, 1);
+	ApplyEffect(OtherActor, Magnitude, -1);
 }
 

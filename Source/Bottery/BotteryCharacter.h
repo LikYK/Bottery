@@ -38,16 +38,13 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void TakeDamage(int32 Damage);
+	void TakeDamage(float Damage);
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	int32 GetCurrentHealth();
+	float GetCurrentHealth();
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	int32 GetMaxHealth();
-
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetHealthBarFill();
+	float GetMaxHealth();
 
 	UPROPERTY(BlueprintAssignable, Category = "Health")
 	FOnHealthChangedSignature OnHealthChanged;
@@ -58,6 +55,6 @@ protected:
 
 private:
 	UFUNCTION(BlueprintCallable, Category = "Health")
-	void BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth, float Fill);
+	void BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth);
 };
 

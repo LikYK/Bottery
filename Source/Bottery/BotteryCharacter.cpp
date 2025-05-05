@@ -66,27 +66,22 @@ void ABotteryCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
 }
 
-void ABotteryCharacter::TakeDamage(int32 Damage)
+void ABotteryCharacter::TakeDamage(float Damage)
 {
 	HealthComponent->TakeDamage(Damage);
 }
 
-int32 ABotteryCharacter::GetCurrentHealth()
+float ABotteryCharacter::GetCurrentHealth()
 {
 	return HealthComponent->GetCurrentHealth();
 }
 
-int32 ABotteryCharacter::GetMaxHealth()
+float ABotteryCharacter::GetMaxHealth()
 {
 	return HealthComponent->GetMaxHealth();
 }
 
-float ABotteryCharacter::GetHealthBarFill()
+void ABotteryCharacter::BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth)
 {
-	return HealthComponent->GetHealthBarFill();
-}
-
-void ABotteryCharacter::BroadcastHealthChangedInternal(int32 CurrentHealth, int32 MaxHealth, float Fill)
-{
-	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth, Fill);
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 }
