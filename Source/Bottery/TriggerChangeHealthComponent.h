@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "TriggerEffectComponent.h"
+#include "HasHealth.h"
 #include "TriggerChangeHealthComponent.generated.h"
 
 /**

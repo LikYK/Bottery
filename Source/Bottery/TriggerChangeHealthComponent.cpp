@@ -17,11 +17,13 @@ void UTriggerChangeHealthComponent::ApplyEffect(AActor* Target, float EffectMagn
 			// Heals character if same polarity, deals damage otherwise
 			if (Polarity == CharacterPolarity)
 			{
-				BotteryCharacter->TakeDamage(-EffectMagnitude);
+				IHasHealth::Execute_TakeDamage(BotteryCharacter, -EffectMagnitude);
+				//BotteryCharacter->TakeDamage(-EffectMagnitude);
 			}
 			else 
 			{
-				BotteryCharacter->TakeDamage(EffectMagnitude);
+				IHasHealth::Execute_TakeDamage(BotteryCharacter, EffectMagnitude);
+				//BotteryCharacter->TakeDamage(EffectMagnitude);
 			}
 		}
 	}

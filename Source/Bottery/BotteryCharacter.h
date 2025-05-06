@@ -6,10 +6,12 @@
 #include "GameFramework/Character.h"
 #include "HealthComponent.h"
 #include "PolarityComponent.h"
+#include "HasHealth.h"
+#include "UObject/ScriptDelegateFwd.h"
 #include "BotteryCharacter.generated.h"
 
 UCLASS(Blueprintable)
-class ABotteryCharacter : public ACharacter
+class ABotteryCharacter : public ACharacter, public IHasHealth
 {
 	GENERATED_BODY()
 
@@ -37,27 +39,31 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
+	// Health
 public:
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	void TakeDamage(float Damage);
+	virtual void TakeDamage_Implementation(float Damage) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetCurrentHealth();
+	virtual float GetCurrentHealth_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetMaxHealth();
+	virtual float GetMaxHealth_Implementation() override;
 
-	UPROPERTY(BlueprintAssignable, Category = "Health")
-	FOnHealthChangedSignature OnHealthChanged;
+	virtual UHealthDelegatesWrapper* GetHealthDelegates_Implementation() override;
 
 protected:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	//UHealthDelegatesWrapper* HealthDelegates;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Health")
+	//FOnHealthChangedSignature OnHealthChanged;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
 	UHealthComponent* HealthComponent;
 
-private:
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	void BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth);
+//private:
+//	UFUNCTION(BlueprintCallable, Category = "Health")
+//	void BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth);
 
+	// Polarity
 public:
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
 	EPolarity GetPolarity();

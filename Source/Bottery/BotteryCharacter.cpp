@@ -58,10 +58,30 @@ void ABotteryCharacter::BeginPlay()
 
 	// Link the OnHealthChange broadcast
 	// this is done so that the delegate can be bound to from outside without directly accessing health component
-	if (HealthComponent)
-	{
-		HealthComponent->OnHealthChanged.AddUniqueDynamic(this, &ABotteryCharacter::BroadcastHealthChangedInternal);
-	}
+	//if (HealthComponent)
+	//{
+	//	HealthComponent->OnHealthChanged.AddUniqueDynamic(this, &ABotteryCharacter::BroadcastHealthChangedInternal);
+	//}
+}
+
+void ABotteryCharacter::TakeDamage_Implementation(float Damage)
+{
+	HealthComponent->TakeDamage(Damage);
+}
+
+float ABotteryCharacter::GetCurrentHealth_Implementation()
+{
+	return HealthComponent->GetCurrentHealth();
+}
+
+float ABotteryCharacter::GetMaxHealth_Implementation()
+{
+	return HealthComponent->GetMaxHealth();
+}
+
+UHealthDelegatesWrapper* ABotteryCharacter::GetHealthDelegates_Implementation()
+{
+	return HealthComponent->HealthDelegates;
 }
 
 void ABotteryCharacter::Tick(float DeltaSeconds)
@@ -69,25 +89,25 @@ void ABotteryCharacter::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
 }
 
-void ABotteryCharacter::TakeDamage(float Damage)
-{
-	HealthComponent->TakeDamage(Damage);
-}
+//void ABotteryCharacter::TakeDamage_Implementation(float Damage)
+//{
+//	HealthComponent->TakeDamage(Damage);
+//}
+//
+//float ABotteryCharacter::GetCurrentHealth_Implementation()
+//{
+//	return HealthComponent->GetCurrentHealth();
+//}
+//
+//float ABotteryCharacter::GetMaxHealth_Implementation()
+//{
+//	return HealthComponent->GetMaxHealth();
+//}
 
-float ABotteryCharacter::GetCurrentHealth()
-{
-	return HealthComponent->GetCurrentHealth();
-}
-
-float ABotteryCharacter::GetMaxHealth()
-{
-	return HealthComponent->GetMaxHealth();
-}
-
-void ABotteryCharacter::BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth)
-{
-	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
-}
+//void ABotteryCharacter::BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth)
+//{
+//	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
+//}
 
 EPolarity ABotteryCharacter::GetPolarity()
 {

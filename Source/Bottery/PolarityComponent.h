@@ -15,7 +15,7 @@ enum class EPolarity : uint8
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPolarityChangedSignature, EPolarity, Polarity, FLinearColor, Color);
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BOTTERY_API UPolarityComponent : public UActorComponent
 {
 	GENERATED_BODY()

@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HealthDelegatesWrapper.h"
 #include "HealthComponent.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, CurrentHealth, float, MaxHealth);
 
 UCLASS( ClassGroup=(Health), meta=(BlueprintSpawnableComponent) )
 class BOTTERY_API UHealthComponent : public UActorComponent
@@ -30,8 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetMaxHealth();
 
-	UPROPERTY(BlueprintAssignable, Category = "Health")
-	FOnHealthChangedSignature OnHealthChanged;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	UHealthDelegatesWrapper* HealthDelegates;
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void TakeDamage(float Damage);
