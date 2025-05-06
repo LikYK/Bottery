@@ -46,6 +46,9 @@ ABotteryCharacter::ABotteryCharacter()
 
 	// Add a default health component
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+
+	// Add a default polarity component
+	PolarityComponent = CreateDefaultSubobject<UPolarityComponent>(TEXT("Polarity"));
 }
 
 void ABotteryCharacter::BeginPlay()
@@ -84,4 +87,19 @@ float ABotteryCharacter::GetMaxHealth()
 void ABotteryCharacter::BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth)
 {
 	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
+}
+
+EPolarity ABotteryCharacter::GetPolarity()
+{
+	return PolarityComponent->GetPolarity();
+}
+
+void ABotteryCharacter::SetPolarity(EPolarity NewPolarity)
+{
+	PolarityComponent->SetPolarity(NewPolarity);
+}
+
+void ABotteryCharacter::SwitchPolarity()
+{
+	PolarityComponent->SwitchPolarity();
 }

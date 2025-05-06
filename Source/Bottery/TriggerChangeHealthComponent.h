@@ -15,5 +15,5 @@ class BOTTERY_API UTriggerChangeHealthComponent : public UTriggerEffectComponent
 	GENERATED_BODY()
 	
 protected:
-	virtual void ApplyEffect(AActor* Target, float EffectMagnitude, int8 Polarity) override;
+	virtual void ApplyEffect(AActor* Target, float EffectMagnitude) override;
 };

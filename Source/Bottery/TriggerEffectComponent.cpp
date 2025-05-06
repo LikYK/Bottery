@@ -36,16 +36,6 @@ void UTriggerEffectComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UTriggerEffectComponent::HandleOwnerOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	int8 Polarity = 1;
-	if (AActor* Owner = GetOwner())
-	{
-		// Check for polarity
-		/*if (Owner->GetComponentByClass<>)
-		{
-
-		}*/
-	}
-
-	ApplyEffect(OtherActor, Magnitude, -1);
+	ApplyEffect(OtherActor, Magnitude);
 }
 

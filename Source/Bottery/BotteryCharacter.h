@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "HealthComponent.h"
+#include "PolarityComponent.h"
 #include "BotteryCharacter.generated.h"
 
 UCLASS(Blueprintable)
@@ -56,5 +57,19 @@ protected:
 private:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth);
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	EPolarity GetPolarity();
+
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	void SetPolarity(EPolarity NewPolarity);
+
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	void SwitchPolarity();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
+	UPolarityComponent* PolarityComponent;
 };
 

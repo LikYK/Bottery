@@ -28,7 +28,7 @@ protected:
 	UFUNCTION()
 	void HandleOwnerOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
 
-	virtual void ApplyEffect(AActor* Target, float EffectMagnitude, int8 Polarity) PURE_VIRTUAL(UMyAbstractComponent::ApplyEffect, );
+	virtual void ApplyEffect(AActor* Target, float EffectMagnitude) PURE_VIRTUAL(UMyAbstractComponent::ApplyEffect, );
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
 	float Magnitude = 10;
