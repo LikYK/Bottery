@@ -25,6 +25,7 @@ void UTriggerChangeHealthComponent::ApplyEffect(AActor* Target, float EffectMagn
 				IHasHealth::Execute_TakeDamage(BotteryCharacter, EffectMagnitude);
 				//BotteryCharacter->TakeDamage(EffectMagnitude);
 			}
+			GetOwner()->Destroy();
 		}
 	}
 }

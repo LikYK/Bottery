@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "HealthDelegatesWrapper.h"
+#include "HealthDelegateWrapper.h"
 #include "HealthComponent.generated.h"
 
 UCLASS( ClassGroup=(Health), meta=(BlueprintSpawnableComponent) )
@@ -29,11 +29,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetMaxHealth();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	UHealthDelegatesWrapper* HealthDelegates;
-
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void TakeDamage(float Damage);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealthDelegateWrapper* HealthDelegateWrapper;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "HealthDelegatesWrapper.h"
+#include "HealthDelegateWrapper.h"
 #include "HasHealth.generated.h"
 
 // This class does not need to be modified.
@@ -33,5 +33,5 @@ public:
 	float GetMaxHealth();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Health")
-	UHealthDelegatesWrapper* GetHealthDelegates();
+	UHealthDelegateWrapper* GetHealthDelegateWrapper();
 };

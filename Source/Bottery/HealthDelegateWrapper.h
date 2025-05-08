@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "HealthDelegatesWrapper.generated.h"
+#include "HealthDelegateWrapper.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, CurrentHealth, float, MaxHealth);
 
@@ -12,7 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, C
 // Wrapping delegates allow them to be passed to blueprints for binding
 // and also allow them to be declared in interfaces as function return type
 UCLASS()
-class BOTTERY_API UHealthDelegatesWrapper : public UObject
+class BOTTERY_API UHealthDelegateWrapper : public UObject
 {
 	GENERATED_BODY()
 	

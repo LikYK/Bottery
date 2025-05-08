@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "HealthComponent.h"
 #include "PolarityComponent.h"
 #include "HasHealth.h"
-#include "UObject/ScriptDelegateFwd.h"
+#include "HealthComponent.h"
+#include "HasSpeed.h"
+#include "StatComponent.h"
 #include "BotteryCharacter.generated.h"
 
 UCLASS(Blueprintable)
-class ABotteryCharacter : public ACharacter, public IHasHealth
+class ABotteryCharacter : public ACharacter, public IHasHealth, public IHasSpeed
 {
 	GENERATED_BODY()
 
 public:
-	ABotteryCharacter();
+	ABotteryCharacter(const FObjectInitializer& ObjectInitializer);
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
@@ -39,6 +40,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
 
+protected:
+	// Stat component stores and manages stat values
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+	UStatComponent* StatComponent;
+
 	// Health
 public:
 	virtual void TakeDamage_Implementation(float Damage) override;
@@ -47,21 +53,39 @@ public:
 
 	virtual float GetMaxHealth_Implementation() override;
 
-	virtual UHealthDelegatesWrapper* GetHealthDelegates_Implementation() override;
+	virtual UHealthDelegateWrapper* GetHealthDelegateWrapper_Implementation() override;
 
 protected:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
-	//UHealthDelegatesWrapper* HealthDelegates;
-
-	//UPROPERTY(BlueprintAssignable, Category = "Health")
-	//FOnHealthChangedSignature OnHealthChanged;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
 
-//private:
-//	UFUNCTION(BlueprintCallable, Category = "Health")
-//	void BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth);
+	// Speed
+public:
+	virtual float GetBaseSpeed_Implementation() override;
+
+	virtual float GetMaxSpeed_Implementation() override;
+
+	virtual float GetMinSpeed_Implementation() override;
+
+	virtual float GetCurrentSpeed_Implementation() override;
+
+	virtual void SetSpeed_Implementation(float NewValue) override;
+
+	virtual void ModifySpeed_Implementation(float ChangeAmount) override;
+
+	virtual UStatDelegateWrapper* GetSpeedDelegateWrapper_Implementation() override;
+
+protected:
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Speed")
+	//UCharacterMovementComponent* MovementComponent;
+
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Speed")
+	//USpeedComponent* SpeedComponent;
+
+	// Speed component accepts a function as OnSpeedChanged handler
+	// This is an effort to decouple speed component from actor movement components (character movement, projectile movement etc.)
+	//UFUNCTION(BlueprintCallable, Category = "Speed")
+	//void SetSpeed(float NewSpeedMultiplier, float NewSpeed);
 
 	// Polarity
 public:

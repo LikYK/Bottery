@@ -12,7 +12,7 @@ UHealthComponent::UHealthComponent()
 
 	CurrentHealth = MaxHealth;
 
-	HealthDelegates = CreateDefaultSubobject<UHealthDelegatesWrapper>(TEXT("HealthDelegatesWrapper"));
+	HealthDelegateWrapper = CreateDefaultSubobject<UHealthDelegateWrapper>(TEXT("HealthDelegateWrapper"));
 }
 
 // Called when the game starts
@@ -45,7 +45,7 @@ void UHealthComponent::TakeDamage(float Damage)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0, MaxHealth);
 
-	HealthDelegates->OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
+	HealthDelegateWrapper->OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 
 	// Check if owner is dead after taking damage
 	if (CurrentHealth <= -MaxHealth || CurrentHealth >= MaxHealth)

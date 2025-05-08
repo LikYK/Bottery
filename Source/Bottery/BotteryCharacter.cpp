@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BotteryCharacter.h"
+#include "BotCharacterMovementComponent.h"
+#include "StatDelegateWrapper.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
@@ -11,7 +13,8 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 
-ABotteryCharacter::ABotteryCharacter()
+ABotteryCharacter::ABotteryCharacter(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer.SetDefaultSubobjectClass<UBotCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set size for player capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -44,6 +47,9 @@ ABotteryCharacter::ABotteryCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	// Add a default stat component
+	StatComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stats"));
+
 	// Add a default health component
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 
@@ -55,15 +61,14 @@ void ABotteryCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
-	// Link the OnHealthChange broadcast
-	// this is done so that the delegate can be bound to from outside without directly accessing health component
-	//if (HealthComponent)
-	//{
-	//	HealthComponent->OnHealthChanged.AddUniqueDynamic(this, &ABotteryCharacter::BroadcastHealthChangedInternal);
-	//}
 }
 
+void ABotteryCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
+// Health
 void ABotteryCharacter::TakeDamage_Implementation(float Damage)
 {
 	HealthComponent->TakeDamage(Damage);
@@ -79,36 +84,109 @@ float ABotteryCharacter::GetMaxHealth_Implementation()
 	return HealthComponent->GetMaxHealth();
 }
 
-UHealthDelegatesWrapper* ABotteryCharacter::GetHealthDelegates_Implementation()
+UHealthDelegateWrapper* ABotteryCharacter::GetHealthDelegateWrapper_Implementation()
 {
-	return HealthComponent->HealthDelegates;
+	return HealthComponent->HealthDelegateWrapper;
 }
 
-void ABotteryCharacter::Tick(float DeltaSeconds)
+// Speed
+float ABotteryCharacter::GetBaseSpeed_Implementation()
 {
-    Super::Tick(DeltaSeconds);
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat)) 
+	{
+		return Stat->GetBaseValue();
+	}
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetBaseSpeed failed, speed stat is not valid."));
+		return 0.0f;
+	}
 }
 
-//void ABotteryCharacter::TakeDamage_Implementation(float Damage)
-//{
-//	HealthComponent->TakeDamage(Damage);
-//}
-//
-//float ABotteryCharacter::GetCurrentHealth_Implementation()
-//{
-//	return HealthComponent->GetCurrentHealth();
-//}
-//
-//float ABotteryCharacter::GetMaxHealth_Implementation()
-//{
-//	return HealthComponent->GetMaxHealth();
-//}
+float ABotteryCharacter::GetMaxSpeed_Implementation()
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		return Stat->GetMaxValue();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetMaxSpeed failed, speed stat is not valid."));
+		return 0.0f;
+	}
+}
 
-//void ABotteryCharacter::BroadcastHealthChangedInternal(float CurrentHealth, float MaxHealth)
-//{
-//	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
-//}
+float ABotteryCharacter::GetMinSpeed_Implementation()
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		return Stat->GetMinValue();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetMinSpeed failed, speed stat is not valid."));
+		return 0.0f;
+	}
+}
 
+float ABotteryCharacter::GetCurrentSpeed_Implementation()
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		return Stat->GetValue();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetCurrentSpeed failed, speed stat is not valid."));
+		return 0.0f;
+	}
+}
+
+void ABotteryCharacter::SetSpeed_Implementation(float NewValue)
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		Stat->SetValue(NewValue);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetSpeed failed, speed stat is not valid."));
+	}
+}
+
+void ABotteryCharacter::ModifySpeed_Implementation(float ChangeAmount)
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		Stat->ModifyValue(ChangeAmount);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ModifySpeed failed, speed stat is not valid."));
+	}
+}
+
+UStatDelegateWrapper* ABotteryCharacter::GetSpeedDelegateWrapper_Implementation()
+{
+	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+	if (IsValid(Stat))
+	{
+		return Stat->StatDelegateWrapper;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetSpeedDelegateWrapper failed, speed stat is not valid."));
+		return nullptr;
+	}
+}
+
+// Polarity
 EPolarity ABotteryCharacter::GetPolarity()
 {
 	return PolarityComponent->GetPolarity();
