@@ -7,25 +7,20 @@
 
 void UTriggerChangeHealthComponent::ApplyEffect(AActor* Target, float EffectMagnitude)
 {
-	if (ABotteryCharacter* BotteryCharacter = Cast<ABotteryCharacter>(Target))
+	if (Target && Target->Implements<UHasHealth>())
 	{
-		EPolarity CharacterPolarity = BotteryCharacter->GetComponentByClass<UPolarityComponent>()->GetPolarity();
-		if (UPolarityComponent* PolarityComponent = GetOwner()->GetComponentByClass<UPolarityComponent>())
+		if (Target && Target->Implements<UHasPolarity>() && GetOwner()->Implements<UHasPolarity>())
 		{
-			EPolarity Polarity = PolarityComponent->GetPolarity();
-
-			// Heals character if same polarity, deals damage otherwise
-			if (Polarity == CharacterPolarity)
+			EPolarity TargetPolarity = IHasPolarity::Execute_GetPolarity(Target);
+			EPolarity OwnPolarity = IHasPolarity::Execute_GetPolarity(GetOwner());
+			if (OwnPolarity == TargetPolarity)
 			{
-				IHasHealth::Execute_TakeDamage(BotteryCharacter, -EffectMagnitude);
-				//BotteryCharacter->TakeDamage(-EffectMagnitude);
+				IHasHealth::Execute_TakeDamage(Target, -EffectMagnitude);
 			}
-			else 
+			else
 			{
-				IHasHealth::Execute_TakeDamage(BotteryCharacter, EffectMagnitude);
-				//BotteryCharacter->TakeDamage(EffectMagnitude);
+				IHasHealth::Execute_TakeDamage(Target, EffectMagnitude);
 			}
-			GetOwner()->Destroy();
 		}
 	}
 }

@@ -5,26 +5,25 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BotteryCharacter.h"
-#include "HasSpeed.h"
 #include "PolarityComponent.h"
 
 void UTriggerChangeSpeedComponent::ApplyEffect(AActor* Target, float EffectMagnitude)
 {
-	if (Target && Target->Implements<UHasSpeed>())
+	if (Target && Target->Implements<UHasStats>() && IHasStats::Execute_HasStat(Target, EStatKey::Speed))
 	{
 		if (UPolarityComponent* PolarityComponent = GetOwner()->GetComponentByClass<UPolarityComponent>())
 		{
 			EPolarity Polarity = PolarityComponent->GetPolarity();
-			float BaseVal = IHasSpeed::Execute_GetBaseSpeed(Target);
+			float BaseVal = IHasStats::Execute_GetStatBase(Target, EStatKey::Speed);
 
 			if (Polarity == EPolarity::Positive)
 			{
-				IHasSpeed::Execute_ModifySpeed(Target, EffectMagnitude * BaseVal);
+				IHasStats::Execute_ModifyStat(Target, EStatKey::Speed, EffectMagnitude * BaseVal);
 				//Character->GetCharacterMovement()->MaxWalkSpeed += EffectMagnitude;
 			}
 			else 
 			{
-				IHasSpeed::Execute_ModifySpeed(Target, -EffectMagnitude * BaseVal);
+				IHasStats::Execute_ModifyStat(Target, EStatKey::Speed, -EffectMagnitude * BaseVal);
 				//Character->GetCharacterMovement()->MaxWalkSpeed -= EffectMagnitude;
 			}
 			GetOwner()->Destroy();

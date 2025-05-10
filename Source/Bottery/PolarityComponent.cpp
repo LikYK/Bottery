@@ -10,8 +10,10 @@ UPolarityComponent::UPolarityComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	PositiveColor = FLinearColor::Blue;
-	NegativeColor = FLinearColor::Red;
+	PositiveColour = FLinearColor::Blue;
+	NegativeColour = FLinearColor::Red;
+	PolarityDelegateWrapper = CreateDefaultSubobject<UPolarityDelegateWrapper>(TEXT("PolarityDelegateWrapper"));
+	ColourComponent = CreateDefaultSubobject<UColourComponent>(TEXT("ColourComponent"));
 }
 
 
@@ -20,15 +22,13 @@ void UPolarityComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Set a random polarity
-	float bResult = FMath::RandBool();
-	if (bResult)
+	if (ColourComponent->IsReady())
 	{
-		SetPolarity(EPolarity::Negative);
+		SetRandomPolarity();
 	}
 	else 
 	{
-		SetPolarity(EPolarity::Positive);
+		ColourComponent->OnColourReady.AddUniqueDynamic(this, &UPolarityComponent::SetRandomPolarity);
 	}
 }
 
@@ -50,7 +50,8 @@ void UPolarityComponent::SetPolarity(EPolarity NewPolarity)
 {
 	Polarity = NewPolarity;
 
-	OnPolarityChanged.Broadcast(Polarity, GetPolarityColor());
+	ColourComponent->ChangeColour(GetPolarityColour());
+	PolarityDelegateWrapper->OnPolarityChanged.Broadcast(Polarity, GetPolarityColour());
 }
 
 void UPolarityComponent::SwitchPolarity()
@@ -65,15 +66,28 @@ void UPolarityComponent::SwitchPolarity()
 	}
 }
 
-FLinearColor UPolarityComponent::GetPolarityColor()
+FLinearColor UPolarityComponent::GetPolarityColour()
 {
 	if (Polarity == EPolarity::Positive)
 	{
-		return PositiveColor;
+		return PositiveColour;
 	}
 	else
 	{
-		return NegativeColor;
+		return NegativeColour;
+	}
+}
+
+void UPolarityComponent::SetRandomPolarity()
+{
+	bool bResult = FMath::RandBool();
+	if (bResult)
+	{
+		SetPolarity(EPolarity::Negative);
+	}
+	else
+	{
+		SetPolarity(EPolarity::Positive);
 	}
 }
 

@@ -89,115 +89,180 @@ UHealthDelegateWrapper* ABotteryCharacter::GetHealthDelegateWrapper_Implementati
 	return HealthComponent->HealthDelegateWrapper;
 }
 
+bool ABotteryCharacter::HasStat_Implementation(EStatKey Key)
+{
+	return StatComponent->HasStat(Key);
+}
+
+float ABotteryCharacter::GetStatBase_Implementation(EStatKey Key)
+{
+	return StatComponent->GetStatBase(Key);
+}
+
+float ABotteryCharacter::GetStatMax_Implementation(EStatKey Key)
+{
+	return StatComponent->GetStatMax(Key);
+}
+
+float ABotteryCharacter::GetStatMin_Implementation(EStatKey Key)
+{
+	return StatComponent->GetStatMin(Key);
+}
+
+float ABotteryCharacter::GetStatValue_Implementation(EStatKey Key)
+{
+	return StatComponent->GetStatValue(Key);
+}
+
+void ABotteryCharacter::SetStatValue_Implementation(EStatKey Key, float NewValue)
+{
+	StatComponent->SetStatValue(Key, NewValue);
+}
+
+void ABotteryCharacter::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
+{
+	StatComponent->ModifyStat(Key, ChangeAmount);
+}
+
+UStatDelegateWrapper* ABotteryCharacter::GetStatDelegateWrapper_Implementation(EStatKey Key)
+{
+	return StatComponent->GetStatDelegateWrapper(Key);
+}
+
 // Speed
-float ABotteryCharacter::GetBaseSpeed_Implementation()
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat)) 
-	{
-		return Stat->GetBaseValue();
-	}
-	else 
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetBaseSpeed failed, speed stat is not valid."));
-		return 0.0f;
-	}
-}
+//float ABotteryCharacter::GetBaseSpeed_Implementation()
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat)) 
+//	{
+//		return Stat->GetBaseValue();
+//	}
+//	else 
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("GetBaseSpeed failed, speed stat is not valid."));
+//		return 0.0f;
+//	}
+//}
+//
+//float ABotteryCharacter::GetMaxSpeed_Implementation()
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		return Stat->GetMaxValue();
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("GetMaxSpeed failed, speed stat is not valid."));
+//		return 0.0f;
+//	}
+//}
+//
+//float ABotteryCharacter::GetMinSpeed_Implementation()
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		return Stat->GetMinValue();
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("GetMinSpeed failed, speed stat is not valid."));
+//		return 0.0f;
+//	}
+//}
+//
+//float ABotteryCharacter::GetCurrentSpeed_Implementation()
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		return Stat->GetValue();
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("GetCurrentSpeed failed, speed stat is not valid."));
+//		return 0.0f;
+//	}
+//}
+//
+//void ABotteryCharacter::SetSpeed_Implementation(float NewValue)
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		Stat->SetValue(NewValue);
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("SetSpeed failed, speed stat is not valid."));
+//	}
+//}
+//
+//void ABotteryCharacter::ModifySpeed_Implementation(float ChangeAmount)
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		Stat->ModifyValue(ChangeAmount);
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("ModifySpeed failed, speed stat is not valid."));
+//	}
+//}
+//
+//UStatDelegateWrapper* ABotteryCharacter::GetSpeedDelegateWrapper_Implementation()
+//{
+//	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
+//	if (IsValid(Stat))
+//	{
+//		return Stat->StatDelegateWrapper;
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("GetSpeedDelegateWrapper failed, speed stat is not valid."));
+//		return nullptr;
+//	}
+//}
 
-float ABotteryCharacter::GetMaxSpeed_Implementation()
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		return Stat->GetMaxValue();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetMaxSpeed failed, speed stat is not valid."));
-		return 0.0f;
-	}
-}
-
-float ABotteryCharacter::GetMinSpeed_Implementation()
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		return Stat->GetMinValue();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetMinSpeed failed, speed stat is not valid."));
-		return 0.0f;
-	}
-}
-
-float ABotteryCharacter::GetCurrentSpeed_Implementation()
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		return Stat->GetValue();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetCurrentSpeed failed, speed stat is not valid."));
-		return 0.0f;
-	}
-}
-
-void ABotteryCharacter::SetSpeed_Implementation(float NewValue)
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		Stat->SetValue(NewValue);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SetSpeed failed, speed stat is not valid."));
-	}
-}
-
-void ABotteryCharacter::ModifySpeed_Implementation(float ChangeAmount)
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		Stat->ModifyValue(ChangeAmount);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ModifySpeed failed, speed stat is not valid."));
-	}
-}
-
-UStatDelegateWrapper* ABotteryCharacter::GetSpeedDelegateWrapper_Implementation()
-{
-	UStat* Stat = StatComponent->GetStat(EStatKey::Speed);
-	if (IsValid(Stat))
-	{
-		return Stat->StatDelegateWrapper;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetSpeedDelegateWrapper failed, speed stat is not valid."));
-		return nullptr;
-	}
-}
-
-// Polarity
-EPolarity ABotteryCharacter::GetPolarity()
+EPolarity ABotteryCharacter::GetPolarity_Implementation()
 {
 	return PolarityComponent->GetPolarity();
 }
 
-void ABotteryCharacter::SetPolarity(EPolarity NewPolarity)
+void ABotteryCharacter::SetPolarity_Implementation(EPolarity NewPolarity)
 {
 	PolarityComponent->SetPolarity(NewPolarity);
 }
 
-void ABotteryCharacter::SwitchPolarity()
+void ABotteryCharacter::SwitchPolarity_Implementation()
 {
 	PolarityComponent->SwitchPolarity();
 }
+
+FLinearColor ABotteryCharacter::GetPolarityColour_Implementation()
+{
+	return PolarityComponent->GetPolarityColour();
+}
+
+UPolarityDelegateWrapper* ABotteryCharacter::GetPolarityDelegateWrapper_Implementation()
+{
+	return PolarityComponent->PolarityDelegateWrapper;
+}
+
+// Polarity
+//EPolarity ABotteryCharacter::GetPolarity()
+//{
+//	return PolarityComponent->GetPolarity();
+//}
+//
+//void ABotteryCharacter::SetPolarity(EPolarity NewPolarity)
+//{
+//	PolarityComponent->SetPolarity(NewPolarity);
+//}
+//
+//void ABotteryCharacter::SwitchPolarity()
+//{
+//	PolarityComponent->SwitchPolarity();
+//}

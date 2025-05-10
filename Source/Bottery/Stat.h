@@ -19,8 +19,10 @@ class BOTTERY_API UStat : public UObject
 public:
 	UStat();
 
+protected:
 	virtual void PostInitProperties() override;
 
+public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")
 	float GetBaseValue();
 

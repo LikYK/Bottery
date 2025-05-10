@@ -53,7 +53,7 @@ void AOrbSpawner::SpawnNew()
 	{
 		return;
 	}
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::Printf(TEXT("Spawning Orb")));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::Printf(TEXT("Spawning Orb")));
 	FVector SpawnLocation = ChoosePoint();
 	FRotator SpawnRotation = FRotator(0.0f, FMath::FRandRange(0.0f, 360.0f), 0.0f);
 

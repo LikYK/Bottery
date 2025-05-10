@@ -38,7 +38,7 @@ float UStat::GetValue()
 
 void UStat::SetValue(float NewValue)
 {
-	Value = NewValue;
+	Value = FMath::Clamp(NewValue, MinValue, MaxValue);
 	StatDelegateWrapper->OnStatChanged.Broadcast(Value, BaseValue);
 }
 

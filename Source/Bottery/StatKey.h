@@ -8,7 +8,6 @@
 UENUM(BlueprintType)
 enum class EStatKey : uint8
 {
-    HealthDecayRate    UMETA(DisplayName = "HealthDecayRate"),
-    //StaminaRegenRate   UMETA(DisplayName = "StaminaRegenRate"),
+    Magnitude    UMETA(DisplayName = "Magnitude"),
     Speed     UMETA(DisplayName = "Speed"),
 };

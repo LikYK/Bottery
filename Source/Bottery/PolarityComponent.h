@@ -4,16 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "PolarityDelegateWrapper.h"
+#include "Polarity.h"
+#include "PolarityDelegateWrapper.h"
+#include "ColourComponent.h"
 #include "PolarityComponent.generated.h"
-
-UENUM(BlueprintType)
-enum class EPolarity : uint8
-{
-	Negative UMETA(DisplayName = "Negative"),
-	Positive UMETA(DisplayName = "Positive"),
-};
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPolarityChangedSignature, EPolarity, Polarity, FLinearColor, Color);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BOTTERY_API UPolarityComponent : public UActorComponent
@@ -24,15 +19,14 @@ public:
 	// Sets default values for this component's properties
 	UPolarityComponent();
 
+	// Called every frame
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-public:
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
 	EPolarity GetPolarity();
 
@@ -43,18 +37,24 @@ public:
 	void SwitchPolarity();
 
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
-	FLinearColor GetPolarityColor();
+	FLinearColor GetPolarityColour();
 
-	UPROPERTY(BlueprintAssignable, Category = "Health")
-	FOnPolarityChangedSignature OnPolarityChanged;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Polarity")
+	UPolarityDelegateWrapper* PolarityDelegateWrapper;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
-	EPolarity Polarity;
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	void SetRandomPolarity();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
-	FLinearColor PositiveColor;
+	EPolarity Polarity = EPolarity::Positive;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
-	FLinearColor NegativeColor;
+	UColourComponent* ColourComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
+	FLinearColor PositiveColour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
+	FLinearColor NegativeColour;
 };
