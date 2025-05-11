@@ -40,5 +40,5 @@ protected:
 	float DecayRate = 0;
 
 	UPROPERTY()
-	UHealthComponent* HealthComponent;
+	UActorComponent* HealthComponent;
 };

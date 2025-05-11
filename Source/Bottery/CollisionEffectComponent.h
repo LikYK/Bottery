@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TriggerEffectComponent.generated.h"
+#include "Effect.h"
+#include "CollisionEffectComponent.generated.h"
 
 
-UCLASS(Abstract, ClassGroup=(Effects), meta=(BlueprintSpawnableComponent) )
-class BOTTERY_API UTriggerEffectComponent : public UActorComponent
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class BOTTERY_API UCollisionEffectComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UTriggerEffectComponent();
+	UCollisionEffectComponent();
 
 protected:
 	// Called when the game starts
@@ -26,10 +27,11 @@ public:
 
 protected:
 	UFUNCTION()
-	void HandleOwnerOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void CreateEffectInstance();
 
-	virtual void ApplyEffect(AActor* Target, float EffectMagnitude) PURE_VIRTUAL(UMyAbstractComponent::ApplyEffect, );
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect")
+	TSubclassOf<UEffect> EffectClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
-	float Magnitude = 10;
+	UPROPERTY()
+	UEffect* EffectInstance;
 };

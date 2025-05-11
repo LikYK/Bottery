@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "OrbMovementComponent.h"
+#include "PolarityComponent.h"
 #include "Orb.generated.h"
 
 UCLASS()

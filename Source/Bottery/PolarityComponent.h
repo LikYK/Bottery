@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PolarityDelegateWrapper.h"
+#include "PolarityInterface.h"
 #include "Polarity.h"
 #include "PolarityDelegateWrapper.h"
 #include "ColourComponent.h"
 #include "PolarityComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class BOTTERY_API UPolarityComponent : public UActorComponent
+class BOTTERY_API UPolarityComponent : public UActorComponent, public IPolarityInterface
 {
 	GENERATED_BODY()
 
@@ -27,20 +27,15 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
-	EPolarity GetPolarity();
+	EPolarity GetPolarity_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
-	void SetPolarity(EPolarity NewPolarity);
+	void SetPolarity_Implementation(EPolarity NewPolarity) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
-	void SwitchPolarity();
+	void SwitchPolarity_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
-	FLinearColor GetPolarityColour();
+	FLinearColor GetPolarityColour_Implementation(EPolarity TargetPolarity) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Polarity")
-	UPolarityDelegateWrapper* PolarityDelegateWrapper;
+	virtual UPolarityDelegateWrapper* GetPolarityDelegateWrapper_Implementation() override;
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
@@ -57,4 +52,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Polarity")
 	FLinearColor NegativeColour;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Polarity")
+	UPolarityDelegateWrapper* PolarityDelegateWrapper;
 };

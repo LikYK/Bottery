@@ -67,4 +67,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	float SpawnInterval = 1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	int32 MaxSpawned = 0;
 };

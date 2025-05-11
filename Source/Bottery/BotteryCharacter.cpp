@@ -52,7 +52,7 @@ ABotteryCharacter::ABotteryCharacter(const FObjectInitializer& ObjectInitializer
 
 	// Add a default health component
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
-
+	
 	// Add a default polarity component
 	PolarityComponent = CreateDefaultSubobject<UPolarityComponent>(TEXT("Polarity"));
 }
@@ -69,65 +69,65 @@ void ABotteryCharacter::Tick(float DeltaSeconds)
 }
 
 // Health
-void ABotteryCharacter::TakeDamage_Implementation(float Damage)
-{
-	HealthComponent->TakeDamage(Damage);
-}
-
-float ABotteryCharacter::GetCurrentHealth_Implementation()
-{
-	return HealthComponent->GetCurrentHealth();
-}
-
-float ABotteryCharacter::GetMaxHealth_Implementation()
-{
-	return HealthComponent->GetMaxHealth();
-}
-
-UHealthDelegateWrapper* ABotteryCharacter::GetHealthDelegateWrapper_Implementation()
-{
-	return HealthComponent->HealthDelegateWrapper;
-}
-
-bool ABotteryCharacter::HasStat_Implementation(EStatKey Key)
-{
-	return StatComponent->HasStat(Key);
-}
-
-float ABotteryCharacter::GetStatBase_Implementation(EStatKey Key)
-{
-	return StatComponent->GetStatBase(Key);
-}
-
-float ABotteryCharacter::GetStatMax_Implementation(EStatKey Key)
-{
-	return StatComponent->GetStatMax(Key);
-}
-
-float ABotteryCharacter::GetStatMin_Implementation(EStatKey Key)
-{
-	return StatComponent->GetStatMin(Key);
-}
-
-float ABotteryCharacter::GetStatValue_Implementation(EStatKey Key)
-{
-	return StatComponent->GetStatValue(Key);
-}
-
-void ABotteryCharacter::SetStatValue_Implementation(EStatKey Key, float NewValue)
-{
-	StatComponent->SetStatValue(Key, NewValue);
-}
-
-void ABotteryCharacter::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
-{
-	StatComponent->ModifyStat(Key, ChangeAmount);
-}
-
-UStatDelegateWrapper* ABotteryCharacter::GetStatDelegateWrapper_Implementation(EStatKey Key)
-{
-	return StatComponent->GetStatDelegateWrapper(Key);
-}
+//void ABotteryCharacter::TakeDamage_Implementation(float Damage)
+//{
+//	HealthComponent->TakeDamage(Damage);
+//}
+//
+//float ABotteryCharacter::GetCurrentHealth_Implementation()
+//{
+//	return HealthComponent->GetCurrentHealth();
+//}
+//
+//float ABotteryCharacter::GetMaxHealth_Implementation()
+//{
+//	return HealthComponent->GetMaxHealth();
+//}
+//
+//UHealthDelegateWrapper* ABotteryCharacter::GetHealthDelegateWrapper_Implementation()
+//{
+//	return HealthComponent->HealthDelegateWrapper;
+//}
+//
+//bool ABotteryCharacter::HasStat_Implementation(EStatKey Key)
+//{
+//	return StatComponent->HasStat(Key);
+//}
+//
+//float ABotteryCharacter::GetStatBase_Implementation(EStatKey Key)
+//{
+//	return StatComponent->GetStatBase(Key);
+//}
+//
+//float ABotteryCharacter::GetStatMax_Implementation(EStatKey Key)
+//{
+//	return StatComponent->GetStatMax(Key);
+//}
+//
+//float ABotteryCharacter::GetStatMin_Implementation(EStatKey Key)
+//{
+//	return StatComponent->GetStatMin(Key);
+//}
+//
+//float ABotteryCharacter::GetStatValue_Implementation(EStatKey Key)
+//{
+//	return StatComponent->GetStatValue(Key);
+//}
+//
+//void ABotteryCharacter::SetStatValue_Implementation(EStatKey Key, float NewValue)
+//{
+//	StatComponent->SetStatValue(Key, NewValue);
+//}
+//
+//void ABotteryCharacter::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
+//{
+//	StatComponent->ModifyStat(Key, ChangeAmount);
+//}
+//
+//UStatDelegateWrapper* ABotteryCharacter::GetStatDelegateWrapper_Implementation(EStatKey Key)
+//{
+//	return StatComponent->GetStatDelegateWrapper(Key);
+//}
 
 // Speed
 //float ABotteryCharacter::GetBaseSpeed_Implementation()
@@ -226,30 +226,30 @@ UStatDelegateWrapper* ABotteryCharacter::GetStatDelegateWrapper_Implementation(E
 //	}
 //}
 
-EPolarity ABotteryCharacter::GetPolarity_Implementation()
-{
-	return PolarityComponent->GetPolarity();
-}
-
-void ABotteryCharacter::SetPolarity_Implementation(EPolarity NewPolarity)
-{
-	PolarityComponent->SetPolarity(NewPolarity);
-}
-
-void ABotteryCharacter::SwitchPolarity_Implementation()
-{
-	PolarityComponent->SwitchPolarity();
-}
-
-FLinearColor ABotteryCharacter::GetPolarityColour_Implementation()
-{
-	return PolarityComponent->GetPolarityColour();
-}
-
-UPolarityDelegateWrapper* ABotteryCharacter::GetPolarityDelegateWrapper_Implementation()
-{
-	return PolarityComponent->PolarityDelegateWrapper;
-}
+//EPolarity ABotteryCharacter::GetPolarity_Implementation()
+//{
+//	return PolarityComponent->GetPolarity();
+//}
+//
+//void ABotteryCharacter::SetPolarity_Implementation(EPolarity NewPolarity)
+//{
+//	PolarityComponent->SetPolarity(NewPolarity);
+//}
+//
+//void ABotteryCharacter::SwitchPolarity_Implementation()
+//{
+//	PolarityComponent->SwitchPolarity();
+//}
+//
+//FLinearColor ABotteryCharacter::GetPolarityColour_Implementation()
+//{
+//	return PolarityComponent->GetPolarityColour();
+//}
+//
+//UPolarityDelegateWrapper* ABotteryCharacter::GetPolarityDelegateWrapper_Implementation()
+//{
+//	return PolarityComponent->PolarityDelegateWrapper;
+//}
 
 // Polarity
 //EPolarity ABotteryCharacter::GetPolarity()

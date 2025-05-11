@@ -13,13 +13,13 @@
 #include "BotteryCharacter.generated.h"
 
 UCLASS(Blueprintable)
-class ABotteryCharacter : public ACharacter, public IHasHealth, public IHasStats, public IHasPolarity
+class ABotteryCharacter : public ACharacter//, public IHasHealth, public IHasStats, public IHasPolarity
 {
 	GENERATED_BODY()
 
 public:
 	ABotteryCharacter(const FObjectInitializer& ObjectInitializer);
-
+	
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -42,36 +42,36 @@ private:
 	class USpringArmComponent* CameraBoom;
 
 	// Health
-public:
-	virtual void TakeDamage_Implementation(float Damage) override;
-
-	virtual float GetCurrentHealth_Implementation() override;
-
-	virtual float GetMaxHealth_Implementation() override;
-
-	virtual UHealthDelegateWrapper* GetHealthDelegateWrapper_Implementation() override;
+//public:
+//	virtual void TakeDamage_Implementation(float Damage) override;
+//
+//	virtual float GetCurrentHealth_Implementation() override;
+//
+//	virtual float GetMaxHealth_Implementation() override;
+//
+//	virtual UHealthDelegateWrapper* GetHealthDelegateWrapper_Implementation() override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealthComponent* HealthComponent;
 
 	// Stats (Speed, Magnitude)
-public:
-	virtual bool HasStat_Implementation(EStatKey Key) override;
-
-	virtual float GetStatBase_Implementation(EStatKey Key) override;
-
-	virtual float GetStatMax_Implementation(EStatKey Key) override;
-
-	virtual float GetStatMin_Implementation(EStatKey Key) override;
-
-	virtual float GetStatValue_Implementation(EStatKey Key) override;
-
-	virtual void SetStatValue_Implementation(EStatKey Key, float NewValue) override;
-
-	virtual void ModifyStat_Implementation(EStatKey Key, float ChangeAmount) override;
-
-	virtual UStatDelegateWrapper* GetStatDelegateWrapper_Implementation(EStatKey Key) override;
+//public:
+//	virtual bool HasStat_Implementation(EStatKey Key) override;
+//
+//	virtual float GetStatBase_Implementation(EStatKey Key) override;
+//
+//	virtual float GetStatMax_Implementation(EStatKey Key) override;
+//
+//	virtual float GetStatMin_Implementation(EStatKey Key) override;
+//
+//	virtual float GetStatValue_Implementation(EStatKey Key) override;
+//
+//	virtual void SetStatValue_Implementation(EStatKey Key, float NewValue) override;
+//
+//	virtual void ModifyStat_Implementation(EStatKey Key, float ChangeAmount) override;
+//
+//	virtual UStatDelegateWrapper* GetStatDelegateWrapper_Implementation(EStatKey Key) override;
 
 protected:
 	// Stat component stores and manages stat values
@@ -107,16 +107,16 @@ protected:
 	//void SetSpeed(float NewSpeedMultiplier, float NewSpeed);
 
 	// Polarity
-public:
-	virtual EPolarity GetPolarity_Implementation() override;
-
-	virtual void SetPolarity_Implementation(EPolarity NewPolarity) override;
-
-	virtual void SwitchPolarity_Implementation() override;
-
-	virtual FLinearColor GetPolarityColour_Implementation() override;
-
-	virtual UPolarityDelegateWrapper* GetPolarityDelegateWrapper_Implementation() override;
+//public:
+//	virtual EPolarity GetPolarity_Implementation() override;
+//
+//	virtual void SetPolarity_Implementation(EPolarity NewPolarity) override;
+//
+//	virtual void SwitchPolarity_Implementation() override;
+//
+//	virtual FLinearColor GetPolarityColour_Implementation() override;
+//
+//	virtual UPolarityDelegateWrapper* GetPolarityDelegateWrapper_Implementation() override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Polarity")

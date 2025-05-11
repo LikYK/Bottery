@@ -31,12 +31,12 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-bool UStatComponent::HasStat(EStatKey Key)
+bool UStatComponent::HasStat_Implementation(EStatKey Key)
 {
 	return Stats.Contains(Key);
 }
 
-float UStatComponent::GetStatBase(EStatKey Key)
+float UStatComponent::GetStatBase_Implementation(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -46,7 +46,7 @@ float UStatComponent::GetStatBase(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatMax(EStatKey Key)
+float UStatComponent::GetStatMax_Implementation(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -56,7 +56,7 @@ float UStatComponent::GetStatMax(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatMin(EStatKey Key)
+float UStatComponent::GetStatMin_Implementation(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -66,7 +66,7 @@ float UStatComponent::GetStatMin(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatValue(EStatKey Key)
+float UStatComponent::GetStatValue_Implementation(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -76,25 +76,31 @@ float UStatComponent::GetStatValue(EStatKey Key)
 	return 0.0f;
 }
 
-void UStatComponent::SetStatValue(EStatKey Key, float NewValue)
+void UStatComponent::SetStatValue_Implementation(EStatKey Key, float NewValue)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
-		return Stat->SetValue(NewValue);
+		Stat->SetValue(NewValue);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("SetStatValue failed: stat is not valid."));
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SetStatValue failed: stat is not valid."));
+	}
 }
 
-void UStatComponent::ModifyStat(EStatKey Key, float ChangeAmount)
+void UStatComponent::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
-		return Stat->ModifyValue(ChangeAmount);
+		Stat->ModifyValue(ChangeAmount);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("ModifyStat failed: stat is not valid."));
+	else 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ModifyStat failed: stat is not valid."));
+	}
 }
 
-UStatDelegateWrapper* UStatComponent::GetStatDelegateWrapper(EStatKey Key)
+UStatDelegateWrapper* UStatComponent::GetStatDelegateWrapper_Implementation(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{

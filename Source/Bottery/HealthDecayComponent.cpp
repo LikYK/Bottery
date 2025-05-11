@@ -19,10 +19,15 @@ void UHealthDecayComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HealthComponent = GetOwner()->GetComponentByClass<UHealthComponent>();
+	TArray<UActorComponent*> HealthComponents = GetOwner()->GetComponentsByInterface(UHealthInterface::StaticClass());
+	if (HealthComponents.Num() > 0)
+	{
+		HealthComponent = HealthComponents[0];
+	}
+	
 	if (!HealthComponent)
 	{
-		UE_LOG(LogTemp, Error, TEXT("UHealthDecayComponent requires UHealthComponent to function properly."));
+		UE_LOG(LogTemp, Error, TEXT("UHealthDecayComponent requires a component that implements IHealthInterface to function properly."));
 	}
 	
 }
@@ -35,7 +40,7 @@ void UHealthDecayComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (HealthComponent)
 	{
-		HealthComponent->TakeDamage(DecayRate * DeltaTime);
+		IHealthInterface::Execute_TakeDamage(HealthComponent, DecayRate * DeltaTime);
 	}
 }
 

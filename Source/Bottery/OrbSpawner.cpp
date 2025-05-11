@@ -43,6 +43,11 @@ void AOrbSpawner::Tick(float DeltaTime)
 
 void AOrbSpawner::SpawnNew()
 {
+	if (MaxSpawned > 0 && SpawnedActors.Num() >= MaxSpawned)
+	{
+		return;
+	}
+
 	int32 SpawnIndex = ChooseIndex();
 	if (SpawnIndex < 0 || !SpawnTable.IsValidIndex(SpawnIndex))
 	{

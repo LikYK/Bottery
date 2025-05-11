@@ -8,21 +8,28 @@ void UOrbMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
+	TArray<UActorComponent*> StatComponents = GetOwner()->GetComponentsByInterface(UStatInterface::StaticClass());
+	UActorComponent* StatComponent = nullptr;
+
+	if (StatComponents.Num() > 0)
+	{
+		StatComponent = StatComponents[0];
+	}
+
 	if (StatComponent)
 	{
-		float BaseSpeed = StatComponent->GetStatBase(EStatKey::Speed);
+		float BaseSpeed = IStatInterface::Execute_GetStatBase(StatComponent, EStatKey::Speed);
 		InitialSpeed = BaseSpeed;
 		MaxSpeed = BaseSpeed;
 		Velocity = Velocity.GetSafeNormal() * BaseSpeed;
 		UpdateComponentVelocity();
 
-		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStatDelegateWrapper(EStatKey::Speed))
+		if (UStatDelegateWrapper* DelegateWrapper = IStatInterface::Execute_GetStatDelegateWrapper(StatComponent, EStatKey::Speed))
 		{
 			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 		}
 
-		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Speed stat set")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb speed stat set:%d"),BaseSpeed));
 	}
 	else
 	{

@@ -21,6 +21,7 @@ public:
 
 protected:
 	virtual void PostInitProperties() override;
+	virtual void PostDuplicate(bool bDuplicateForPIE) override;
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")

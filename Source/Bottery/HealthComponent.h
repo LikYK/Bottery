@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HealthInterface.h"
 #include "HealthDelegateWrapper.h"
 #include "HealthComponent.generated.h"
 
 UCLASS( ClassGroup=(Health), meta=(BlueprintSpawnableComponent) )
-class BOTTERY_API UHealthComponent : public UActorComponent
+class BOTTERY_API UHealthComponent : public UActorComponent, public IHealthInterface
 {
 	GENERATED_BODY()
 
@@ -23,17 +24,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetCurrentHealth();
+	virtual float GetCurrentHealth_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetMaxHealth();
+	virtual float GetMaxHealth_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	void TakeDamage(float Damage);
+	virtual void TakeDamage_Implementation(float Damage) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealthDelegateWrapper* HealthDelegateWrapper;
+	virtual UHealthDelegateWrapper* GetHealthDelegateWrapper_Implementation() override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -41,4 +38,7 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Health")
 	float CurrentHealth;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Health")
+	UHealthDelegateWrapper* HealthDelegateWrapper;
 };

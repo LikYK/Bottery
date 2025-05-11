@@ -13,6 +13,14 @@ AOrb::AOrb()
 	RootComponent = MeshComponent;
 
 	MovementComponent = CreateDefaultSubobject<UOrbMovementComponent>(TEXT("Movement"));
+	MovementComponent->bShouldBounce = true;
+	MovementComponent->Bounciness = 1.0f;
+	MovementComponent->Friction = 0.0f;
+	MovementComponent->ProjectileGravityScale = 0.0f;
+	MovementComponent->bConstrainToPlane = true;
+	MovementComponent->bSnapToPlaneAtStart = true;
+	MovementComponent->SetPlaneConstraintNormal(FVector(0.0f, 0.0f, 1.0f));
+	MovementComponent->SetPlaneConstraintOrigin(FVector(0.0f, 0.0f, 100.f));
 }
 
 // Called when the game starts or when spawned

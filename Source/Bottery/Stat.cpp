@@ -13,7 +13,19 @@ void UStat::PostInitProperties()
 	Super::PostInitProperties();
 
 	// After properties are loaded from defaults, set current value = base value
+	// This only works when the component containing UStat is added in C++ through CreateDefaultObject<>
 	Value = BaseValue;
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postinit, val: %f, %f"), Value, BaseValue));
+}
+
+void UStat::PostDuplicate(bool bDuplicateForPIE)
+{
+	Super::PostDuplicate(bDuplicateForPIE);
+
+	// After properties are loaded from defaults, set current value = base value
+	// This only works when the component containing UStat is added in Blueprint
+	Value = BaseValue;
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postduplicate, val: %f, %f"), Value, BaseValue));
 }
 
 float UStat::GetBaseValue()

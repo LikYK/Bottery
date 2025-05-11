@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "StatInterface.h"
 #include "StatKey.h"
 #include "Stat.h"
 #include "StatComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOTTERY_API UStatComponent : public UActorComponent
+class BOTTERY_API UStatComponent : public UActorComponent, public IStatInterface
 {
 	GENERATED_BODY()
 
@@ -27,35 +28,35 @@ protected:
 
 public:	
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	bool HasStat(EStatKey Key);
+	bool HasStat_Implementation(EStatKey Key) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatBase(EStatKey Key);
+	float GetStatBase_Implementation(EStatKey Key) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMax(EStatKey Key);
+	float GetStatMax_Implementation(EStatKey Key) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMin(EStatKey Key);
+	float GetStatMin_Implementation(EStatKey Key) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatValue(EStatKey Key);
+	float GetStatValue_Implementation(EStatKey Key) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void SetStatValue(EStatKey Key, float NewSpeed);
+	void SetStatValue_Implementation(EStatKey Key, float NewSpeed) override;
 
 	// Increases or decreases speed by a fixed amount for Steps times.
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void ModifyStat(EStatKey Key, float ChangeAmount);
+	void ModifyStat_Implementation(EStatKey Key, float ChangeAmount) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	UStatDelegateWrapper* GetStatDelegateWrapper(EStatKey Key);
+	UStatDelegateWrapper* GetStatDelegateWrapper_Implementation(EStatKey Key) override;
 
 	//UFUNCTION(BlueprintCallable, Category = "Stats")
 	//UStat* GetStat(EStatKey StatKey);
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Stats")
 	TMap<EStatKey, UStat*> Stats;
 
 };

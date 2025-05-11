@@ -41,34 +41,34 @@ void UPolarityComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
-EPolarity UPolarityComponent::GetPolarity()
+EPolarity UPolarityComponent::GetPolarity_Implementation()
 {
 	return Polarity;
 }
 
-void UPolarityComponent::SetPolarity(EPolarity NewPolarity)
+void UPolarityComponent::SetPolarity_Implementation(EPolarity NewPolarity)
 {
 	Polarity = NewPolarity;
 
-	ColourComponent->ChangeColour(GetPolarityColour());
-	PolarityDelegateWrapper->OnPolarityChanged.Broadcast(Polarity, GetPolarityColour());
+	ColourComponent->ChangeColour(IPolarityInterface::Execute_GetPolarityColour(this, Polarity));
+	PolarityDelegateWrapper->OnPolarityChanged.Broadcast(Polarity, IPolarityInterface::Execute_GetPolarityColour(this, Polarity));
 }
 
-void UPolarityComponent::SwitchPolarity()
+void UPolarityComponent::SwitchPolarity_Implementation()
 {
 	if (Polarity == EPolarity::Positive)
 	{
-		SetPolarity(EPolarity::Negative);
+		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Negative);
 	}
 	else 
 	{
-		SetPolarity(EPolarity::Positive);
+		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Positive);
 	}
 }
 
-FLinearColor UPolarityComponent::GetPolarityColour()
+FLinearColor UPolarityComponent::GetPolarityColour_Implementation(EPolarity TargetPolarity)
 {
-	if (Polarity == EPolarity::Positive)
+	if (TargetPolarity == EPolarity::Positive)
 	{
 		return PositiveColour;
 	}
@@ -78,16 +78,21 @@ FLinearColor UPolarityComponent::GetPolarityColour()
 	}
 }
 
+UPolarityDelegateWrapper* UPolarityComponent::GetPolarityDelegateWrapper_Implementation()
+{
+	return PolarityDelegateWrapper;
+}
+
 void UPolarityComponent::SetRandomPolarity()
 {
 	bool bResult = FMath::RandBool();
 	if (bResult)
 	{
-		SetPolarity(EPolarity::Negative);
+		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Negative);
 	}
 	else
 	{
-		SetPolarity(EPolarity::Positive);
+		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Positive);
 	}
 }
 

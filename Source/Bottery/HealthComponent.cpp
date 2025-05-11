@@ -31,17 +31,17 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-float UHealthComponent::GetCurrentHealth()
+float UHealthComponent::GetCurrentHealth_Implementation()
 {
 	return CurrentHealth;
 }
 
-float UHealthComponent::GetMaxHealth()
+float UHealthComponent::GetMaxHealth_Implementation()
 {
 	return MaxHealth;
 }
 
-void UHealthComponent::TakeDamage(float Damage)
+void UHealthComponent::TakeDamage_Implementation(float Damage)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0, MaxHealth);
 
@@ -59,5 +59,10 @@ void UHealthComponent::TakeDamage(float Damage)
 			FString::Printf(TEXT("Damage: %f, %f"), GetCurrentHealth(), GetMaxHealth())
 		);
 	}*/
+}
+
+UHealthDelegateWrapper* UHealthComponent::GetHealthDelegateWrapper_Implementation()
+{
+	return HealthDelegateWrapper;
 }
 
