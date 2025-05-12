@@ -46,15 +46,15 @@ public:
 	UStatDelegateWrapper* StatDelegateWrapper;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (ClampMin = "0.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float BaseValue;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (ClampMin = "0.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float MaxValue;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", meta = (ClampMin = "0.0"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float MinValue;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Stat", meta = (ClampMin = "0.0"))
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Stat")
 	float Value;
 };

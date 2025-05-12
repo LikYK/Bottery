@@ -31,11 +31,11 @@ void UBounceEffectComponent::HandleProjectileBounce(const FHitResult& ImpactResu
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("bounce handler")));
 	AActor* OtherActor = ImpactResult.GetActor();
 
-	if (!EffectInstance)
-	{
-		CreateEffectInstance();
-	}
+	//if (!EffectInstance)
+	//{
+	//	CreateEffectInstance();
+	//}
 
-	EffectInstance->ApplyEffect(GetOwner(), OtherActor);
+	Effect->ApplyEffect(GetOwner(), OtherActor);
 }
 

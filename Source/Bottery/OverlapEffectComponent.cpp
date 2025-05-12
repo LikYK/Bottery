@@ -28,12 +28,12 @@ void UOverlapEffectComponent::BeginPlay()
 void UOverlapEffectComponent::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("overlap handler")));
-	if (!EffectInstance)
-	{
-		CreateEffectInstance();
-	}
+	//if (!EffectInstance)
+	//{
+	//	CreateEffectInstance();
+	//}
 
-	EffectInstance->ApplyEffect(GetOwner(), OtherActor);
+	Effect->ApplyEffect(GetOwner(), OtherActor);
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Overlap destroy")));
 	GetOwner()->Destroy();
 }

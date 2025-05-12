@@ -26,12 +26,12 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
-	UFUNCTION()
-	virtual void CreateEffectInstance();
+	//UFUNCTION()
+	//virtual void CreateEffectInstance();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect")
-	TSubclassOf<UEffect> EffectClass;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect")
+	//TSubclassOf<UEffect> EffectClass;
 
-	UPROPERTY()
-	UEffect* EffectInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = "Effect")
+	UEffect* Effect;
 };

@@ -32,11 +32,11 @@ void UCollisionEffectComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// ...
 }
 
-void UCollisionEffectComponent::CreateEffectInstance()
-{
-	if (EffectClass)
-	{
-		EffectInstance = NewObject<UEffect>(this, EffectClass);
-	}
-}
+//void UCollisionEffectComponent::CreateEffectInstance()
+//{
+//	//if (EffectClass)
+//	//{
+//	//	EffectInstance = NewObject<UEffect>(this, EffectClass);
+//	//}
+//}
 

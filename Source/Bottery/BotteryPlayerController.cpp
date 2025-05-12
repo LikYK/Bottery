@@ -63,6 +63,9 @@ void ABotteryPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnTouchTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ABotteryPlayerController::OnTouchReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ABotteryPlayerController::OnTouchReleased);
+
+		// Change polarity
+		EnhancedInputComponent->BindAction(ChangePolarityAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnChangePolarity);
 	}
 	else
 	{
@@ -132,4 +135,23 @@ void ABotteryPlayerController::OnTouchReleased()
 {
 	bIsTouch = false;
 	OnSetDestinationReleased();
+}
+
+void ABotteryPlayerController::OnChangePolarity()
+{
+	APawn* ControlledPawn = GetPawn();
+
+	TArray<UActorComponent*> PolarityComponents = ControlledPawn->GetComponentsByInterface(UPolarityInterface::StaticClass());
+	if (!PolarityComponents.IsEmpty())
+	{
+		UActorComponent* PolarityComponent = PolarityComponents[0];
+
+		IPolarityInterface::Execute_SwitchPolarity(PolarityComponent);
+
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), IPolarityInterface::Execute_GetPolarity(PolarityComponent)));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found in player'-controlled pawn's control target."));
+	}
 }
