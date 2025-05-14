@@ -47,6 +47,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ChangePolarityAction;
 
+	// Dash
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DashAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float DashDistance = 1200.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float DashCooldown = 1.0f;
+
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -63,14 +73,21 @@ protected:
 	void OnTouchTriggered();
 	void OnTouchReleased();
 
-	// Input handlers for changing polarity
+	// Input handler for changing polarity
 	void OnChangePolarity();
+
+	// Input handler for dashing
+	void OnDash();
+	void ResetCanDash();
 
 private:
 	FVector CachedDestination;
 
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
+
+	bool bCanDash = true;
+	FTimerHandle DashCooldownTimer;
 
 	// UI
 protected:

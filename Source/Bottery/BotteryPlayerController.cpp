@@ -1,7 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BotteryPlayerController.h"
+#include "BotCharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
@@ -66,6 +68,9 @@ void ABotteryPlayerController::SetupInputComponent()
 
 		// Change polarity
 		EnhancedInputComponent->BindAction(ChangePolarityAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnChangePolarity);
+
+		// Dash
+		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnDash);
 	}
 	else
 	{
@@ -152,6 +157,27 @@ void ABotteryPlayerController::OnChangePolarity()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found in player'-controlled pawn's control target."));
+		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found in player-controlled pawn."));
 	}
+}
+
+void ABotteryPlayerController::OnDash()
+{
+	if (!bCanDash) return;
+	
+	// Get direction
+	ACharacter* ControlledCharacter = Cast<ACharacter>(GetPawn());
+	FVector Dir = GetPawn()->GetActorForwardVector();
+
+	// Launch character
+	ControlledCharacter->LaunchCharacter(Dir * DashDistance, true, false);
+
+	// Cooldown
+	bCanDash = false;
+	GetWorldTimerManager().SetTimer(DashCooldownTimer, this, &ABotteryPlayerController::ResetCanDash, DashCooldown, false);
+}
+
+void ABotteryPlayerController::ResetCanDash()
+{
+	bCanDash = true;
 }

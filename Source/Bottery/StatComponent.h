@@ -58,5 +58,4 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Stats")
 	TMap<EStatKey, UStat*> Stats;
-
 };

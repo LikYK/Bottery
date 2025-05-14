@@ -4,11 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "HasHealth.h"
 #include "HealthComponent.h"
-#include "HasStats.h"
 #include "StatComponent.h"
-#include "HasPolarity.h"
 #include "PolarityComponent.h"
 #include "BotteryCharacter.generated.h"
 
