@@ -90,12 +90,22 @@ private:
 	FTimerHandle DashCooldownTimer;
 
 	// UI
+public:
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowGameOverUI(int32 Score);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> HUDWidgetClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
 	UUserWidget* HUDWidgetInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> GameOverWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	UUserWidget* GameOverWidgetInstance;
 };
 
 

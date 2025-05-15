@@ -2,19 +2,14 @@
 
 
 #include "ChangePolarityEffect.h"
-#include "PolarityInterface.h"
+#include "PolarityComponent.h"
 
 void UChangePolarityEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
-	TArray<UActorComponent*> TargetPolarityComponents = Target->GetComponentsByInterface(UPolarityInterface::StaticClass());
+	UPolarityComponent* TargetPolarityComponent = Target->GetComponentByClass<UPolarityComponent>();
 
-	UActorComponent* TargetPolarityInterface = nullptr;
-
-	if (TargetPolarityComponents.Num() > 0)
-		TargetPolarityInterface = TargetPolarityComponents[0];
-
-	if (!TargetPolarityInterface)
+	if (!TargetPolarityComponent)
 	{
 		// Target has no polarity, this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarity Target return")));
@@ -23,7 +18,7 @@ void UChangePolarityEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Apply effect
 	// Switch target's polarity
-	IPolarityInterface::Execute_SwitchPolarity(TargetPolarityInterface);
+	TargetPolarityComponent->SwitchPolarity();
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarityEffect end return, newPolarity: %d"), IPolarityInterface::Execute_GetPolarity(TargetPolarityInterface)));
+	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarityEffect end return, newPolarity: %d"), TargetPolarityComponent->GetPolarity()));
 }

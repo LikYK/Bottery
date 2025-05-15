@@ -2,58 +2,46 @@
 
 
 #include "ChangeStatEffect.h"
-#include "StatInterface.h"
-#include "PolarityInterface.h"
+#include "StatComponent.h"
+#include "PolarityComponent.h"
 
 void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
-	TArray<UActorComponent*> TargetStatComponents = Target->GetComponentsByInterface(UStatInterface::StaticClass());
-	UActorComponent* TargetStatInterface = nullptr;
+	UStatComponent* TargetStatComponent = Target->GetComponentByClass<UStatComponent>();
 
-	if (TargetStatComponents.Num() > 0)
-		TargetStatInterface = TargetStatComponents[0];
-
-	if (!TargetStatInterface || !IStatInterface::Execute_HasStat(TargetStatInterface, TargetStat))
+	if (!TargetStatComponent || !TargetStatComponent->HasStat(TargetStat))
 	{
 		// Target has no speed stat, this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat Target return")));
 		return;
 	}
 
-	// Get the required interfaces from owner
-	TArray<UActorComponent*> InitiatorStatComponents = Initiator->GetComponentsByInterface(UStatInterface::StaticClass());
-	TArray<UActorComponent*> InitiatorPolarityComponents = Initiator->GetComponentsByInterface(UPolarityInterface::StaticClass());
+	// Get the required data from initiator
+	UStatComponent* InitiatorStatComponent = Initiator->GetComponentByClass<UStatComponent>();
+	UPolarityComponent* InitiatorPolarityComponent = Initiator->GetComponentByClass<UPolarityComponent>();
 
-	UActorComponent* InitiatorStatInterface = nullptr;
-	UActorComponent* InitiatorPolarityInterface = nullptr;
-
-	if (InitiatorStatComponents.Num() > 0)
-		InitiatorStatInterface = InitiatorStatComponents[0];
-	if (InitiatorPolarityComponents.Num() > 0)
-		InitiatorPolarityInterface = InitiatorPolarityComponents[0];
-
-	if ((!InitiatorStatInterface) || (!IStatInterface::Execute_HasStat(InitiatorStatInterface, EStatKey::Magnitude)) || (!InitiatorPolarityInterface))
+	if ((!InitiatorStatComponent) || (!InitiatorStatComponent->HasStat(EStatKey::Magnitude)) || (!InitiatorPolarityComponent))
 	{
-		// The owner is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat owner return")));
-		UE_LOG(LogTemp, Error, TEXT("ChangeSpeedEffect ApplyEffect failed: Missing required component(s) or data in owner, this effect will fail to apply on any target!"));
+		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat initiator return")));
+		UE_LOG(LogTemp, Error, TEXT("ChangeSpeedEffect ApplyEffect failed: Missing required component(s) or data in initiator, this effect will fail to apply on any target!"));
 		return;
 	}
 
 	// Apply effect
-	// Based on owner's polarity, increase or decrease target's speed by their base speed * owner magnitude
-	EPolarity SelfPolarity = IPolarityInterface::Execute_GetPolarity(InitiatorPolarityInterface);
-	float Magnitude = IStatInterface::Execute_GetStatValue(InitiatorStatInterface, EStatKey::Magnitude);
-	float BaseVal = IStatInterface::Execute_GetStatBase(TargetStatInterface, TargetStat);
+	// Based on initiator's polarity, increase or decrease target's speed by their base speed * initiator magnitude
+	EPolarity InitiatorPolarity = InitiatorPolarityComponent->GetPolarity();
+	float Magnitude = InitiatorStatComponent->GetStatValue(EStatKey::Magnitude);
+	float BaseVal = TargetStatComponent->GetStatBase(TargetStat);
 
-	if (SelfPolarity == EPolarity::Positive)
+	if (InitiatorPolarity == EPolarity::Positive)
 	{
-		IStatInterface::Execute_ModifyStat(TargetStatInterface, TargetStat, Magnitude * BaseVal);
+		TargetStatComponent->ModifyStat(TargetStat, Magnitude * BaseVal);
 	}
 	else
 	{
-		IStatInterface::Execute_ModifyStat(TargetStatInterface, TargetStat, -Magnitude * BaseVal);
+		TargetStatComponent->ModifyStat(TargetStat, -Magnitude * BaseVal);
 	}
 	
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStatEffect end return, targetStat: %d, changeAmt: %f"), TargetStat, Magnitude * BaseVal));

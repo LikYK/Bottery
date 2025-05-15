@@ -31,12 +31,12 @@ void UStatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-bool UStatComponent::HasStat_Implementation(EStatKey Key)
+bool UStatComponent::HasStat(EStatKey Key)
 {
 	return Stats.Contains(Key);
 }
 
-float UStatComponent::GetStatBase_Implementation(EStatKey Key)
+float UStatComponent::GetStatBase(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -46,7 +46,7 @@ float UStatComponent::GetStatBase_Implementation(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatMax_Implementation(EStatKey Key)
+float UStatComponent::GetStatMax(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -56,7 +56,7 @@ float UStatComponent::GetStatMax_Implementation(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatMin_Implementation(EStatKey Key)
+float UStatComponent::GetStatMin(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -66,7 +66,7 @@ float UStatComponent::GetStatMin_Implementation(EStatKey Key)
 	return 0.0f;
 }
 
-float UStatComponent::GetStatValue_Implementation(EStatKey Key)
+float UStatComponent::GetStatValue(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -76,7 +76,7 @@ float UStatComponent::GetStatValue_Implementation(EStatKey Key)
 	return 0.0f;
 }
 
-void UStatComponent::SetStatValue_Implementation(EStatKey Key, float NewValue)
+void UStatComponent::SetStatValue(EStatKey Key, float NewValue)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -88,7 +88,7 @@ void UStatComponent::SetStatValue_Implementation(EStatKey Key, float NewValue)
 	}
 }
 
-void UStatComponent::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
+void UStatComponent::ModifyStat(EStatKey Key, float ChangeAmount)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -100,7 +100,7 @@ void UStatComponent::ModifyStat_Implementation(EStatKey Key, float ChangeAmount)
 	}
 }
 
-UStatDelegateWrapper* UStatComponent::GetStatDelegateWrapper_Implementation(EStatKey Key)
+UStatDelegateWrapper* UStatComponent::GetStatDelegateWrapper(EStatKey Key)
 {
 	if (UStat* Stat = Stats.FindRef(Key))
 	{
@@ -109,23 +109,4 @@ UStatDelegateWrapper* UStatComponent::GetStatDelegateWrapper_Implementation(ESta
 	UE_LOG(LogTemp, Warning, TEXT("GetStatDelegateWrapper failed: stat is not valid."));
 	return nullptr;
 }
-
-//UStat* UStatComponent::GetStat(EStatKey StatKey)
-//{
-//	UStat* Stat = nullptr;
-//
-//	// Use Find instead of FindRef because FindRef returns a default obj if not found
-//	UStat** StatPtr = Stats.Find(StatKey);
-//	if (StatPtr)
-//	{
-//		Stat = *StatPtr;
-//	}
-//
-//	if (!Stat)
-//	{
-//		UE_LOG(LogTemp, Warning, TEXT("Get stat failed, stat not found."));
-//	}
-//
-//	return Stat;
-//}
 

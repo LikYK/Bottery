@@ -2,7 +2,7 @@
 
 
 #include "ScaleSizeWithStatComponent.h"
-#include "StatInterface.h"
+#include "StatComponent.h"
 
 // Sets default values for this component's properties
 UScaleSizeWithStatComponent::UScaleSizeWithStatComponent()
@@ -25,24 +25,20 @@ void UScaleSizeWithStatComponent::BeginPlay()
 	OriginalScale = TargetComponent->GetRelativeScale3D();
 	
 	// Check if target stat exists on owner
-	TArray<UActorComponent*> StatComponents = GetOwner()->GetComponentsByInterface(UStatInterface::StaticClass());
-	UActorComponent* StatInterface = nullptr;
+	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 
-	if (StatComponents.Num() > 0)
-		StatInterface = StatComponents[0];
-
-	if (!StatInterface || !IStatInterface::Execute_HasStat(StatInterface, TargetStat))
+	if (!StatComponent || !StatComponent->HasStat(TargetStat))
 	{
 		UE_LOG(LogTemp, Error, TEXT("ScaleSizeWithStatComponent failed to initialize, target stat is not found in owner."));
 		return;
 	}
 
 	// Cache TargetStat's minimum and maximum for ScaleMultiplier's calculation in handler
-	TargetMin = IStatInterface::Execute_GetStatMin(StatInterface, TargetStat);
-	TargetMax = IStatInterface::Execute_GetStatMax(StatInterface, TargetStat);
+	TargetMin = StatComponent->GetStatMin(TargetStat);
+	TargetMax = StatComponent->GetStatMax(TargetStat);
 
 	// Bind handler taht updates the ScaleMultiplier to target stat's OnstatChanged delegate
-	IStatInterface::Execute_GetStatDelegateWrapper(StatInterface, TargetStat)->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
+	StatComponent->GetStatDelegateWrapper(TargetStat)->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
 
 	// Update the actual scale of the target component automatically when ScaleMultiplier changes
 	ScaleMultiplier->StatDelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
@@ -63,7 +59,7 @@ void UScaleSizeWithStatComponent::HandleTargetStatChange(float NewTargetValue, f
 	float ScaleMax = ScaleMultiplier->GetMaxValue();
 	float ScaleBase = ScaleMultiplier->GetBaseValue();
 
-	// GetMappedRangeValueClamped performs inverse-lerp with 1st and 3rd parameter,
+	// GetMappedRangeValueClamped performs inverse-lerp with 3rd and 1st parameter,
 	// and performs lerp with the result and the 2nd parameter
 	if (NewTargetValue < BaseTargetValue)
 	{

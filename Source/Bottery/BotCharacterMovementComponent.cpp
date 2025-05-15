@@ -8,14 +8,12 @@ void UBotCharacterMovementComponent::BeginPlay()
 { 
 	Super::BeginPlay();
 
-	auto StatComponents = GetOwner()->GetComponentsByInterface(UStatInterface::StaticClass());
-	if (!StatComponents.IsEmpty())
+	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
+	if (StatComponent && StatComponent->HasStat(EStatKey::Speed))
 	{
-		UActorComponent* StatComponent = StatComponents[0];
+		MaxWalkSpeed = StatComponent->GetStatBase(EStatKey::Speed);
 
-		MaxWalkSpeed = IStatInterface::Execute_GetStatBase(StatComponent, EStatKey::Speed);
-
-		if (UStatDelegateWrapper* DelegateWrapper = IStatInterface::Execute_GetStatDelegateWrapper(StatComponent, EStatKey::Speed))
+		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStatDelegateWrapper(EStatKey::Speed))
 		{
 			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
 		}
@@ -24,7 +22,7 @@ void UBotCharacterMovementComponent::BeginPlay()
 	}
 	else 
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Bot movement component init failed, no stat component found in owner."));
+		UE_LOG(LogTemp, Warning, TEXT("Bot movement component init failed, no speed stat found in owner."));
 	}
 }
 

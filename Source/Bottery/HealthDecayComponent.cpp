@@ -19,10 +19,10 @@ void UHealthDecayComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<UActorComponent*> HealthComponents = GetOwner()->GetComponentsByInterface(UHealthInterface::StaticClass());
-	if (HealthComponents.Num() > 0)
+	UHealthComponent* HealthComp = GetOwner()->GetComponentByClass<UHealthComponent>();
+	if (HealthComp)
 	{
-		HealthComponent = HealthComponents[0];
+		HealthComponent = HealthComp;
 	}
 	
 	if (!HealthComponent)
@@ -40,7 +40,7 @@ void UHealthDecayComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (HealthComponent)
 	{
-		IHealthInterface::Execute_TakeDamage(HealthComponent, DecayRate * DeltaTime);
+		HealthComponent->TakeDamage(DecayRate * DeltaTime);
 	}
 }
 

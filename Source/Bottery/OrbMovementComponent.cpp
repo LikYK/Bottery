@@ -8,23 +8,17 @@ void UOrbMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	TArray<UActorComponent*> StatComponents = GetOwner()->GetComponentsByInterface(UStatInterface::StaticClass());
-	UActorComponent* StatComponent = nullptr;
-
-	if (StatComponents.Num() > 0)
-	{
-		StatComponent = StatComponents[0];
-	}
+	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 
 	if (StatComponent)
 	{
-		float BaseSpeed = IStatInterface::Execute_GetStatBase(StatComponent, EStatKey::Speed);
+		float BaseSpeed = StatComponent->GetStatBase(EStatKey::Speed);
 		InitialSpeed = BaseSpeed;
 		MaxSpeed = BaseSpeed;
 		Velocity = Velocity.GetSafeNormal() * BaseSpeed;
 		UpdateComponentVelocity();
 
-		if (UStatDelegateWrapper* DelegateWrapper = IStatInterface::Execute_GetStatDelegateWrapper(StatComponent, EStatKey::Speed))
+		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStatDelegateWrapper(EStatKey::Speed))
 		{
 			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 		}

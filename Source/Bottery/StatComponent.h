@@ -4,14 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "StatInterface.h"
 #include "StatKey.h"
 #include "Stat.h"
 #include "StatComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BOTTERY_API UStatComponent : public UActorComponent, public IStatInterface
+class BOTTERY_API UStatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -28,29 +27,29 @@ protected:
 
 public:	
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	bool HasStat_Implementation(EStatKey Key) override;
+	bool HasStat(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatBase_Implementation(EStatKey Key) override;
+	float GetStatBase(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMax_Implementation(EStatKey Key) override;
+	float GetStatMax(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMin_Implementation(EStatKey Key) override;
+	float GetStatMin(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatValue_Implementation(EStatKey Key) override;
+	float GetStatValue(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void SetStatValue_Implementation(EStatKey Key, float NewSpeed) override;
+	void SetStatValue(EStatKey Key, float NewSpeed);
 
 	// Increases or decreases speed by a fixed amount for Steps times.
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void ModifyStat_Implementation(EStatKey Key, float ChangeAmount) override;
+	void ModifyStat(EStatKey Key, float ChangeAmount);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	UStatDelegateWrapper* GetStatDelegateWrapper_Implementation(EStatKey Key) override;
+	UStatDelegateWrapper* GetStatDelegateWrapper(EStatKey Key);
 
 	//UFUNCTION(BlueprintCallable, Category = "Stats")
 	//UStat* GetStat(EStatKey StatKey);

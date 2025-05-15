@@ -31,27 +31,32 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-float UHealthComponent::GetCurrentHealth_Implementation()
+float UHealthComponent::GetCurrentHealth()
 {
 	return CurrentHealth;
 }
 
-float UHealthComponent::GetMaxHealth_Implementation()
+float UHealthComponent::GetMaxHealth()
 {
 	return MaxHealth;
 }
 
-void UHealthComponent::TakeDamage_Implementation(float Damage)
+void UHealthComponent::TakeDamage(float Damage)
 {
 	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0, MaxHealth);
 
 	HealthDelegateWrapper->OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 
-	// Check if owner is dead after taking damage
-	if (CurrentHealth <= -MaxHealth || CurrentHealth >= MaxHealth)
+	if (Damage < 0) // Healing
 	{
-		// broadcast death event here
+		HealthDelegateWrapper->OnHealed.Broadcast(-Damage);
 	}
+
+	// Check if owner is dead after taking damage
+	//if (CurrentHealth <= -MaxHealth || CurrentHealth >= MaxHealth)
+	//{
+		// broadcast death event here
+	//}
 
 	/*if (GEngine)
 	{
@@ -61,7 +66,7 @@ void UHealthComponent::TakeDamage_Implementation(float Damage)
 	}*/
 }
 
-UHealthDelegateWrapper* UHealthComponent::GetHealthDelegateWrapper_Implementation()
+UHealthDelegateWrapper* UHealthComponent::GetHealthDelegateWrapper()
 {
 	return HealthDelegateWrapper;
 }

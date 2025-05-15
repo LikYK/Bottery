@@ -41,32 +41,32 @@ void UPolarityComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
-EPolarity UPolarityComponent::GetPolarity_Implementation()
+EPolarity UPolarityComponent::GetPolarity()
 {
 	return Polarity;
 }
 
-void UPolarityComponent::SetPolarity_Implementation(EPolarity NewPolarity)
+void UPolarityComponent::SetPolarity(EPolarity NewPolarity)
 {
 	Polarity = NewPolarity;
 
-	ColourComponent->ChangeColour(IPolarityInterface::Execute_GetPolarityColour(this, Polarity));
-	PolarityDelegateWrapper->OnPolarityChanged.Broadcast(Polarity, IPolarityInterface::Execute_GetPolarityColour(this, Polarity));
+	ColourComponent->ChangeColour(GetPolarityColour(Polarity));
+	PolarityDelegateWrapper->OnPolarityChanged.Broadcast(Polarity, GetPolarityColour(Polarity));
 }
 
-void UPolarityComponent::SwitchPolarity_Implementation()
+void UPolarityComponent::SwitchPolarity()
 {
 	if (Polarity == EPolarity::Positive)
 	{
-		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Negative);
+		SetPolarity(EPolarity::Negative);
 	}
 	else 
 	{
-		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Positive);
+		SetPolarity(EPolarity::Positive);
 	}
 }
 
-FLinearColor UPolarityComponent::GetPolarityColour_Implementation(EPolarity TargetPolarity)
+FLinearColor UPolarityComponent::GetPolarityColour(EPolarity TargetPolarity)
 {
 	if (TargetPolarity == EPolarity::Positive)
 	{
@@ -78,7 +78,7 @@ FLinearColor UPolarityComponent::GetPolarityColour_Implementation(EPolarity Targ
 	}
 }
 
-UPolarityDelegateWrapper* UPolarityComponent::GetPolarityDelegateWrapper_Implementation()
+UPolarityDelegateWrapper* UPolarityComponent::GetPolarityDelegateWrapper()
 {
 	return PolarityDelegateWrapper;
 }
@@ -88,11 +88,11 @@ void UPolarityComponent::SetRandomPolarity()
 	bool bResult = FMath::RandBool();
 	if (bResult)
 	{
-		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Negative);
+		SetPolarity(EPolarity::Negative);
 	}
 	else
 	{
-		IPolarityInterface::Execute_SetPolarity(this, EPolarity::Positive);
+		SetPolarity(EPolarity::Positive);
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "HealthDelegateWrapper.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthChangedSignature, float, CurrentHealth, float, MaxHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealedSignature, float, HealAmount);
 
 // This is a wrapper class that contains delegates related to health and damage
 // Wrapping delegates allow them to be passed to blueprints for binding
@@ -19,4 +20,7 @@ class BOTTERY_API UHealthDelegateWrapper : public UObject
 public:
 	UPROPERTY(BlueprintAssignable, Category =  "Delegates")
 	FOnHealthChangedSignature OnHealthChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Delegates")
+	FOnHealedSignature OnHealed;
 };

@@ -3,24 +3,61 @@
 #include "BotteryGameMode.h"
 #include "BotteryPlayerController.h"
 #include "BotteryCharacter.h"
+#include "PlayerProgressSubsystem.h"
+#include "BotteryGameState.h"
+#include "Kismet/GameplayStatics.h"
+#include "HealthComponent.h"
 #include "UObject/ConstructorHelpers.h"
+
+void ABotteryGameMode::BeginPlay()
+{
+	// Bind to health delegates to update score and check for game over
+	if (ABotteryCharacter* PlayerCharacter = Cast<ABotteryCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
+	{
+		if (UHealthComponent* HealthComponent = PlayerCharacter->GetComponentByClass<UHealthComponent>())
+		{
+			HealthComponent->GetHealthDelegateWrapper()->OnHealthChanged.AddUniqueDynamic(this, &ABotteryGameMode::CheckForGameOver);
+			HealthComponent->GetHealthDelegateWrapper()->OnHealed.AddUniqueDynamic(this, &ABotteryGameMode::AddScore);
+		}
+	}
+
+	// Bind PlayerProgressSubsystem's save to GameState's GameOver
+	if (UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
+	{
+		if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
+		{
+			GS->OnGameOver.AddUniqueDynamic(Subsys, &UPlayerProgressSubsystem::SaveProgress);
+		}
+	}
+}
 
 ABotteryGameMode::ABotteryGameMode()
 {
-	// use our custom PlayerController class
-	PlayerControllerClass = ABotteryPlayerController::StaticClass();
+}
 
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/TopDown/Blueprints/BP_TopDownCharacter"));
-	if (PlayerPawnBPClass.Class != nullptr)
+void ABotteryGameMode::CheckForGameOver(float CurrentHealth, float BaseHealth)
+{
+	ABotteryGameState* GS = GetGameState<ABotteryGameState>();
+
+	if (!GS->IsGameOver() && CurrentHealth <= 0)
 	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
+		GameOver();
 	}
+}
 
-	// set default controller to our Blueprinted controller
-	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerBPClass(TEXT("/Game/TopDown/Blueprints/BP_TopDownPlayerController"));
-	if(PlayerControllerBPClass.Class != NULL)
+void ABotteryGameMode::AddScore(float Amount)
+{
+	ABotteryGameState* GS = GetGameState<ABotteryGameState>();
+	if (GS)
 	{
-		PlayerControllerClass = PlayerControllerBPClass.Class;
+		GS->AddScore(Amount);
+	}
+}
+
+void ABotteryGameMode::GameOver()
+{
+	if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
+	{
+		GS->GameOver();
 	}
 }

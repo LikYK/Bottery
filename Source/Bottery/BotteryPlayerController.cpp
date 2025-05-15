@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BotteryPlayerController.h"
+#include "StaminaComponent.h"
 #include "BotCharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -13,6 +14,8 @@
 #include "InputActionValue.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
+#include <Kismet/GameplayStatics.h>
+#include "BotteryGameState.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -37,6 +40,12 @@ void ABotteryPlayerController::BeginPlay()
 		{
 			HUDWidgetInstance->AddToViewport();
 		}
+	}
+
+	// Show game over UI on game over
+	if (ABotteryGameState* GameState = Cast<ABotteryGameState>(GetWorld()->GetGameState()))
+	{
+		GameState->OnGameOver.AddUniqueDynamic(this, &ABotteryPlayerController::ShowGameOverUI);
 	}
 }
 
@@ -146,14 +155,12 @@ void ABotteryPlayerController::OnChangePolarity()
 {
 	APawn* ControlledPawn = GetPawn();
 
-	TArray<UActorComponent*> PolarityComponents = ControlledPawn->GetComponentsByInterface(UPolarityInterface::StaticClass());
-	if (!PolarityComponents.IsEmpty())
+	UPolarityComponent* PolarityComponent = ControlledPawn->GetComponentByClass<UPolarityComponent>();
+	if (PolarityComponent)
 	{
-		UActorComponent* PolarityComponent = PolarityComponents[0];
+		PolarityComponent->SwitchPolarity();
 
-		IPolarityInterface::Execute_SwitchPolarity(PolarityComponent);
-
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), IPolarityInterface::Execute_GetPolarity(PolarityComponent)));
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), PolarityComponent->GetPolarity()));
 	}
 	else
 	{
@@ -165,6 +172,25 @@ void ABotteryPlayerController::OnDash()
 {
 	if (!bCanDash) return;
 	
+	// Check stamina
+	UStaminaComponent* StaminaComponent = GetPawn()->GetComponentByClass<UStaminaComponent>();
+	if (StaminaComponent)
+	{
+		if (StaminaComponent->GetCurrentStamina() >= 10)
+		{
+			StaminaComponent->UseStamina(10);
+		}
+		else 
+		{
+			if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina, no dash")));
+			return;
+		}
+	}
+	else
+	{
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina comp")));
+	}
+
 	// Get direction
 	ACharacter* ControlledCharacter = Cast<ACharacter>(GetPawn());
 	FVector Dir = GetPawn()->GetActorForwardVector();
@@ -180,4 +206,25 @@ void ABotteryPlayerController::OnDash()
 void ABotteryPlayerController::ResetCanDash()
 {
 	bCanDash = true;
+}
+
+void ABotteryPlayerController::ShowGameOverUI(int32 Score)
+{
+	if (GameOverWidgetClass && !GameOverWidgetInstance)
+	{
+		GameOverWidgetInstance = CreateWidget<UUserWidget>(this, GameOverWidgetClass);
+	}
+
+	if (GameOverWidgetInstance)
+	{
+		GameOverWidgetInstance->AddToViewport();
+
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+		//FInputModeUIOnly InputMode;
+		//InputMode.SetWidgetToFocus(GameOverWidgetInstance->TakeWidget());
+		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		//SetInputMode(InputMode);
+		//bShowMouseCursor = true;
+	}
 }

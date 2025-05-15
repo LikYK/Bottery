@@ -11,8 +11,20 @@ class ABotteryGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void BeginPlay() override;
+
 public:
 	ABotteryGameMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Game Over")
+	void CheckForGameOver(float CurrentHealth, float BaseHealth);
+
+	UFUNCTION(BlueprintCallable, Category = Basic)
+	void AddScore(float Amount);
+
+	UFUNCTION(BlueprintCallable, Category = "Game Over")
+	void GameOver();
 };
 
 
