@@ -27,10 +27,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Basic)
 	bool IsGameOver();
 
-	UPROPERTY(BlueprintReadWrite, Category = Basic)
+	UPROPERTY(BlueprintAssignable, Category = Basic)
 	FOnGameOverSignature OnGameOver;
 
-	UPROPERTY(BlueprintReadWrite, Category = Basic)
+	UPROPERTY(BlueprintAssignable, Category = Basic)
 	FOnScoreUpdatedSignature OnScoreUpdated;
 
 protected:

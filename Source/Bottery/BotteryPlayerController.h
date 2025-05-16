@@ -94,6 +94,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void ShowGameOverUI(int32 Score);
 
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowPauseUI();
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
+	void ShowTutorialUI();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> HUDWidgetClass;
@@ -106,6 +112,18 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "UI")
 	UUserWidget* GameOverWidgetInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> PauseWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	UUserWidget* PauseWidgetInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> TutorialWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	UUserWidget* TutorialWidgetInstance;
 };
 
 

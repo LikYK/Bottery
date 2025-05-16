@@ -217,7 +217,12 @@ void ABotteryPlayerController::ShowGameOverUI(int32 Score)
 
 	if (GameOverWidgetInstance)
 	{
-		GameOverWidgetInstance->AddToViewport();
+		if (!GameOverWidgetInstance->IsInViewport())
+		{
+			GameOverWidgetInstance->AddToViewport();
+		}
+
+		GameOverWidgetInstance->SetVisibility(ESlateVisibility::Visible);
 
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
 
@@ -226,5 +231,45 @@ void ABotteryPlayerController::ShowGameOverUI(int32 Score)
 		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 		//SetInputMode(InputMode);
 		//bShowMouseCursor = true;
+	}
+}
+
+void ABotteryPlayerController::ShowPauseUI()
+{
+	if (PauseWidgetClass && !PauseWidgetInstance)
+	{
+		PauseWidgetInstance = CreateWidget<UUserWidget>(this, PauseWidgetClass);
+	}
+
+	if (PauseWidgetInstance)
+	{
+		if (!PauseWidgetInstance->IsInViewport())
+		{
+			PauseWidgetInstance->AddToViewport();
+		}
+
+		PauseWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+	}
+}
+
+void ABotteryPlayerController::ShowTutorialUI()
+{
+	if (TutorialWidgetClass && !TutorialWidgetInstance)
+	{
+		TutorialWidgetInstance = CreateWidget<UUserWidget>(this, TutorialWidgetClass);
+	}
+
+	if (TutorialWidgetInstance)
+	{
+		if (!TutorialWidgetInstance->IsInViewport()) 
+		{
+			TutorialWidgetInstance->AddToViewport();
+		}
+
+		TutorialWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
 }
