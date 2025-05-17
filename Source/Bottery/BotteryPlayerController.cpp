@@ -3,6 +3,7 @@
 #include "BotteryPlayerController.h"
 #include "ResourceComponent.h"
 #include "BotCharacterMovementComponent.h"
+#include "BotteryHUD.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
@@ -33,20 +34,20 @@ void ABotteryPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	// Create and add HUD widget
-	if (HUDWidgetClass)
-	{
-		HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
-		if (HUDWidgetInstance)
-		{
-			HUDWidgetInstance->AddToViewport();
-		}
-	}
+	//if (HUDWidgetClass)
+	//{
+	//	HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
+	//	if (HUDWidgetInstance)
+	//	{
+	//		HUDWidgetInstance->AddToViewport();
+	//	}
+	//}
 
 	// Show game over UI on game over
-	if (ABotteryGameState* GameState = Cast<ABotteryGameState>(GetWorld()->GetGameState()))
-	{
-		GameState->OnGameOver.AddUniqueDynamic(this, &ABotteryPlayerController::ShowGameOverUI);
-	}
+	//if (ABotteryGameState* GameState = Cast<ABotteryGameState>(GetWorld()->GetGameState()))
+	//{
+	//	GameState->OnGameOver.AddUniqueDynamic(Cast<ABotteryHUD>(GetHUD()), &ABotteryHUD::ShowGameOverUI);
+	//}
 }
 
 void ABotteryPlayerController::SetupInputComponent()
@@ -153,125 +154,89 @@ void ABotteryPlayerController::OnTouchReleased()
 
 void ABotteryPlayerController::OnChangePolarity()
 {
-	APawn* ControlledPawn = GetPawn();
-
-	UFlagComponent* FlagComponent = ControlledPawn->GetComponentByClass<UFlagComponent>();
-	if (FlagComponent && FlagComponent->HasFlag(EFlagKey::Polarity))
+	ABotteryCharacter* ControlledCharacter = Cast<ABotteryCharacter>(GetPawn());
+	if (ControlledCharacter)
 	{
-		FlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
-
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found in player-controlled pawn."));
+		ControlledCharacter->ChangePolarity();
 	}
 }
 
 void ABotteryPlayerController::OnDash()
 {
-	if (!bCanDash) return;
-	
-	// Check stamina
-	UResourceComponent* ResourceComponent = GetPawn()->GetComponentByClass<UResourceComponent>();
-	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Stamina))
+	ABotteryCharacter* ControlledCharacter = Cast<ABotteryCharacter>(GetPawn());
+	if (ControlledCharacter)
 	{
-		UResource* Stamina = ResourceComponent->GetResource(EResourceKey::Stamina);
-
-		if (Stamina->GetValue() >= 10)
-		{
-			Stamina->ModifyValue(-10);
-		}
-		else 
-		{
-			if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina, no dash")));
-			return;
-		}
-	}
-	else
-	{
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina resource")));
-	}
-
-	// Get direction
-	ACharacter* ControlledCharacter = Cast<ACharacter>(GetPawn());
-	FVector Dir = GetPawn()->GetActorForwardVector();
-
-	// Launch character
-	ControlledCharacter->LaunchCharacter(Dir * DashDistance, true, false);
-
-	// Cooldown
-	bCanDash = false;
-	GetWorldTimerManager().SetTimer(DashCooldownTimer, this, &ABotteryPlayerController::ResetCanDash, DashCooldown, false);
-}
-
-void ABotteryPlayerController::ResetCanDash()
-{
-	bCanDash = true;
-}
-
-void ABotteryPlayerController::ShowGameOverUI(int32 Score)
-{
-	if (GameOverWidgetClass && !GameOverWidgetInstance)
-	{
-		GameOverWidgetInstance = CreateWidget<UUserWidget>(this, GameOverWidgetClass);
-	}
-
-	if (GameOverWidgetInstance)
-	{
-		if (!GameOverWidgetInstance->IsInViewport())
-		{
-			GameOverWidgetInstance->AddToViewport();
-		}
-
-		GameOverWidgetInstance->SetVisibility(ESlateVisibility::Visible);
-
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-
-		//FInputModeUIOnly InputMode;
-		//InputMode.SetWidgetToFocus(GameOverWidgetInstance->TakeWidget());
-		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-		//SetInputMode(InputMode);
-		//bShowMouseCursor = true;
+		ControlledCharacter->Dash();
 	}
 }
 
-void ABotteryPlayerController::ShowPauseUI()
-{
-	if (PauseWidgetClass && !PauseWidgetInstance)
-	{
-		PauseWidgetInstance = CreateWidget<UUserWidget>(this, PauseWidgetClass);
-	}
+//void ABotteryPlayerController::ResetCanDash()
+//{
+//	bCanDash = true;
+//}
 
-	if (PauseWidgetInstance)
-	{
-		if (!PauseWidgetInstance->IsInViewport())
-		{
-			PauseWidgetInstance->AddToViewport();
-		}
-
-		PauseWidgetInstance->SetVisibility(ESlateVisibility::Visible);
-
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-	}
-}
-
-void ABotteryPlayerController::ShowTutorialUI()
-{
-	if (TutorialWidgetClass && !TutorialWidgetInstance)
-	{
-		TutorialWidgetInstance = CreateWidget<UUserWidget>(this, TutorialWidgetClass);
-	}
-
-	if (TutorialWidgetInstance)
-	{
-		if (!TutorialWidgetInstance->IsInViewport()) 
-		{
-			TutorialWidgetInstance->AddToViewport();
-		}
-
-		TutorialWidgetInstance->SetVisibility(ESlateVisibility::Visible);
-
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-	}
-}
+//void ABotteryPlayerController::ShowGameOverUI(int32 Score)
+//{
+//	if (GameOverWidgetClass && !GameOverWidgetInstance)
+//	{
+//		GameOverWidgetInstance = CreateWidget<UUserWidget>(this, GameOverWidgetClass);
+//	}
+//
+//	if (GameOverWidgetInstance)
+//	{
+//		if (!GameOverWidgetInstance->IsInViewport())
+//		{
+//			GameOverWidgetInstance->AddToViewport();
+//		}
+//
+//		GameOverWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+//
+//		UGameplayStatics::SetGamePaused(GetWorld(), true);
+//
+//		//FInputModeUIOnly InputMode;
+//		//InputMode.SetWidgetToFocus(GameOverWidgetInstance->TakeWidget());
+//		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+//		//SetInputMode(InputMode);
+//		//bShowMouseCursor = true;
+//	}
+//}
+//
+//void ABotteryPlayerController::ShowPauseUI()
+//{
+//	if (PauseWidgetClass && !PauseWidgetInstance)
+//	{
+//		PauseWidgetInstance = CreateWidget<UUserWidget>(this, PauseWidgetClass);
+//	}
+//
+//	if (PauseWidgetInstance)
+//	{
+//		if (!PauseWidgetInstance->IsInViewport())
+//		{
+//			PauseWidgetInstance->AddToViewport();
+//		}
+//
+//		PauseWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+//
+//		UGameplayStatics::SetGamePaused(GetWorld(), true);
+//	}
+//}
+//
+//void ABotteryPlayerController::ShowTutorialUI()
+//{
+//	if (TutorialWidgetClass && !TutorialWidgetInstance)
+//	{
+//		TutorialWidgetInstance = CreateWidget<UUserWidget>(this, TutorialWidgetClass);
+//	}
+//
+//	if (TutorialWidgetInstance)
+//	{
+//		if (!TutorialWidgetInstance->IsInViewport()) 
+//		{
+//			TutorialWidgetInstance->AddToViewport();
+//		}
+//
+//		TutorialWidgetInstance->SetVisibility(ESlateVisibility::Visible);
+//
+//		UGameplayStatics::SetGamePaused(GetWorld(), true);
+//	}
+//}

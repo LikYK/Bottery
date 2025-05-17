@@ -30,7 +30,6 @@ void UChangeColourWithFlagComponent::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("ChangeColourWithFlagComponent failed to initialize, target flag is not found in owner."));
 		return;
 	}
-
 	TargetFlag = FlagComponent->GetFlag(TargetFlagKey);
 
 	if (ColourComponent->IsReady())
