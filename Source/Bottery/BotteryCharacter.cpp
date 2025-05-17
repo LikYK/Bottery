@@ -51,7 +51,7 @@ ABotteryCharacter::ABotteryCharacter(const FObjectInitializer& ObjectInitializer
 	StatComponent = CreateDefaultSubobject<UStatComponent>(TEXT("Stats"));
 
 	// Add a default health component
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	ResourceComponent = CreateDefaultSubobject<UResourceComponent>(TEXT("Resources"));
 	
 	// Add a default polarity component
 	FlagComponent = CreateDefaultSubobject<UFlagComponent>(TEXT("Flags"));

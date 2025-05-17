@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "HealthComponent.h"
+#include "ResourceComponent.h"
 #include "StatComponent.h"
 #include "FlagComponent.h"
 #include "BotteryCharacter.generated.h"
@@ -50,7 +50,7 @@ private:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealthComponent* HealthComponent;
+	UResourceComponent* ResourceComponent;
 
 	// Stats (Speed, Magnitude)
 //public:

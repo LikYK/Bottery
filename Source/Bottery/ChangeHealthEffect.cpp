@@ -2,17 +2,18 @@
 
 
 #include "ChangeHealthEffect.h"
-#include "HealthComponent.h"
+#include "ResourceComponent.h"
 #include "StatComponent.h"
 #include "FlagComponent.h"
 
 void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
-	UHealthComponent* TargetHealthComponent = Target->GetComponentByClass<UHealthComponent>();
+	UResourceComponent* TargetResourceComponent = Target->GetComponentByClass<UResourceComponent>();
 	UFlagComponent* TargetFlagComponent = Target->GetComponentByClass<UFlagComponent>();
 
-	if (!TargetHealthComponent || !TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
+	if (!TargetResourceComponent || !TargetResourceComponent->HasResource(EResourceKey::Health)
+		|| !TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// Target has no health or polarity (needed to decide heal or damage), this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth Target return")));
@@ -38,13 +39,14 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	bool TargetPolarity = TargetFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
 	float Magnitude = InitiatorStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
 
+	UResource* TargetHealth = TargetResourceComponent->GetResource(EResourceKey::Health);
 	if (InitiatorPolarity == TargetPolarity)
 	{
-		TargetHealthComponent->TakeDamage(-Magnitude); // Negative damage means healing
+		TargetHealth->ModifyValue(Magnitude);
 	}
 	else
 	{
-		TargetHealthComponent->TakeDamage(Magnitude);
+		TargetHealth->ModifyValue(-Magnitude);
 	}
 
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealthEffect end return, samePolarity: %d, changeAmt: %f"), InitiatorPolarity == TargetPolarity, Magnitude));

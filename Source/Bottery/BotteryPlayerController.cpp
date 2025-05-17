@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BotteryPlayerController.h"
-#include "StaminaComponent.h"
+#include "ResourceComponent.h"
 #include "BotCharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/Character.h"
@@ -173,12 +173,14 @@ void ABotteryPlayerController::OnDash()
 	if (!bCanDash) return;
 	
 	// Check stamina
-	UStaminaComponent* StaminaComponent = GetPawn()->GetComponentByClass<UStaminaComponent>();
-	if (StaminaComponent)
+	UResourceComponent* ResourceComponent = GetPawn()->GetComponentByClass<UResourceComponent>();
+	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Stamina))
 	{
-		if (StaminaComponent->GetCurrentStamina() >= 10)
+		UResource* Stamina = ResourceComponent->GetResource(EResourceKey::Stamina);
+
+		if (Stamina->GetValue() >= 10)
 		{
-			StaminaComponent->UseStamina(10);
+			Stamina->ModifyValue(-10);
 		}
 		else 
 		{
@@ -188,7 +190,7 @@ void ABotteryPlayerController::OnDash()
 	}
 	else
 	{
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina comp")));
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina resource")));
 	}
 
 	// Get direction

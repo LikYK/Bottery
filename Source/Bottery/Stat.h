@@ -21,20 +21,22 @@ public:
 
 protected:
 	virtual void PostInitProperties() override;
-	virtual void PostDuplicate(bool bDuplicateForPIE) override;
+	//virtual void PostDuplicate(bool bDuplicateForPIE) override;
+	virtual void PostLoad() override;
+	//virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")
-	float GetBaseValue();
+	float GetBaseValue() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stat")
-	float GetMaxValue();
+	float GetMaxValue() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stat")
-	float GetMinValue();
+	float GetMinValue() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stat")
-	float GetValue();
+	float GetValue() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Stat")
 	void SetValue(float NewValue);
@@ -57,4 +59,7 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Stat")
 	float Value;
+
+private:
+	void InitValue();
 };

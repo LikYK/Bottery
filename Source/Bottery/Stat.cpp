@@ -14,35 +14,42 @@ void UStat::PostInitProperties()
 
 	// After properties are loaded from defaults, set current value = base value
 	// This only works when the component containing UStat is added in C++ through CreateDefaultObject<>
-	Value = BaseValue;
+	InitValue();
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postinit, val: %f, %f"), Value, BaseValue));
 }
 
-void UStat::PostDuplicate(bool bDuplicateForPIE)
-{
-	Super::PostDuplicate(bDuplicateForPIE);
+//void UStat::PostDuplicate(bool bDuplicateForPIE)
+//{
+//	Super::PostDuplicate(bDuplicateForPIE);
+//
+//	// Set current value = base value for UStat added in Blueprint
+//	InitValue();
+//	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postduplicate, val: %f, %f"), Value, BaseValue));
+//}
 
-	// Set current value = base value for UStat added in Blueprint
-	Value = BaseValue;
-	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postduplicate, val: %f, %f"), Value, BaseValue));
+void UStat::PostLoad()
+{
+	Super::PostLoad();
+
+	InitValue();
 }
 
-float UStat::GetBaseValue()
+float UStat::GetBaseValue() const
 {
 	return BaseValue;
 }
 
-float UStat::GetMaxValue()
+float UStat::GetMaxValue() const
 {
 	return MaxValue;
 }
 
-float UStat::GetMinValue()
+float UStat::GetMinValue() const
 {
 	return MinValue;
 }
 
-float UStat::GetValue()
+float UStat::GetValue() const
 {
 	return Value;
 }
@@ -56,6 +63,11 @@ void UStat::SetValue(float NewValue)
 void UStat::ModifyValue(float ChangeAmount)
 {
 	SetValue(Value + ChangeAmount);
+}
+
+void UStat::InitValue()
+{
+	SetValue(BaseValue);
 }
 
 //void UStat::SetBase(float Base)

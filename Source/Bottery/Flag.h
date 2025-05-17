@@ -20,14 +20,15 @@ public:
 
 protected:
 	virtual void PostInitProperties() override;
-	virtual void PostDuplicate(bool bDuplicateForPIE) override;
+	//virtual void PostDuplicate(bool bDuplicateForPIE) override;
+	virtual void PostLoad() override;
 
 public:
 	UFUNCTION(BlueprintCallable)
-	bool GetBaseValue();
+	bool GetBaseValue() const;
 
 	UFUNCTION(BlueprintCallable)
-	bool GetValue();
+	bool GetValue() const;
 
 	UFUNCTION(BlueprintCallable)
 	void SetValue(bool bNewValue);

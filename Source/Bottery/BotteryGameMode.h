@@ -17,13 +17,10 @@ protected:
 public:
 	ABotteryGameMode();
 
-	UFUNCTION(BlueprintCallable, Category = "Game Over")
-	void CheckForGameOver(float CurrentHealth, float BaseHealth);
+	UFUNCTION(BlueprintCallable, Category = "Game Rules")
+	void HandleHealthChange(float CurrentHealth, float BaseHealth, float ChangeAmount);
 
-	UFUNCTION(BlueprintCallable, Category = Basic)
-	void AddScore(float Amount);
-
-	UFUNCTION(BlueprintCallable, Category = "Game Over")
+	UFUNCTION(BlueprintCallable, Category = "Game Rules")
 	void GameOver();
 };
 

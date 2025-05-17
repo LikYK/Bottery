@@ -6,7 +6,7 @@
 #include "PlayerProgressSubsystem.h"
 #include "BotteryGameState.h"
 #include "Kismet/GameplayStatics.h"
-#include "HealthComponent.h"
+#include "ResourceComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 void ABotteryGameMode::BeginPlay()
@@ -14,10 +14,12 @@ void ABotteryGameMode::BeginPlay()
 	// Bind to health delegates to update score and check for game over
 	if (ABotteryCharacter* PlayerCharacter = Cast<ABotteryCharacter>(UGameplayStatics::GetPlayerPawn(this, 0)))
 	{
-		if (UHealthComponent* HealthComponent = PlayerCharacter->GetComponentByClass<UHealthComponent>())
+		UResourceComponent* ResourceComponent = PlayerCharacter->GetComponentByClass<UResourceComponent>();
+		if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Health))
 		{
-			HealthComponent->GetHealthDelegateWrapper()->OnHealthChanged.AddUniqueDynamic(this, &ABotteryGameMode::CheckForGameOver);
-			HealthComponent->GetHealthDelegateWrapper()->OnHealed.AddUniqueDynamic(this, &ABotteryGameMode::AddScore);
+			UResource* Health = ResourceComponent->GetResource(EResourceKey::Health);
+
+			Health->DelegateWrapper->OnResourceChanged.AddUniqueDynamic(this, &ABotteryGameMode::HandleHealthChange);
 		}
 	}
 
@@ -35,22 +37,20 @@ ABotteryGameMode::ABotteryGameMode()
 {
 }
 
-void ABotteryGameMode::CheckForGameOver(float CurrentHealth, float BaseHealth)
+void ABotteryGameMode::HandleHealthChange(float CurrentHealth, float BaseHealth, float ChangeAmount)
 {
 	ABotteryGameState* GS = GetGameState<ABotteryGameState>();
 
+	// Add score if this change is a heal
+	if (ChangeAmount > 0.0f)
+	{
+		GS->AddScore(ChangeAmount);
+	}
+
+	// Game over if health reaches 0
 	if (!GS->IsGameOver() && CurrentHealth <= 0)
 	{
 		GameOver();
-	}
-}
-
-void ABotteryGameMode::AddScore(float Amount)
-{
-	ABotteryGameState* GS = GetGameState<ABotteryGameState>();
-	if (GS)
-	{
-		GS->AddScore(Amount);
 	}
 }
 

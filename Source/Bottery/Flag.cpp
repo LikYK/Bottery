@@ -15,19 +15,26 @@ void UFlag::PostInitProperties()
 	InitValue();
 }
 
-void UFlag::PostDuplicate(bool bDuplicateForPIE)
+//void UFlag::PostDuplicate(bool bDuplicateForPIE)
+//{
+//	Super::PostDuplicate(bDuplicateForPIE);
+//
+//	InitValue();
+//}
+
+void UFlag::PostLoad()
 {
-	Super::PostDuplicate(bDuplicateForPIE);
+	Super::PostLoad();
 
 	InitValue();
 }
 
-bool UFlag::GetBaseValue()
+bool UFlag::GetBaseValue() const
 {
 	return bBaseValue;
 }
 
-bool UFlag::GetValue()
+bool UFlag::GetValue() const
 {
 	return bValue;
 }
