@@ -4,16 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "ChangePolarityEffect.generated.h"
+#include "FlagKey.h"
+#include "ChangeFlagEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BOTTERY_API UChangePolarityEffect : public UEffect
+class BOTTERY_API UChangeFlagEffect : public UEffect
 {
 	GENERATED_BODY()
-
+	
 public:
 	virtual void ApplyEffect(AActor* Initiator, AActor* Target) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Stat Effect")
+	EFlagKey TargetFlag;
 };

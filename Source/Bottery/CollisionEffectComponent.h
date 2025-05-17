@@ -8,7 +8,7 @@
 #include "CollisionEffectComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(Abstract, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BOTTERY_API UCollisionEffectComponent : public UActorComponent
 {
 	GENERATED_BODY()

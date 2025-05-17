@@ -4,16 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "ChangeHealthEffect.generated.h"
+#include "ResourceKey.h"
+#include "ChangeResourceEffect.generated.h"
 
 /**
- * This effect heals the target(character) when the it and the initiator(orb) have same polarity, otherwise it damages the target
+ * 
  */
 UCLASS()
-class BOTTERY_API UChangeHealthEffect : public UEffect
+class BOTTERY_API UChangeResourceEffect : public UEffect
 {
 	GENERATED_BODY()
 	
 public:
 	virtual void ApplyEffect(AActor* Initiator, AActor* Target) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Stat Effect")
+	EResourceKey TargetResource;
 };
