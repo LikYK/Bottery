@@ -54,7 +54,7 @@ ABotteryCharacter::ABotteryCharacter(const FObjectInitializer& ObjectInitializer
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 	
 	// Add a default polarity component
-	PolarityComponent = CreateDefaultSubobject<UPolarityComponent>(TEXT("Polarity"));
+	FlagComponent = CreateDefaultSubobject<UFlagComponent>(TEXT("Flags"));
 }
 
 void ABotteryCharacter::BeginPlay()

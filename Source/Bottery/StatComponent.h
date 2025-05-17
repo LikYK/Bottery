@@ -30,26 +30,29 @@ public:
 	bool HasStat(EStatKey Key);
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatBase(EStatKey Key);
+	UStat* GetStat(EStatKey Key);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMax(EStatKey Key);
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//float GetStatBase(EStatKey Key);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatMin(EStatKey Key);
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//float GetStatMax(EStatKey Key);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	float GetStatValue(EStatKey Key);
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//float GetStatMin(EStatKey Key);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void SetStatValue(EStatKey Key, float NewSpeed);
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//float GetStatValue(EStatKey Key);
 
-	// Increases or decreases speed by a fixed amount for Steps times.
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void ModifyStat(EStatKey Key, float ChangeAmount);
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//void SetStatValue(EStatKey Key, float NewSpeed);
 
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	UStatDelegateWrapper* GetStatDelegateWrapper(EStatKey Key);
+	//// Increases or decreases speed by a fixed amount for Steps times.
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//void ModifyStat(EStatKey Key, float ChangeAmount);
+
+	//UFUNCTION(BlueprintCallable, Category = "Stats")
+	//UStatDelegateWrapper* GetStatDelegateWrapper(EStatKey Key);
 
 	//UFUNCTION(BlueprintCallable, Category = "Stats")
 	//UStat* GetStat(EStatKey StatKey);

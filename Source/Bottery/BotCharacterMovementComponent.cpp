@@ -11,9 +11,11 @@ void UBotCharacterMovementComponent::BeginPlay()
 	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 	if (StatComponent && StatComponent->HasStat(EStatKey::Speed))
 	{
-		MaxWalkSpeed = StatComponent->GetStatBase(EStatKey::Speed);
+		UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
 
-		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStatDelegateWrapper(EStatKey::Speed))
+		MaxWalkSpeed = SpeedStat->GetBaseValue();
+
+		if (UStatDelegateWrapper* DelegateWrapper = SpeedStat->DelegateWrapper)
 		{
 			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
 		}

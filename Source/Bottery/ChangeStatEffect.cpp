@@ -3,7 +3,7 @@
 
 #include "ChangeStatEffect.h"
 #include "StatComponent.h"
-#include "PolarityComponent.h"
+#include "FlagComponent.h"
 
 void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
@@ -19,9 +19,10 @@ void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Get the required data from initiator
 	UStatComponent* InitiatorStatComponent = Initiator->GetComponentByClass<UStatComponent>();
-	UPolarityComponent* InitiatorPolarityComponent = Initiator->GetComponentByClass<UPolarityComponent>();
+	UFlagComponent* InitiatorFlagComponent = Initiator->GetComponentByClass<UFlagComponent>();
 
-	if ((!InitiatorStatComponent) || (!InitiatorStatComponent->HasStat(EStatKey::Magnitude)) || (!InitiatorPolarityComponent))
+	if (!InitiatorStatComponent || !InitiatorStatComponent->HasStat(EStatKey::Magnitude) 
+		|| !InitiatorFlagComponent || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat initiator return")));
@@ -31,17 +32,17 @@ void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Apply effect
 	// Based on initiator's polarity, increase or decrease target's speed by their base speed * initiator magnitude
-	EPolarity InitiatorPolarity = InitiatorPolarityComponent->GetPolarity();
-	float Magnitude = InitiatorStatComponent->GetStatValue(EStatKey::Magnitude);
-	float BaseVal = TargetStatComponent->GetStatBase(TargetStat);
+	bool InitiatorPolarity = InitiatorFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
+	float Magnitude = InitiatorStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
+	float BaseVal = TargetStatComponent->GetStat(TargetStat)->GetBaseValue();
 
-	if (InitiatorPolarity == EPolarity::Positive)
+	if (InitiatorPolarity) // True/Positive, increase the target's stat value
 	{
-		TargetStatComponent->ModifyStat(TargetStat, Magnitude * BaseVal);
+		TargetStatComponent->GetStat(TargetStat)->ModifyValue(Magnitude * BaseVal);
 	}
 	else
 	{
-		TargetStatComponent->ModifyStat(TargetStat, -Magnitude * BaseVal);
+		TargetStatComponent->GetStat(TargetStat)->ModifyValue(-Magnitude * BaseVal);
 	}
 	
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStatEffect end return, targetStat: %d, changeAmt: %f"), TargetStat, Magnitude * BaseVal));

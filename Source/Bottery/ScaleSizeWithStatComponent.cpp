@@ -27,21 +27,20 @@ void UScaleSizeWithStatComponent::BeginPlay()
 	// Check if target stat exists on owner
 	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 
-	if (!StatComponent || !StatComponent->HasStat(TargetStat))
+	if (!StatComponent || !StatComponent->HasStat(TargetStatKey))
 	{
 		UE_LOG(LogTemp, Error, TEXT("ScaleSizeWithStatComponent failed to initialize, target stat is not found in owner."));
 		return;
 	}
 
-	// Cache TargetStat's minimum and maximum for ScaleMultiplier's calculation in handler
-	TargetMin = StatComponent->GetStatMin(TargetStat);
-	TargetMax = StatComponent->GetStatMax(TargetStat);
+	// Cache TargetStat for ScaleMultiplier's calculation in handler
+	TargetStat = StatComponent->GetStat(TargetStatKey);
 
-	// Bind handler taht updates the ScaleMultiplier to target stat's OnstatChanged delegate
-	StatComponent->GetStatDelegateWrapper(TargetStat)->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
+	// Bind handler that updates the ScaleMultiplier to target stat's OnstatChanged delegate
+	TargetStat->DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
 
 	// Update the actual scale of the target component automatically when ScaleMultiplier changes
-	ScaleMultiplier->StatDelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
+	ScaleMultiplier->DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
 }
 
 
@@ -55,6 +54,8 @@ void UScaleSizeWithStatComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 void UScaleSizeWithStatComponent::HandleTargetStatChange(float NewTargetValue, float BaseTargetValue)
 {
+	float TargetMin = TargetStat->GetMinValue();
+	float TargetMax = TargetStat->GetMaxValue();
 	float ScaleMin = ScaleMultiplier->GetMinValue();
 	float ScaleMax = ScaleMultiplier->GetMaxValue();
 	float ScaleBase = ScaleMultiplier->GetBaseValue();

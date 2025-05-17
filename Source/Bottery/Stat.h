@@ -43,7 +43,7 @@ public:
 	void ModifyValue(float ChangeAmount);
 
 	UPROPERTY(BlueprintReadOnly, Category = "Stat")
-	UStatDelegateWrapper* StatDelegateWrapper;
+	UStatDelegateWrapper* DelegateWrapper;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")

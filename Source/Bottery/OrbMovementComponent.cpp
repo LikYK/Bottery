@@ -10,15 +10,15 @@ void UOrbMovementComponent::BeginPlay()
 
 	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 
-	if (StatComponent)
+	if (StatComponent && StatComponent->HasStat(EStatKey::Speed))
 	{
-		float BaseSpeed = StatComponent->GetStatBase(EStatKey::Speed);
+		float BaseSpeed = StatComponent->GetStat(EStatKey::Speed)->GetBaseValue();
 		InitialSpeed = BaseSpeed;
 		MaxSpeed = BaseSpeed;
 		Velocity = Velocity.GetSafeNormal() * BaseSpeed;
 		UpdateComponentVelocity();
 
-		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStatDelegateWrapper(EStatKey::Speed))
+		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStat(EStatKey::Speed)->DelegateWrapper)
 		{
 			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 		}

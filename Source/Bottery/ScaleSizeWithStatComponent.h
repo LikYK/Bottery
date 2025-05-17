@@ -34,9 +34,13 @@ public:
 	void UpdateScale(float NewTargetValue, float BaseTargetValue);
 
 protected:
-	// The stat to base the scale on
+	// The key of the stat to base the scale on
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size Scaling")
-	EStatKey TargetStat;
+	EStatKey TargetStatKey;
+
+	// The stat to base the scale on
+	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
+	UStat* TargetStat;
 
 	// The somponent that will be scaled
 	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
@@ -49,11 +53,4 @@ protected:
 	// Stored here because this stat is used only in this component
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Size Scaling")
 	UStat* ScaleMultiplier;
-
-	// Cache TargetStat's minimum and maximum for ScaleMultiplier's calculation
-	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
-	float TargetMin;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
-	float TargetMax;
 };

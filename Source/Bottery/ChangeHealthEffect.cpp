@@ -4,15 +4,15 @@
 #include "ChangeHealthEffect.h"
 #include "HealthComponent.h"
 #include "StatComponent.h"
-#include "PolarityComponent.h"
+#include "FlagComponent.h"
 
 void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
 	UHealthComponent* TargetHealthComponent = Target->GetComponentByClass<UHealthComponent>();
-	UPolarityComponent* TargetPolarityComponent = Target->GetComponentByClass<UPolarityComponent>();
+	UFlagComponent* TargetFlagComponent = Target->GetComponentByClass<UFlagComponent>();
 
-	if (!TargetHealthComponent || !TargetPolarityComponent)
+	if (!TargetHealthComponent || !TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// Target has no health or polarity (needed to decide heal or damage), this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth Target return")));
@@ -21,9 +21,10 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Get the required data from initiator
 	UStatComponent* InitiatorStatComponent = Initiator->GetComponentByClass<UStatComponent>();
-	UPolarityComponent* InitiatorPolarityComponent = Initiator->GetComponentByClass<UPolarityComponent>();
+	UFlagComponent* InitiatorFlagComponent = Initiator->GetComponentByClass<UFlagComponent>();
 
-	if ((!InitiatorStatComponent) || (!InitiatorStatComponent->HasStat(EStatKey::Magnitude)) || (!InitiatorPolarityComponent))
+	if ((!InitiatorStatComponent) || !InitiatorStatComponent->HasStat(EStatKey::Magnitude) 
+		|| (!InitiatorFlagComponent) || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth initiator return")));
@@ -33,9 +34,9 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Apply effect
 	// If target and initiator have the same polarity, heal target, else damage it
-	EPolarity InitiatorPolarity = InitiatorPolarityComponent->GetPolarity();
-	EPolarity TargetPolarity = TargetPolarityComponent->GetPolarity();
-	float Magnitude = InitiatorStatComponent->GetStatValue(EStatKey::Magnitude);
+	bool InitiatorPolarity = InitiatorFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
+	bool TargetPolarity = TargetFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
+	float Magnitude = InitiatorStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
 
 	if (InitiatorPolarity == TargetPolarity)
 	{

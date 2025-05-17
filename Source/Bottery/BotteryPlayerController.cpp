@@ -155,12 +155,12 @@ void ABotteryPlayerController::OnChangePolarity()
 {
 	APawn* ControlledPawn = GetPawn();
 
-	UPolarityComponent* PolarityComponent = ControlledPawn->GetComponentByClass<UPolarityComponent>();
-	if (PolarityComponent)
+	UFlagComponent* FlagComponent = ControlledPawn->GetComponentByClass<UFlagComponent>();
+	if (FlagComponent && FlagComponent->HasFlag(EFlagKey::Polarity))
 	{
-		PolarityComponent->SwitchPolarity();
+		FlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
 
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), PolarityComponent->GetPolarity()));
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
 	}
 	else
 	{

@@ -5,7 +5,7 @@
 
 UStat::UStat()
 {
-	StatDelegateWrapper = CreateDefaultSubobject<UStatDelegateWrapper>(TEXT("StatDelegateWrapper"));
+	DelegateWrapper = CreateDefaultSubobject<UStatDelegateWrapper>(TEXT("DelegateWrapper"));
 }
 
 void UStat::PostInitProperties()
@@ -22,8 +22,7 @@ void UStat::PostDuplicate(bool bDuplicateForPIE)
 {
 	Super::PostDuplicate(bDuplicateForPIE);
 
-	// After properties are loaded from defaults, set current value = base value
-	// This only works when the component containing UStat is added in Blueprint
+	// Set current value = base value for UStat added in Blueprint
 	Value = BaseValue;
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("postduplicate, val: %f, %f"), Value, BaseValue));
 }
@@ -51,7 +50,7 @@ float UStat::GetValue()
 void UStat::SetValue(float NewValue)
 {
 	Value = FMath::Clamp(NewValue, MinValue, MaxValue);
-	StatDelegateWrapper->OnStatChanged.Broadcast(Value, BaseValue);
+	DelegateWrapper->OnStatChanged.Broadcast(Value, BaseValue);
 }
 
 void UStat::ModifyValue(float ChangeAmount)

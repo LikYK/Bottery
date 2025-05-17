@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "HealthComponent.h"
 #include "StatComponent.h"
-#include "PolarityComponent.h"
+#include "FlagComponent.h"
 #include "BotteryCharacter.generated.h"
 
 UCLASS(Blueprintable)
@@ -117,7 +117,7 @@ protected:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Polarity")
-	UPolarityComponent* PolarityComponent;
+	UFlagComponent* FlagComponent;
 
 //public:
 //	UFUNCTION(BlueprintCallable, Category = "Polarity")

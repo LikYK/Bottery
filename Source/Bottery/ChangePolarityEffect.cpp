@@ -2,14 +2,14 @@
 
 
 #include "ChangePolarityEffect.h"
-#include "PolarityComponent.h"
+#include "FlagComponent.h"
 
 void UChangePolarityEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
-	UPolarityComponent* TargetPolarityComponent = Target->GetComponentByClass<UPolarityComponent>();
+	UFlagComponent* TargetFlagComponent = Target->GetComponentByClass<UFlagComponent>();
 
-	if (!TargetPolarityComponent)
+	if (!TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// Target has no polarity, this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarity Target return")));
@@ -18,7 +18,7 @@ void UChangePolarityEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 
 	// Apply effect
 	// Switch target's polarity
-	TargetPolarityComponent->SwitchPolarity();
+	TargetFlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarityEffect end return, newPolarity: %d"), TargetPolarityComponent->GetPolarity()));
+	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangePolarityEffect end return, newPolarity: %d"), TargetFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
 }
