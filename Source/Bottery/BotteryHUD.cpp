@@ -4,12 +4,13 @@
 #include "BotteryHUD.h"
 #include "BotteryGameState.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 void ABotteryHUD::BeginPlay()
 {
     Super::BeginPlay();
     
-    ShowUI("HUD");
+    InitHUD();
 
     // Show game over UI on game over
     if (ABotteryGameState* GameState = Cast<ABotteryGameState>(GetWorld()->GetGameState()))
@@ -39,6 +40,7 @@ void ABotteryHUD::BeginPlay()
 
 void ABotteryHUD::ShowUI(FName WidgetKey)
 {
+    // Show widget that corresponds to the WidgetKey
     UUserWidget* Widget = WidgetInstances.FindRef(WidgetKey);
     if (Widget)
     {
@@ -47,24 +49,79 @@ void ABotteryHUD::ShowUI(FName WidgetKey)
     else if (WidgetClasses.Contains(WidgetKey))
     {
         TSubclassOf<UUserWidget> Class = WidgetClasses[WidgetKey];
-        if (Class)
+        Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
+        if (Widget)
         {
-            UUserWidget* NewWidget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
-            if (NewWidget)
-            {
-                NewWidget->AddToViewport();
-                WidgetInstances.Add(WidgetKey, NewWidget);
-            }
+            Widget->AddToViewport();
+            WidgetInstances.Add(WidgetKey, Widget);
         }
     }
+
+    // Other widget exists in the UIStack, hide the top widget first then add this widget to the stack
+    if (UIStack.Num() > 0) 
+    {
+        FName TopKey = UIStack.Last();
+        if (UUserWidget* TopWidget = WidgetInstances.FindRef(TopKey))
+        {
+            TopWidget->SetVisibility(ESlateVisibility::Hidden);
+        }
+    }
+    UIStack.Push(WidgetKey);
+
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
-void ABotteryHUD::HideUI(FName WidgetKey)
+void ABotteryHUD::HideUI()
 {
-    UUserWidget* Widget = WidgetInstances.FindRef(WidgetKey);
-    if (Widget)
+    if (UIStack.Num() == 0)
     {
-        Widget->SetVisibility(ESlateVisibility::Hidden);
+        return;
+    }
+    
+    FName TopKey = UIStack.Pop();
+
+    if (UUserWidget* TopWidget = WidgetInstances.FindRef(TopKey))
+    {
+        TopWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+
+    if (UIStack.Num() == 0)
+    {
+        // If no more item in stack, resume game
+        UGameplayStatics::SetGamePaused(GetWorld(), false);
+    }
+    else
+    {
+        // Else show the new top widget
+        FName NextKey = UIStack.Last();
+        if (UUserWidget* NextWidget = WidgetInstances.FindRef(NextKey))
+        {
+            NextWidget->SetVisibility(ESlateVisibility::Visible);
+        }
+    }
+
+}
+
+//void ABotteryHUD::HideUI(FName WidgetKey)
+//{
+//    UUserWidget* Widget = WidgetInstances.FindRef(WidgetKey);
+//    if (Widget)
+//    {
+//        Widget->SetVisibility(ESlateVisibility::Hidden);
+//    }
+//}
+
+void ABotteryHUD::InitHUD()
+{
+    if (WidgetClasses.Contains("HUD"))
+    {
+        TSubclassOf<UUserWidget> Class = WidgetClasses["HUD"];
+        UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
+        if (Widget)
+        {
+            Widget->AddToViewport();
+            WidgetInstances.Add("HUD", Widget);
+        }
     }
 }
 

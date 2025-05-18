@@ -21,7 +21,13 @@ public:
     void ShowUI(FName WidgetKey);
 
     UFUNCTION(BlueprintCallable, Category = "UI")
-    void HideUI(FName WidgetKey);
+    void HideUI();
+
+    //UFUNCTION(BlueprintCallable, Category = "UI")
+    //void HideUI(FName WidgetKey);
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    void InitHUD();
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     void ShowGameOverUI(int32 Score);
@@ -32,4 +38,7 @@ protected:
 
     UPROPERTY()
     TMap<FName, UUserWidget*> WidgetInstances; 
+
+    // Only the top widget in the UIStack is visible
+    TArray<FName> UIStack;
 };
