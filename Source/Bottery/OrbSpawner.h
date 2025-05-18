@@ -7,17 +7,17 @@
 #include "Components/BoxComponent.h"
 #include "OrbSpawner.generated.h"
 
-USTRUCT(BlueprintType)
-struct FSpawnEntry
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	TSubclassOf<AActor> ActorClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "0.0"))
-	float Weight = 1.0f;
-};
+//USTRUCT(BlueprintType)
+//struct FSpawnEntry
+//{
+//	GENERATED_BODY()
+//
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+//	TSubclassOf<AActor> ActorClass;
+//
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "0.0"))
+//	float Weight = 1.0f;
+//};
 
 UCLASS()
 class BOTTERY_API AOrbSpawner : public AActor
@@ -48,7 +48,7 @@ protected:
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	TArray<FSpawnEntry> SpawnTable;
+	//TArray<FSpawnEntry> SpawnTable;
 
 	float TotalWeight;
 
