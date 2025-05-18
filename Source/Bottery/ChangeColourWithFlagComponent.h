@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "FlagKey.h"
 #include "Flag.h"
 #include "ColourComponent.h"
 #include "ChangeColourWithFlagComponent.generated.h"

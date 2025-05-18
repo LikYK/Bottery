@@ -4,13 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "StatDelegateWrapper.h"
 #include "Stat.generated.h"
 
 //DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
 
-// An object that stores a base stat and applies a multiplier to it
+UENUM(BlueprintType)
+enum class EStatKey : uint8
+{
+	Magnitude    UMETA(DisplayName = "Magnitude"),
+	Speed     UMETA(DisplayName = "Speed"),
+};
+
 UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class BOTTERY_API UStat : public UObject
 {
@@ -44,8 +50,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")
 	void ModifyValue(float ChangeAmount);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Stat")
-	UStatDelegateWrapper* DelegateWrapper;
+	UPROPERTY(BlueprintAssignable, Category = "Stat")
+	FOnStatChangedSignature OnStatChanged;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")

@@ -37,10 +37,10 @@ void UScaleSizeWithStatComponent::BeginPlay()
 	TargetStat = StatComponent->GetStat(TargetStatKey);
 
 	// Bind handler that updates the ScaleMultiplier to target stat's OnstatChanged delegate
-	TargetStat->DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
+	TargetStat->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::HandleTargetStatChange);
 
 	// Update the actual scale of the target component automatically when ScaleMultiplier changes
-	ScaleMultiplier->DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
+	ScaleMultiplier->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
 }
 
 

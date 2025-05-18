@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "StatKey.h"
+#include "Stat.h"
 #include "ChangeStatEffect.generated.h"
 
 /**

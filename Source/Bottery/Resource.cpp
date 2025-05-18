@@ -5,7 +5,6 @@
 
 UResource::UResource()
 {
-    DelegateWrapper = CreateDefaultSubobject<UResourceDelegateWrapper>(TEXT("DelegateWrapper"));
     RegenRateStat = CreateDefaultSubobject<UStat>(TEXT("RegenRateStat"));
 }
 
@@ -89,7 +88,7 @@ void UResource::SetValue(float NewValue)
 {
     float OldValue = CurrentValue;
     CurrentValue = FMath::Clamp(NewValue, 0.0f, MaxValue);
-    DelegateWrapper->OnResourceChanged.Broadcast(CurrentValue, MaxValue, NewValue - OldValue);
+    OnResourceChanged.Broadcast(CurrentValue, MaxValue, NewValue - OldValue);
 }
 
 void UResource::ModifyValue(float ChangeAmount)

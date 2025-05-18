@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "ResourceKey.h"
+#include "Resource.h"
 #include "ChangeResourceEffect.generated.h"
 
 /**

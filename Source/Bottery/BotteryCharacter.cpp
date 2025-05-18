@@ -2,7 +2,6 @@
 
 #include "BotteryCharacter.h"
 #include "BotCharacterMovementComponent.h"
-#include "StatDelegateWrapper.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
@@ -61,6 +60,15 @@ void ABotteryCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
+	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
+
+	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
+	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * MagnitudeStat->GetBaseValue());
+
+	MagnitudeStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleMagnitudeChange);
+	SpeedStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleSpeedChange);
 }
 
 void ABotteryCharacter::Dash()
@@ -122,6 +130,21 @@ void ABotteryCharacter::ChangePolarity()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found."));
 	}
+}
+
+void ABotteryCharacter::HandleMagnitudeChange(float CurrentValue, float BaseValue)
+{
+	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
+
+	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * CurrentValue);
+}
+
+void ABotteryCharacter::HandleSpeedChange(float CurrentValue, float BaseValue)
+{
+	UStat* StaminaRegenStat = ResourceComponent->GetResource(EResourceKey::Stamina)->GetRegenRateStat();
+	float Multiplier = CurrentValue / BaseValue;
+
+	StaminaRegenStat->SetValue(StaminaRegenStat->GetBaseValue() * (1.0f / Multiplier));
 }
 
 void ABotteryCharacter::Tick(float DeltaSeconds)

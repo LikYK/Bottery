@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "FlagDelegateWrapper.h"
 #include "Flag.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFlagChangedSignature, bool, bCurrentValue);
+
+UENUM(BlueprintType)
+enum class EFlagKey : uint8
+{
+	Polarity    UMETA(DisplayName = "Polarity"),
+};
+
 UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class BOTTERY_API UFlag : public UObject
 {
@@ -39,8 +43,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RandomizeValue();
 
-	UPROPERTY(BlueprintReadOnly)
-	UFlagDelegateWrapper* DelegateWrapper;
+	UPROPERTY(BlueprintAssignable)
+	FOnFlagChangedSignature OnFlagChanged;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

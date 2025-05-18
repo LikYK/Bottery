@@ -30,7 +30,7 @@ public:
     void InitHUD();
 
     UFUNCTION(BlueprintCallable, Category = "UI")
-    void ShowGameOverUI(int32 Score);
+    void ShowGameOverUI(float Score);
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     void HandlePauseAction();

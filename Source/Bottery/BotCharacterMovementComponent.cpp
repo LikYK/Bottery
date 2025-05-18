@@ -15,10 +15,7 @@ void UBotCharacterMovementComponent::BeginPlay()
 
 		MaxWalkSpeed = SpeedStat->GetBaseValue();
 
-		if (UStatDelegateWrapper* DelegateWrapper = SpeedStat->DelegateWrapper)
-		{
-			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
-		}
+		SpeedStat->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
 
 		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Speed stat set:%d"), MaxWalkSpeed));
 	}

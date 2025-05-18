@@ -125,7 +125,7 @@ void ABotteryHUD::InitHUD()
     }
 }
 
-void ABotteryHUD::ShowGameOverUI(int32 Score)
+void ABotteryHUD::ShowGameOverUI(float Score)
 {
     ShowUI("GameOver");
 }

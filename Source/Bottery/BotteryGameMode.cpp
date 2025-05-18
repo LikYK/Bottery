@@ -19,7 +19,7 @@ void ABotteryGameMode::BeginPlay()
 		{
 			UResource* Health = ResourceComponent->GetResource(EResourceKey::Health);
 
-			Health->DelegateWrapper->OnResourceChanged.AddUniqueDynamic(this, &ABotteryGameMode::HandleHealthChange);
+			Health->OnResourceChanged.AddUniqueDynamic(this, &ABotteryGameMode::HandleHealthChange);
 		}
 	}
 

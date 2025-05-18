@@ -45,6 +45,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
 	void ChangePolarity();
 
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	void HandleMagnitudeChange(float CurrentValue, float BaseValue);
+
+	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	void HandleSpeedChange(float CurrentValue, float BaseValue);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UResourceComponent* ResourceComponent;

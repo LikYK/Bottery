@@ -19,14 +19,14 @@ public:
 
     // Saves high score on game over.
     UFUNCTION(BlueprintCallable, Category = Basic)
-    void SaveProgress(int32 NewScore);
+    void SaveProgress(float NewScore);
 
     UFUNCTION(BlueprintPure, Category = Basic)
-    int32 GetHighScore() const { return HighScore; }
+    float GetHighScore() const { return HighScore; }
 
 protected:
     UPROPERTY(VisibleAnywhere, Category = Basic)
-    int32 HighScore = 0;
+    float HighScore = 0;
 
     UPROPERTY(EditAnywhere, Category = Basic)
     FString SaveSlotName = TEXT("DefaultSaveSlot");

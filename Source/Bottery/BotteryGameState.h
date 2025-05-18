@@ -6,8 +6,8 @@
 #include "GameFramework/GameStateBase.h"
 #include "BotteryGameState.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameOverSignature, int32, Score);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreUpdatedSignature, int32, NewScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameOverSignature, float, Score);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoreUpdatedSignature, float, NewScore);
 
 UCLASS()
 class BOTTERY_API ABotteryGameState : public AGameStateBase
@@ -16,13 +16,13 @@ class BOTTERY_API ABotteryGameState : public AGameStateBase
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = Basic)
-	void AddScore(int32 Amount);
+	void AddScore(float Amount);
 
 	UFUNCTION(BlueprintCallable, Category = Basic)
 	void GameOver();
 
 	UFUNCTION(BlueprintCallable, Category = Basic)
-	int32 GetCurrentScore();
+	float GetCurrentScore();
 
 	UFUNCTION(BlueprintCallable, Category = Basic)
 	bool IsGameOver();
@@ -35,7 +35,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
-	int32 CurrentScore = 0;
+	float CurrentScore = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
 	bool bIsGameOver = false;

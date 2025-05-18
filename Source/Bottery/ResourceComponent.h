@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Resource.h"
-#include "ResourceKey.h"
-#include "ResourceDelegateWrapper.h"
 #include "ResourceComponent.generated.h"
 
 

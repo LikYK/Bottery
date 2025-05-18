@@ -18,10 +18,7 @@ void UOrbMovementComponent::BeginPlay()
 		Velocity = Velocity.GetSafeNormal() * BaseSpeed;
 		UpdateComponentVelocity();
 
-		if (UStatDelegateWrapper* DelegateWrapper = StatComponent->GetStat(EStatKey::Speed)->DelegateWrapper)
-		{
-			DelegateWrapper->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
-		}
+		StatComponent->GetStat(EStatKey::Speed)->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 
 		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb speed stat set:%d"),BaseSpeed));
 	}

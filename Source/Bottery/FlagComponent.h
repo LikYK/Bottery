@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Flag.h"
-#include "FlagKey.h"
-#include "FlagDelegateWrapper.h"
 #include "FlagComponent.generated.h"
 
 

@@ -4,13 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "ResourceDelegateWrapper.h"
 #include "Stat.h"
 #include "Resource.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnResourceChangedSignature, float, CurrentValue, float, MaxValue, float, ChangeAmount);
+
+UENUM(BlueprintType)
+enum class EResourceKey : uint8
+{
+	Health UMETA(DisplayName = "Health"),
+	Stamina UMETA(DisplayName = "Stamina"),
+};
+
 UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class BOTTERY_API UResource : public UObject, public FTickableGameObject
 {
@@ -49,8 +54,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Resource")
 	UStat* GetRegenRateStat();
 
-	UPROPERTY(BlueprintReadOnly, Category = "Resource")
-	UResourceDelegateWrapper* DelegateWrapper;
+	UPROPERTY(BlueprintAssignable, Category = "Resource")
+	FOnResourceChangedSignature OnResourceChanged;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")

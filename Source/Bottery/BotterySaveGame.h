@@ -16,5 +16,5 @@ class BOTTERY_API UBotterySaveGame : public USaveGame
 	
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
-	int32 HighScore = 0;
+	float HighScore = 0;
 };

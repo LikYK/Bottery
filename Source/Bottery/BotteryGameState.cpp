@@ -3,7 +3,7 @@
 
 #include "BotteryGameState.h"
 
-void ABotteryGameState::AddScore(int32 Amount)
+void ABotteryGameState::AddScore(float Amount)
 {
 	if (!bIsGameOver)
 	{
@@ -18,7 +18,7 @@ void ABotteryGameState::GameOver()
 	OnGameOver.Broadcast(CurrentScore);
 }
 
-int32 ABotteryGameState::GetCurrentScore()
+float ABotteryGameState::GetCurrentScore()
 {
 	return CurrentScore;
 }

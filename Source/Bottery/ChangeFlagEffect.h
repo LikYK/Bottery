@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Effect.h"
-#include "FlagKey.h"
+#include "Flag.h"
 #include "ChangeFlagEffect.generated.h"
 
 /**

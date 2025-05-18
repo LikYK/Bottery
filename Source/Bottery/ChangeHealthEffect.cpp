@@ -10,12 +10,14 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
 	// Check if this effect applies to the target
 	UResourceComponent* TargetResourceComponent = Target->GetComponentByClass<UResourceComponent>();
+	UStatComponent* TargetStatComponent = Target->GetComponentByClass<UStatComponent>();
 	UFlagComponent* TargetFlagComponent = Target->GetComponentByClass<UFlagComponent>();
 
 	if (!TargetResourceComponent || !TargetResourceComponent->HasResource(EResourceKey::Health)
+		|| !TargetStatComponent || !TargetStatComponent->HasStat(EStatKey::Magnitude)
 		|| !TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
-		// Target has no health or polarity (needed to decide heal or damage), this effect does not apply to it.
+		// Target does not have all the data needed, this effect does not apply to it.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth Target return")));
 		return;
 	}
@@ -27,7 +29,7 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	if ((!InitiatorStatComponent) || !InitiatorStatComponent->HasStat(EStatKey::Magnitude) 
 		|| (!InitiatorFlagComponent) || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
-		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
+		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log an error.
 		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth initiator return")));
 		UE_LOG(LogTemp, Error, TEXT("ChangeHealthEffect ApplyEffect failed: Missing required component(s) or data in initiator, this effect will fail to apply on any target!"));
 		return;
@@ -36,18 +38,19 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	// Apply effect
 	// If target and initiator have the same polarity, heal target, else damage it
 	bool InitiatorPolarity = InitiatorFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
+	float InitiatorMagnitude = InitiatorStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
 	bool TargetPolarity = TargetFlagComponent->GetFlag(EFlagKey::Polarity)->GetValue();
-	float Magnitude = InitiatorStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
+	float TargetMagnitude = TargetStatComponent->GetStat(EStatKey::Magnitude)->GetValue();
 
 	UResource* TargetHealth = TargetResourceComponent->GetResource(EResourceKey::Health);
 	if (InitiatorPolarity == TargetPolarity)
 	{
-		TargetHealth->ModifyValue(Magnitude);
+		TargetHealth->ModifyValue(InitiatorMagnitude * TargetMagnitude);
 	}
 	else
 	{
-		TargetHealth->ModifyValue(-Magnitude);
+		TargetHealth->ModifyValue(-InitiatorMagnitude * TargetMagnitude);
 	}
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealthEffect end return, samePolarity: %d, changeAmt: %f"), InitiatorPolarity == TargetPolarity, Magnitude));
+	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealthEffect end return, samePolarity: %d, changeAmt: %f"), InitiatorPolarity == TargetPolarity, InitiatorMagnitude));
 }

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "StatKey.h"
 #include "Stat.h"
 #include "StatComponent.generated.h"
 

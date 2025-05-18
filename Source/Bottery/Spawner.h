@@ -50,7 +50,7 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	void HandleChildDestroyed(AActor* DestroyedActor);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Spawning")
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")

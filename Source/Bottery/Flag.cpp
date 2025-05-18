@@ -5,7 +5,6 @@
 
 UFlag::UFlag()
 {
-	DelegateWrapper = CreateDefaultSubobject<UFlagDelegateWrapper>(TEXT("DelegateWrapper"));
 }
 
 void UFlag::PostInitProperties()
@@ -42,7 +41,7 @@ bool UFlag::GetValue() const
 void UFlag::SetValue(bool bNewValue)
 {
 	bValue = bNewValue;
-	DelegateWrapper->OnFlagChanged.Broadcast(bValue);
+	OnFlagChanged.Broadcast(bValue);
 }
 
 void UFlag::SwitchValue()

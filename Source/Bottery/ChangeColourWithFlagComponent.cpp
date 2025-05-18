@@ -41,7 +41,7 @@ void UChangeColourWithFlagComponent::BeginPlay()
 		ColourComponent->OnColourReady.AddUniqueDynamic(this, &UChangeColourWithFlagComponent::ChangeColourWithFlag);
 	}
 
-	TargetFlag->DelegateWrapper->OnFlagChanged.AddUniqueDynamic(this, &UChangeColourWithFlagComponent::HandleTargetFlagChange);
+	TargetFlag->OnFlagChanged.AddUniqueDynamic(this, &UChangeColourWithFlagComponent::HandleTargetFlagChange);
 }
 
 

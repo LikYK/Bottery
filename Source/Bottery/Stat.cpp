@@ -5,7 +5,6 @@
 
 UStat::UStat()
 {
-	DelegateWrapper = CreateDefaultSubobject<UStatDelegateWrapper>(TEXT("DelegateWrapper"));
 }
 
 void UStat::PostInitProperties()
@@ -57,7 +56,7 @@ float UStat::GetValue() const
 void UStat::SetValue(float NewValue)
 {
 	Value = FMath::Clamp(NewValue, MinValue, MaxValue);
-	DelegateWrapper->OnStatChanged.Broadcast(Value, BaseValue);
+	OnStatChanged.Broadcast(Value, BaseValue);
 }
 
 void UStat::ModifyValue(float ChangeAmount)
