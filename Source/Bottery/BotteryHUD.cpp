@@ -129,3 +129,16 @@ void ABotteryHUD::ShowGameOverUI(int32 Score)
 {
     ShowUI("GameOver");
 }
+
+void ABotteryHUD::HandlePauseAction()
+{
+    if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("ESC handler")));
+    if (UIStack.Num() == 0)
+    {
+        ShowUI("Pause");
+    }
+    else
+    {
+        HideUI();
+    }
+}

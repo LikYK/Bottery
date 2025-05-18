@@ -76,6 +76,9 @@ void ABotteryPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ABotteryPlayerController::OnTouchReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ABotteryPlayerController::OnTouchReleased);
 
+		// Pause
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnPause);
+
 		// Change polarity
 		EnhancedInputComponent->BindAction(ChangePolarityAction, ETriggerEvent::Triggered, this, &ABotteryPlayerController::OnChangePolarity);
 
@@ -150,6 +153,14 @@ void ABotteryPlayerController::OnTouchReleased()
 {
 	bIsTouch = false;
 	OnSetDestinationReleased();
+}
+
+void ABotteryPlayerController::OnPause()
+{
+	if (ABotteryHUD* BotteryHUD = Cast<ABotteryHUD>(GetHUD()))
+	{
+		BotteryHUD->HandlePauseAction();
+	}
 }
 
 void ABotteryPlayerController::OnChangePolarity()

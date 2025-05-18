@@ -32,6 +32,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "UI")
     void ShowGameOverUI(int32 Score);
 
+    UFUNCTION(BlueprintCallable, Category = "UI")
+    void HandlePauseAction();
+
 protected:
     UPROPERTY(EditAnywhere, Category = "UI")
     TMap<FName, TSubclassOf<UUserWidget>> WidgetClasses;
