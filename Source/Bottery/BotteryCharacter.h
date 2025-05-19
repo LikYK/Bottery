@@ -68,6 +68,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
 	UAnimMontage* DashMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	UAudioComponent* AudioComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* DashSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+	USoundBase* ChangePolaritySound;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
 	float DashVelocity = 1200.f;
 

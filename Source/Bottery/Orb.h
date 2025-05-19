@@ -25,9 +25,31 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	UFUNCTION()
+	virtual void HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity);
+
+	UFUNCTION()
+	virtual void HandleOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComponent,
+		int32               OtherBodyIndex,
+		bool                bFromSweep,
+		const FHitResult& SweepResult
+	);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UOrbMovementComponent* MovementComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* BounceSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* OverlapSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundAttenuation* EffectSoundAttenuation;
 };

@@ -33,8 +33,9 @@ void UOverlapEffectComponent::HandleOverlap(UPrimitiveComponent* OverlappedCompo
 	//	CreateEffectInstance();
 	//}
 
+	//PlayEffectSound();
+
 	Effect->ApplyEffect(GetOwner(), OtherActor);
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Overlap destroy")));
-	GetOwner()->Destroy();
 }
 

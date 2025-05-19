@@ -32,6 +32,9 @@ protected:
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect")
 	//TSubclassOf<UEffect> EffectClass;
 
+	//UFUNCTION()
+	//virtual void PlayEffectSound();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Instanced, Category = "Effect")
 	UEffect* Effect;
 };

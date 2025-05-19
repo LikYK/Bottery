@@ -2,6 +2,7 @@
 
 
 #include "Orb.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AOrb::AOrb()
@@ -30,6 +31,15 @@ void AOrb::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (auto* PM = FindComponentByClass<UProjectileMovementComponent>())
+	{
+		PM->OnProjectileBounce.AddUniqueDynamic(this, &AOrb::HandleBounce);
+	}
+
+	if (auto* Primitive = Cast<UPrimitiveComponent>(GetRootComponent()))
+	{
+		Primitive->OnComponentBeginOverlap.AddUniqueDynamic(this, &AOrb::HandleOverlap);
+	}
 }
 
 // Called every frame
@@ -37,5 +47,48 @@ void AOrb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AOrb::HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity)
+{
+	if (BounceSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			BounceSound,
+			GetActorLocation(),
+			1.0f,
+			1.0f,
+			0.0f,
+			EffectSoundAttenuation
+		);
+	}
+}
+
+void AOrb::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OverlapSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			OverlapSound,
+			GetActorLocation(),
+			1.0f,
+			1.0f,
+			0.0f,
+			nullptr
+		);
+	}
+
+	// Destroy self next frame, to ensure overlap handlers from other sources (eg. OverlapEffectComponent) can fire
+	GetWorldTimerManager().SetTimerForNextTick(
+		FTimerDelegate::CreateWeakLambda(this, [this]()
+			{
+				if (IsValid(this))
+				{
+					Destroy();
+				}
+			})
+	);
 }
 

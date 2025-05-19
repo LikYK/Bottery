@@ -5,6 +5,7 @@
 #include "ResourceComponent.h"
 #include "StatComponent.h"
 #include "FlagComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
@@ -45,10 +46,34 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	UResource* TargetHealth = TargetResourceComponent->GetResource(EResourceKey::Health);
 	if (InitiatorPolarity == TargetPolarity)
 	{
+		if (HealSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				HealSound,
+				Initiator->GetActorLocation(),
+				1.0f,
+				1.0f,
+				0.0f,
+				nullptr
+			);
+		}
 		TargetHealth->ModifyValue(InitiatorMagnitude * TargetMagnitude);
 	}
 	else
 	{
+		if (DamageSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				DamageSound,
+				Initiator->GetActorLocation(),
+				1.0f,
+				1.0f,
+				0.0f,
+				nullptr
+			);
+		}
 		TargetHealth->ModifyValue(-InitiatorMagnitude * TargetMagnitude);
 	}
 

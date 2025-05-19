@@ -36,6 +36,8 @@ void UBounceEffectComponent::HandleProjectileBounce(const FHitResult& ImpactResu
 	//	CreateEffectInstance();
 	//}
 
+	//PlayEffectSound();
+
 	Effect->ApplyEffect(GetOwner(), OtherActor);
 }
 

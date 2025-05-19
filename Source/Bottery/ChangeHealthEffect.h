@@ -16,4 +16,14 @@ class BOTTERY_API UChangeHealthEffect : public UEffect
 	
 public:
 	virtual void ApplyEffect(AActor* Initiator, AActor* Target) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* HealSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* DamageSound;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	//USoundAttenuation* EffectSoundAttenuation;
 };

@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -55,6 +56,11 @@ ABotteryCharacter::ABotteryCharacter(const FObjectInitializer& ObjectInitializer
 	
 	// Add a default polarity component
 	FlagComponent = CreateDefaultSubobject<UFlagComponent>(TEXT("Flags"));
+
+	// Add a default polarity component
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bOverrideAttenuation = true;
 }
 
 void ABotteryCharacter::BeginPlay()
@@ -107,6 +113,10 @@ void ABotteryCharacter::Dash()
 		}
 	}
 
+	// Play audio
+	AudioComponent->SetSound(DashSound);
+	AudioComponent->Play();
+
 	// Cooldown
 	bCanDash = false;
 
@@ -138,6 +148,10 @@ void ABotteryCharacter::ChangePolarity()
 	}
 
 	FlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
+
+	// Play audio
+	AudioComponent->SetSound(ChangePolaritySound);
+	AudioComponent->Play();
 
 	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
 }

@@ -32,6 +32,36 @@ void UCollisionEffectComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// ...
 }
 
+//void UCollisionEffectComponent::PlayEffectSound()
+//{
+//	if (!EffectSound)
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("UCollisionEffectComponent::PlayEffectSound failed: No SoundBase assigned."));
+//	}
+//
+//	UGameplayStatics::PlaySoundAtLocation(
+//		this,
+//		EffectSound,
+//		FVector(100, 200, 300),
+//		FRotator::ZeroRotator,
+//		1.0f,
+//		1.0f,
+//		0.0f,
+//		EffectSoundAttenuation,
+//		nullptr,
+//		true
+//	);
+//
+//	/*UAudioComponent* AudioComponent = GetOwner()->GetComponentByClass<UAudioComponent>();
+//	if (!AudioComponent)
+//	{
+//		UE_LOG(LogTemp, Warning, TEXT("UCollisionEffectComponent::PlayEffectSound failed: Cannot get audio component from owner."));
+//	}
+//
+//	AudioComponent->SetSound(EffectSound);
+//	AudioComponent->Play();*/
+//}
+
 //void UCollisionEffectComponent::CreateEffectInstance()
 //{
 //	//if (EffectClass)
