@@ -86,23 +86,9 @@ void ABotteryCharacter::Dash()
 	if (!bCanDash) return;
 
 	// Check stamina
-	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Stamina))
+	if (!UseStamina(DashStamina))
 	{
-		UResource* Stamina = ResourceComponent->GetResource(EResourceKey::Stamina);
-
-		if (Stamina->GetValue() >= 10)
-		{
-			Stamina->ModifyValue(-10);
-		}
-		else
-		{
-			if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina, no dash")));
-			return;
-		}
-	}
-	else
-	{
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina resource")));
+		return;
 	}
 
 	// Get direction
@@ -110,6 +96,16 @@ void ABotteryCharacter::Dash()
 
 	// Launch character
 	LaunchCharacter(Dir * DashVelocity, true, false);
+
+	// Play dash animation
+	if (DashMontage)
+	{
+		UAnimInstance* AnimInst = GetMesh()->GetAnimInstance();
+		if (AnimInst && !AnimInst->Montage_IsPlaying(DashMontage))
+		{
+			AnimInst->Montage_Play(DashMontage);
+		}
+	}
 
 	// Cooldown
 	bCanDash = false;
@@ -130,15 +126,43 @@ void ABotteryCharacter::Dash()
 
 void ABotteryCharacter::ChangePolarity()
 {
-	if (FlagComponent && FlagComponent->HasFlag(EFlagKey::Polarity))
+	if (!FlagComponent || !FlagComponent->HasFlag(EFlagKey::Polarity))
 	{
-		FlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
+		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found."));
+	}
 
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
+	// Check stamina
+	if (!UseStamina(ChangePolarityStamina))
+	{
+		return;
+	}
+
+	FlagComponent->GetFlag(EFlagKey::Polarity)->SwitchValue();
+
+	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
+}
+
+bool ABotteryCharacter::UseStamina(float Amount)
+{
+	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Stamina))
+	{
+		UResource* Stamina = ResourceComponent->GetResource(EResourceKey::Stamina);
+
+		if (Stamina->GetValue() >= Amount)
+		{
+			Stamina->ModifyValue(-Amount);
+			return true;
+		}
+		else
+		{
+			if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Not enough stamina")));
+			return false;
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Changing polarity failed: No polarity handling component found."));
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina resource")));
+		return false;
 	}
 }
 

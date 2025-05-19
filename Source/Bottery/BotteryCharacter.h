@@ -45,28 +45,40 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Polarity")
 	void ChangePolarity();
 
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	UFUNCTION(BlueprintCallable, Category = "Stamina")
+	bool UseStamina(float Amount);
+
+	UFUNCTION(BlueprintCallable, Category = "Magnitude")
 	void HandleMagnitudeChange(float CurrentValue, float BaseValue);
 
-	UFUNCTION(BlueprintCallable, Category = "Polarity")
+	UFUNCTION(BlueprintCallable, Category = "Speed")
 	void HandleSpeedChange(float CurrentValue, float BaseValue);
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource")
 	UResourceComponent* ResourceComponent;
 
 	// Stat component stores and manages stat values
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat")
 	UStatComponent* StatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Polarity")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Flag")
 	UFlagComponent* FlagComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
+	UAnimMontage* DashMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
 	float DashVelocity = 1200.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
 	float DashCooldown = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
+	float DashStamina = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
+	float ChangePolarityStamina = 30.0f;
 
 private:
 	bool bCanDash = true;
