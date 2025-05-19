@@ -84,6 +84,11 @@ float UResource::GetMaxValue() const
     return MaxValue;
 }
 
+void UResource::SetMaxValue(float NewMaxValue)
+{
+    MaxValue = NewMaxValue;
+}
+
 void UResource::SetValue(float NewValue)
 {
     float OldValue = CurrentValue;
@@ -103,5 +108,5 @@ UStat* UResource::GetRegenRateStat()
 
 void UResource::InitValue()
 {
-    SetValue(MaxValue);
+    CurrentValue = MaxValue;
 }

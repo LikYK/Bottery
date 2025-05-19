@@ -2,6 +2,7 @@
 
 #include "BotteryCharacter.h"
 #include "BotCharacterMovementComponent.h"
+#include "PlayerProgressSubsystem.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
@@ -61,13 +62,22 @@ void ABotteryCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
-	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
+	if (UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
+	{
+		// Set MaxHealth as value loaded in PlayerProgressSubsystem
+		UResource* HealthResource = ResourceComponent->GetResource(EResourceKey::Health);
+		HealthResource->SetMaxValue(Subsys->GetMaxHealth());
+		// CurrentHealth also needs to be reset because Resource's InitValue/CurrentValue=MaxValue is called before BeginPlay
+		// Use InitValue instead of SetValue to prevent health's OnResourceChanged from firing
+		HealthResource->InitValue();
+	}
 
+	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
 	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
 	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * MagnitudeStat->GetBaseValue());
-
 	MagnitudeStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleMagnitudeChange);
+
+	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
 	SpeedStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleSpeedChange);
 }
 

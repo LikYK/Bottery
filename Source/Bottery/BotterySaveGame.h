@@ -17,4 +17,7 @@ class BOTTERY_API UBotterySaveGame : public USaveGame
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
 	float HighScore = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
+	float MaxHealth = 100;
 };

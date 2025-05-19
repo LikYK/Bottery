@@ -46,6 +46,9 @@ public:
 	float GetMaxValue() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void SetMaxValue(float NewMaxValue);
+
+	UFUNCTION(BlueprintCallable, Category = "Resource")
 	void SetValue(float NewValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
@@ -53,6 +56,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
 	UStat* GetRegenRateStat();
+
+	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void InitValue();
 
 	UPROPERTY(BlueprintAssignable, Category = "Resource")
 	FOnResourceChangedSignature OnResourceChanged;
@@ -69,7 +75,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Resource")
 	UStat* RegenRateStat;
-
-private:
-	void InitValue();
 };

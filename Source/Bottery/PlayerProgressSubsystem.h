@@ -24,9 +24,15 @@ public:
     UFUNCTION(BlueprintPure, Category = Basic)
     float GetHighScore() const { return HighScore; }
 
+    UFUNCTION(BlueprintPure, Category = Basic)
+    float GetMaxHealth() const { return MaxHealth; }
+
 protected:
     UPROPERTY(VisibleAnywhere, Category = Basic)
     float HighScore = 0;
+
+    UPROPERTY(VisibleAnywhere, Category = Basic)
+    float MaxHealth = 100;
 
     UPROPERTY(EditAnywhere, Category = Basic)
     FString SaveSlotName = TEXT("DefaultSaveSlot");

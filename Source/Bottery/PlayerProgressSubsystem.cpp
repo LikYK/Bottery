@@ -14,8 +14,9 @@ void UPlayerProgressSubsystem::Initialize(FSubsystemCollectionBase& Collection)
         if (UBotterySaveGame* Loaded = Cast<UBotterySaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, UserIndex)))
         {
             HighScore = Loaded->HighScore;
-            if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Load successful, highscore: %f"), HighScore));
-            UE_LOG(LogTemp, Warning, TEXT("Load successful, highscore: %f"), HighScore);
+            MaxHealth = Loaded->MaxHealth;
+            if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Load successful, highscore: %f, maxhealth: %f"), HighScore, MaxHealth));
+            UE_LOG(LogTemp, Warning, TEXT("Load successful, highscore: %f, maxhealth: %f"), HighScore, MaxHealth);
         }
         else 
         {
@@ -31,18 +32,29 @@ void UPlayerProgressSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UPlayerProgressSubsystem::SaveProgress(float NewScore)
 {
-    if (NewScore > HighScore)
+    if (NewScore > HighScore || NewScore >= 100.0f)
     {
-        HighScore = NewScore;
+        if (NewScore > HighScore)
+        {
+            HighScore = NewScore;
+        }
+        
+        if (NewScore >= 100.0f)
+        {
+            int32 HealthAddAmount = NewScore / 100;
+            MaxHealth += HealthAddAmount;
+        }
 
         UBotterySaveGame* ToSave = Cast<UBotterySaveGame>(UGameplayStatics::CreateSaveGameObject(UBotterySaveGame::StaticClass()));
         ToSave->HighScore = HighScore;
+        ToSave->MaxHealth = MaxHealth;
         UGameplayStatics::SaveGameToSlot(ToSave, SaveSlotName, UserIndex);
-        if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Save successful, new highscore:%f"), HighScore));
-        UE_LOG(LogTemp, Warning, TEXT("Save successful, new highscore:%f"), HighScore);
+        if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Save successful, new highscore:%f, new health:%f"), HighScore, MaxHealth));
+        UE_LOG(LogTemp, Warning, TEXT("Save successful, new highscore:%f, new health:%f"), HighScore, MaxHealth);
     }
-    else {
-        if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Save failed, not highscore, current score:%f, highscore:%f"),NewScore, HighScore));
-        UE_LOG(LogTemp, Warning, TEXT("Save failed, not highscore, current score:%f, highscore:%f"), NewScore, HighScore);
+    else 
+    {
+        if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Save failed, not highscore, no newhealth, current score:%f, highscore:%f"),NewScore, HighScore));
+        UE_LOG(LogTemp, Warning, TEXT("Save failed, not highscore, no newhealth, current score:%f, highscore:%f"), NewScore, HighScore);
     }
 }

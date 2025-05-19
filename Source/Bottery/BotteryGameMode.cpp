@@ -24,13 +24,13 @@ void ABotteryGameMode::BeginPlay()
 	}
 
 	// Bind PlayerProgressSubsystem's save to GameState's GameOver
-	if (UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
-	{
-		if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
-		{
-			GS->OnGameOver.AddUniqueDynamic(Subsys, &UPlayerProgressSubsystem::SaveProgress);
-		}
-	}
+	//if (UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
+	//{
+	//	if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
+	//	{
+	//		GS->OnGameOver.AddUniqueDynamic(Subsys, &UPlayerProgressSubsystem::SaveProgress);
+	//	}
+	//}
 }
 
 ABotteryGameMode::ABotteryGameMode()
@@ -56,7 +56,15 @@ void ABotteryGameMode::HandleHealthChange(float CurrentHealth, float BaseHealth,
 
 void ABotteryGameMode::GameOver()
 {
-	if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
+	UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>();
+	ABotteryGameState* GS = GetGameState<ABotteryGameState>();
+
+	if (Subsys)
+	{
+		Subsys->SaveProgress(GS->GetCurrentScore());
+	}
+
+	if (GS)
 	{
 		GS->GameOver();
 	}
