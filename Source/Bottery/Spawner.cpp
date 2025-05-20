@@ -11,6 +11,7 @@ ASpawner::ASpawner()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpawnVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnVolume"));
+	SpawnVolume->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -18,28 +19,7 @@ void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TotalWeight = 0.0f;
-	for (FSpawnEntry Entry : SpawnTable)
-	{
-		TotalWeight += Entry.Weight;
-	}
-
-	if (OneTimeSpawn)
-	{
-		SpawnMultiple(SpawnAmount);
-	}
-	else 
-	{
-		FTimerDelegate Delegate;
-		Delegate.BindUObject(this, &ASpawner::SpawnMultiple, SpawnAmount);
-
-		GetWorld()->GetTimerManager().SetTimer(
-			SpawnTimerHandle,
-			Delegate,
-			SpawnInterval,
-			true
-		);
-	}
+	UpdateSpawner();
 }
 
 // Called every frame
@@ -57,11 +37,11 @@ void ASpawner::SpawnNew()
 	}
 
 	int32 SpawnIndex = ChooseIndex();
-	if (SpawnIndex < 0 || !SpawnTable.IsValidIndex(SpawnIndex))
+	if (SpawnIndex < 0 || !SpawnTableDataAsset || !SpawnTableDataAsset->SpawnTable.IsValidIndex(SpawnIndex))
 	{
 		return;
 	}
-	TSubclassOf<AActor> SpawnActor = SpawnTable[SpawnIndex].ActorClass;
+	TSubclassOf<AActor> SpawnActor = SpawnTableDataAsset->SpawnTable[SpawnIndex].ActorClass;
 	if (!SpawnActor)
 	{
 		return;
@@ -121,7 +101,7 @@ FVector ASpawner::ChoosePoint()
 
 int32 ASpawner::ChooseIndex()
 {
-	if (SpawnTable.Num() == 0 || TotalWeight <= 0.0f)
+	if (!SpawnTableDataAsset || SpawnTableDataAsset->SpawnTable.Num() == 0 || TotalWeight <= 0.0f)
 	{
 		return -1;
 	}
@@ -129,19 +109,48 @@ int32 ASpawner::ChooseIndex()
 	float RandPoint = FMath::FRandRange(0.0f, TotalWeight);
 	float Accum = 0.0f;
 
-	for (int32 i = 0; i < SpawnTable.Num(); i++)
+	for (int32 i = 0; i < SpawnTableDataAsset->SpawnTable.Num(); i++)
 	{
-		Accum += SpawnTable[i].Weight;
+		Accum += SpawnTableDataAsset->SpawnTable[i].Weight;
 		if (RandPoint <= Accum)
 		{
 			return i;
 		}
 	}
 
-	return SpawnTable.Num() - 1;
+	return SpawnTableDataAsset->SpawnTable.Num() - 1;
 }
 
 void ASpawner::HandleChildDestroyed(AActor* DestroyedActor)
 {
 	SpawnedActors.Remove(DestroyedActor);
+}
+
+void ASpawner::UpdateSpawner()
+{
+	TotalWeight = 0.0f;
+	if (SpawnTableDataAsset)
+	{
+		for (FSpawnEntry Entry : SpawnTableDataAsset->SpawnTable)
+		{
+			TotalWeight += Entry.Weight;
+		}
+	}
+
+	if (OneTimeSpawn)
+	{
+		SpawnMultiple(SpawnAmount);
+	}
+	else
+	{
+		FTimerDelegate Delegate;
+		Delegate.BindUObject(this, &ASpawner::SpawnMultiple, SpawnAmount);
+
+		GetWorld()->GetTimerManager().SetTimer(
+			SpawnTimerHandle,
+			Delegate,
+			SpawnInterval,
+			true
+		);
+	}
 }

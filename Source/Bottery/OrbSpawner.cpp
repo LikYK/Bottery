@@ -28,7 +28,7 @@ void AOrbSpawner::BeginPlay()
 	}
 	else
 	{
-		CurrentSpawnInfo.SpawnTable = SpawnTable;
+		CurrentSpawnInfo.SpawnTableDataAsset = SpawnTableDataAsset;
 		CurrentSpawnInfo.SpawnAmount = SpawnAmount;
 		CurrentSpawnInfo.SpawnInterval = SpawnInterval;
 		CurrentSpawnInfo.MaxSpawned = MaxSpawned;
@@ -46,10 +46,11 @@ void AOrbSpawner::SetSpawnInfo(FOrbSpawnInfo SpawnInfo)
 {
 	CurrentSpawnInfo = SpawnInfo;
 
-	SpawnTable = CurrentSpawnInfo.SpawnTable;
+	SpawnTableDataAsset = CurrentSpawnInfo.SpawnTableDataAsset;
 	SpawnAmount = CurrentSpawnInfo.SpawnAmount;
 	SpawnInterval = CurrentSpawnInfo.SpawnInterval;
 	MaxSpawned = CurrentSpawnInfo.MaxSpawned;
+	UpdateSpawner();
 }
 
 void AOrbSpawner::HandleScoreChanged(float NewScore)

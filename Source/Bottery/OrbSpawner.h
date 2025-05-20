@@ -13,7 +13,7 @@ struct FOrbSpawnInfo
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FSpawnEntry> SpawnTable;
+	USpawnTableDataAsset* SpawnTableDataAsset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "1"))
 	int32 SpawnAmount = 1;

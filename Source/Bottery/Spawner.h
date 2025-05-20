@@ -5,19 +5,20 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
+#include "SpawnTableDataAsset.h"
 #include "Spawner.generated.h"
 
-USTRUCT(BlueprintType)
-struct FSpawnEntry
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	TSubclassOf<AActor> ActorClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "0.0"))
-	float Weight = 1.0f;
-};
+//USTRUCT(BlueprintType)
+//struct FSpawnEntry
+//{
+//	GENERATED_BODY()
+//
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+//	TSubclassOf<AActor> ActorClass;
+//
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "0.0"))
+//	float Weight = 1.0f;
+//};
 
 UCLASS()
 class BOTTERY_API ASpawner : public AActor
@@ -50,11 +51,18 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	void HandleChildDestroyed(AActor* DestroyedActor);
 
+	// This function should be called when SpawnTableDataAsset/OneTimeSpawn/SpawnAmount/SpawnInterval is changed to apply the changes
+	UFUNCTION(BlueprintCallable, Category = "Spawning")
+	void UpdateSpawner();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Spawning")
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	TArray<FSpawnEntry> SpawnTable;
+	USpawnTableDataAsset* SpawnTableDataAsset;
+
+	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Spawning")
+	//TArray<FSpawnEntry> SpawnTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawning")
 	TArray<AActor*> SpawnedActors;
