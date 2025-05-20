@@ -34,10 +34,18 @@ void UColourComponent::BeginPlay()
 			UMaterialInterface* ParentMat = Mesh->GetMaterial(Info.MaterialIndex);
 			if (ParentMat)
 			{
-				UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(ParentMat, this);
+				// Check if the material is already a dynamic material, only create a dynamic material and replace it if it is not
+				if (UMaterialInstanceDynamic* MatAsMID = Cast<UMaterialInstanceDynamic>(ParentMat))
+				{
+					DynamicMaterials.Add(Info.MaterialIndex, MatAsMID);
+				}
+				else 
+				{
+					UMaterialInstanceDynamic* MID = UMaterialInstanceDynamic::Create(ParentMat, this);
 
-				Mesh->SetMaterial(Info.MaterialIndex, MID);
-				DynamicMaterials.Add(Info.MaterialIndex, MID);
+					Mesh->SetMaterial(Info.MaterialIndex, MID);
+					DynamicMaterials.Add(Info.MaterialIndex, MID);
+				}
 			}
 		}
 	}

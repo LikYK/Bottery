@@ -86,3 +86,8 @@ void UScaleSizeWithStatComponent::UpdateScale(float NewTargetValue, float BaseTa
 	TargetComponent->SetRelativeScale3D(OriginalScale * NewTargetValue);
 }
 
+float UScaleSizeWithStatComponent::GetScale()
+{
+	return ScaleMultiplier->GetValue();
+}
+

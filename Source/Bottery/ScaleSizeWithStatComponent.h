@@ -32,6 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
 	void UpdateScale(float NewTargetValue, float BaseTargetValue);
 
+	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
+	float GetScale();
+
 protected:
 	// The key of the stat to base the scale on
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size Scaling")

@@ -16,6 +16,9 @@ class BOTTERY_API UOrbMovementComponent : public UProjectileMovementComponent
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Speed")
+	void Init();
+
+	UFUNCTION(BlueprintCallable, Category = "Speed")
 	void UpdateSpeed(float NewSpeed, float BaseSpeed);
 
 protected:

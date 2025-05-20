@@ -8,6 +8,11 @@ void UOrbMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Init();
+}
+
+void UOrbMovementComponent::Init()
+{
 	UStatComponent* StatComponent = GetOwner()->GetComponentByClass<UStatComponent>();
 
 	if (StatComponent && StatComponent->HasStat(EStatKey::Speed))
@@ -15,12 +20,12 @@ void UOrbMovementComponent::BeginPlay()
 		float BaseSpeed = StatComponent->GetStat(EStatKey::Speed)->GetBaseValue();
 		InitialSpeed = BaseSpeed;
 		MaxSpeed = BaseSpeed;
-		Velocity = Velocity.GetSafeNormal() * BaseSpeed;
+		Velocity = GetOwner()->GetActorForwardVector() * BaseSpeed;
 		UpdateComponentVelocity();
 
 		StatComponent->GetStat(EStatKey::Speed)->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 
-		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb speed stat set:%d"),BaseSpeed));
+		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb speed stat set:%d"),BaseSpeed));
 	}
 	else
 	{

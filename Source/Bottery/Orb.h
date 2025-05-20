@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "OrbMovementComponent.h"
+#include "NiagaraSystem.h"
+#include "Components/TimelineComponent.h"
 #include "Orb.generated.h"
 
 UCLASS()
@@ -25,6 +27,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	UFUNCTION()
+	virtual void HandleFadeInProgress(float Value);
+
+	UFUNCTION()
+	virtual void HandleFadeInFinished();
+
 	UFUNCTION()
 	virtual void HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity);
 
@@ -52,4 +60,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundAttenuation* EffectSoundAttenuation;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UTimelineComponent* FadeInTimeline;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UCurveFloat* FadeInCurve;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "VFX")
+	UNiagaraSystem* FXOverlap;
+
+	UPROPERTY(BlueprintReadOnly, Category = "VFX")
+	UMaterialInstanceDynamic* DynamicMaterial;
 };
