@@ -4,7 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Spawner.h"
+#include "Orb.h"
 #include "OrbSpawner.generated.h"
+
+USTRUCT(BlueprintType)
+struct FOrbSpawnInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<FSpawnEntry> SpawnTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "1"))
+	int32 SpawnAmount = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "0.01"))
+	float SpawnInterval = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 MaxSpawned = 0;
+};
 
 UCLASS()
 class BOTTERY_API AOrbSpawner : public ASpawner
@@ -23,10 +42,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:
+	UFUNCTION(BlueprintCallable, Category = "Spawning")
+	void SetSpawnInfo(FOrbSpawnInfo SpawnInfo);
+
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	void HandleScoreChanged(float NewScore);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	TMap<float, int32> ScoreMaxSpawns;
+	TMap<float, FOrbSpawnInfo> SpawnInfos;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Spawning")
+	FOrbSpawnInfo CurrentSpawnInfo;
 };

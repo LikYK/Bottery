@@ -22,9 +22,16 @@ void AOrbSpawner::BeginPlay()
 		GS->OnScoreUpdated.AddUniqueDynamic(this, &AOrbSpawner::HandleScoreChanged);
 	}
 
-	if (ScoreMaxSpawns.Contains(0.0f))
+	if (SpawnInfos.Contains(0.0f))
 	{
-		MaxSpawned = ScoreMaxSpawns[0.0f];
+		SetSpawnInfo(SpawnInfos[0.0f]);
+	}
+	else
+	{
+		CurrentSpawnInfo.SpawnTable = SpawnTable;
+		CurrentSpawnInfo.SpawnAmount = SpawnAmount;
+		CurrentSpawnInfo.SpawnInterval = SpawnInterval;
+		CurrentSpawnInfo.MaxSpawned = MaxSpawned;
 	}
 }
 
@@ -35,19 +42,30 @@ void AOrbSpawner::Tick(float DeltaTime)
 
 }
 
+void AOrbSpawner::SetSpawnInfo(FOrbSpawnInfo SpawnInfo)
+{
+	CurrentSpawnInfo = SpawnInfo;
+
+	SpawnTable = CurrentSpawnInfo.SpawnTable;
+	SpawnAmount = CurrentSpawnInfo.SpawnAmount;
+	SpawnInterval = CurrentSpawnInfo.SpawnInterval;
+	MaxSpawned = CurrentSpawnInfo.MaxSpawned;
+}
+
 void AOrbSpawner::HandleScoreChanged(float NewScore)
 {
-	int32 TargetMaxSpawns = MaxSpawned;
+	FOrbSpawnInfo TargetSpawnInfo = CurrentSpawnInfo;
 	float CurrentScoreDifference = std::numeric_limits<float>::max();
-	for (const TPair<float, int32>& Pair : ScoreMaxSpawns)
+	for (const TPair<float, FOrbSpawnInfo>& Pair : SpawnInfos)
 	{
 		float ScoreDifference = NewScore - Pair.Key;
+		// Find the Pair in the map with key closest to current score that is smaller than current score
 		if (NewScore >= Pair.Key && ScoreDifference < CurrentScoreDifference)
 		{
 			CurrentScoreDifference = ScoreDifference;
-			TargetMaxSpawns = Pair.Value;
+			TargetSpawnInfo = Pair.Value;
 		}
 	}
-	MaxSpawned = TargetMaxSpawns;
+	SetSpawnInfo(TargetSpawnInfo);
 }
 

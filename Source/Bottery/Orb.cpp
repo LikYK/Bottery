@@ -87,16 +87,16 @@ void AOrb::HandleFadeInProgress(float Value)
 
 void AOrb::HandleFadeInFinished()
 {
-	if (UPrimitiveComponent* Primitive = Cast<UPrimitiveComponent>(GetRootComponent()))
-	{
-		Primitive->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-		Primitive->OnComponentBeginOverlap.AddUniqueDynamic(this, &AOrb::HandleOverlap);
-	}
-
 	MovementComponent->Activate();
 	// Call Init() again to give the orb its base velocity, since the velocity was set to zero when deactivating in BeginPlay()
 	MovementComponent->Init();
 	MovementComponent->OnProjectileBounce.AddUniqueDynamic(this, &AOrb::HandleBounce);
+
+	if (UPrimitiveComponent* Primitive = Cast<UPrimitiveComponent>(GetRootComponent()))
+	{
+		Primitive->OnComponentBeginOverlap.AddUniqueDynamic(this, &AOrb::HandleOverlap);
+		Primitive->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	}
 }
 
 void AOrb::HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity)
