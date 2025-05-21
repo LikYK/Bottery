@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Colour Changing")
 	void ChangeColourWithFlag();
 
+	UFUNCTION(BlueprintCallable, Category = "Colour Changing")
+	FLinearColor GetColour(bool bPolarity);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Colour Changing")
 	EFlagKey TargetFlagKey;

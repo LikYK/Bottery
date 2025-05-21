@@ -66,3 +66,8 @@ void UChangeColourWithFlagComponent::ChangeColourWithFlag()
 	ColourComponent->ChangeColour(TargetFlag->GetValue() ? TrueColour : FalseColour);
 }
 
+FLinearColor UChangeColourWithFlagComponent::GetColour(bool bPolarity)
+{
+	return bPolarity ? TrueColour : FalseColour;
+}
+

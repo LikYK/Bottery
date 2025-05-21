@@ -8,6 +8,7 @@
 #include "Resource.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnResourceChangedSignature, float, CurrentValue, float, MaxValue, float, ChangeAmount);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnResourceDepletedSignature);
 
 UENUM(BlueprintType)
 enum class EResourceKey : uint8
@@ -55,6 +56,9 @@ public:
 	void ModifyValue(float ChangeAmount);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void SetRegenerate(bool bNewVal);
+
+	UFUNCTION(BlueprintCallable, Category = "Resource")
 	UStat* GetRegenRateStat();
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
@@ -63,12 +67,18 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Resource")
 	FOnResourceChangedSignature OnResourceChanged;
 
+	UPROPERTY(BlueprintAssignable, Category = "Resource")
+	FOnResourceDepletedSignature OnResourceDepleted;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
 	float MaxValue = 100;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Resource")
 	float CurrentValue;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Resource")
+	bool bDepleted;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
 	bool bRegenerate;

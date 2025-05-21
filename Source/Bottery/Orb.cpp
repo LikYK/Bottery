@@ -29,7 +29,7 @@ AOrb::AOrb()
 	MovementComponent->SetPlaneConstraintNormal(FVector(0.0f, 0.0f, 1.0f));
 	MovementComponent->SetPlaneConstraintOrigin(FVector(0.0f, 0.0f, 100.f));
 
-	FadeInTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("FadeInTimeline"));
+	FadeTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("FadeInTimeline"));
 }
 
 // Called when the game starts or when spawned
@@ -37,6 +37,9 @@ void AOrb::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Check if there is a resource component and cache it if found (to access health resource if there is one)
+	ResourceComponent = GetComponentByClass<UResourceComponent>();
+
 	// Create a dynamic material to change opacity
 	UMeshComponent* Mesh = FindComponentByClass<UMeshComponent>();
 	UMaterialInterface* Mat = Mesh->GetMaterial(0);
@@ -57,19 +60,25 @@ void AOrb::BeginPlay()
 	// Stop movements
 	MovementComponent->Deactivate();
 
+	// Stop health decay if there is a health resource
+	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Health))
+	{
+		ResourceComponent->GetResource(EResourceKey::Health)->SetRegenerate(false);
+	}
+
 	// Update opacity with timeline
 	FOnTimelineFloat ProgressCallback;
-	ProgressCallback.BindUFunction(this, FName(TEXT("HandleFadeInProgress")));
-	FadeInTimeline->AddInterpFloat(FadeInCurve, ProgressCallback);
+	ProgressCallback.BindUFunction(this, FName(TEXT("HandleFadeProgress")));
+	FadeTimeline->AddInterpFloat(FadeInCurve, ProgressCallback, NAME_None, FName(TEXT("Fade")));
 
 	// Enable collision and movement after timeline is finished
 	FOnTimelineEvent FinishedCallback;
 	FinishedCallback.BindUFunction(this, FName(TEXT("HandleFadeInFinished")));
-	FadeInTimeline->SetTimelineFinishedFunc(FinishedCallback);
+	FadeTimeline->SetTimelineFinishedFunc(FinishedCallback);
 
 	// Start timeline to fade in from opacity 0 to 1
-	FadeInTimeline->SetLooping(false);
-	FadeInTimeline->PlayFromStart();
+	FadeTimeline->SetLooping(false);
+	FadeTimeline->PlayFromStart();
 }
 
 // Called every frame
@@ -79,7 +88,7 @@ void AOrb::Tick(float DeltaTime)
 
 }
 
-void AOrb::HandleFadeInProgress(float Value)
+void AOrb::HandleFadeProgress(float Value)
 {
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Spawning Orb, value:%f"), Value));
 	DynamicMaterial->SetScalarParameterValue(TEXT("Opacity"), Value);
@@ -87,6 +96,21 @@ void AOrb::HandleFadeInProgress(float Value)
 
 void AOrb::HandleFadeInFinished()
 {
+	// If there is a health resource, start health decay and bind handler to handle health depleted
+	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Health))
+	{
+		UResource* Health = ResourceComponent->GetResource(EResourceKey::Health);
+
+		UStat* HealthRegen = Health->GetRegenRateStat();
+		
+		//float RegenValue = FMath::RandRange(HealthRegen->GetMinValue(), HealthRegen->GetMaxValue());
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("OrbHealthDecay, Min:%f, Max:%f, Value:%f"), HealthRegen->GetMinValue(), HealthRegen->GetMaxValue(), RegenValue));
+		HealthRegen->SetValue(FMath::RandRange(HealthRegen->GetMinValue(), HealthRegen->GetMaxValue()));
+
+		Health->OnResourceDepleted.AddUniqueDynamic(this, &AOrb::HandleHealthDepleted);
+		Health->SetRegenerate(true);
+	}
+
 	MovementComponent->Activate();
 	// Call Init() again to give the orb its base velocity, since the velocity was set to zero when deactivating in BeginPlay()
 	MovementComponent->Init();
@@ -97,6 +121,11 @@ void AOrb::HandleFadeInFinished()
 		Primitive->OnComponentBeginOverlap.AddUniqueDynamic(this, &AOrb::HandleOverlap);
 		Primitive->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
+}
+
+void AOrb::HandleFadeOutFinished()
+{
+	Destroy();
 }
 
 void AOrb::HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity)
@@ -153,5 +182,18 @@ void AOrb::HandleOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Other
 				}
 			})
 	);
+}
+
+void AOrb::HandleHealthDepleted()
+{
+	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Orb Health Depleted")));
+
+	FadeTimeline->SetFloatCurve(FadeOutCurve, FName(TEXT("Fade")));
+
+	FOnTimelineEvent FinishedCallback;
+	FinishedCallback.BindUFunction(this, FName(TEXT("HandleFadeOutFinished")));
+	FadeTimeline->SetTimelineFinishedFunc(FinishedCallback);
+
+	FadeTimeline->PlayFromStart();
 }
 

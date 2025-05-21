@@ -93,12 +93,27 @@ void UResource::SetValue(float NewValue)
 {
     float OldValue = CurrentValue;
     CurrentValue = FMath::Clamp(NewValue, 0.0f, MaxValue);
+
     OnResourceChanged.Broadcast(CurrentValue, MaxValue, NewValue - OldValue);
+    if (CurrentValue <= 0.0f && !bDepleted)
+    {
+        bDepleted = true;
+        OnResourceDepleted.Broadcast();
+    }
+    else if (CurrentValue > 0.0f)
+    {
+        bDepleted = false; // If is depleted and value restored to above 0.0f, set depleted back to false
+    }
 }
 
 void UResource::ModifyValue(float ChangeAmount)
 {
     SetValue(CurrentValue + ChangeAmount);
+}
+
+void UResource::SetRegenerate(bool bNewVal)
+{
+    bRegenerate = bNewVal;
 }
 
 UStat* UResource::GetRegenRateStat()

@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "OrbMovementComponent.h"
+#include "ResourceComponent.h"
+#include "GameFramework/Actor.h"
 #include "NiagaraSystem.h"
 #include "Components/TimelineComponent.h"
 #include "Orb.generated.h"
@@ -28,10 +29,13 @@ public:
 
 protected:
 	UFUNCTION()
-	virtual void HandleFadeInProgress(float Value);
+	virtual void HandleFadeProgress(float Value);
 
 	UFUNCTION()
 	virtual void HandleFadeInFinished();
+
+	UFUNCTION()
+	virtual void HandleFadeOutFinished();
 
 	UFUNCTION()
 	virtual void HandleBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity);
@@ -46,11 +50,17 @@ protected:
 		const FHitResult& SweepResult
 	);
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void HandleHealthDepleted();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UOrbMovementComponent* MovementComponent;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Resource")
+	UResourceComponent* ResourceComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* BounceSound;
@@ -62,10 +72,13 @@ protected:
 	USoundAttenuation* EffectSoundAttenuation;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	UTimelineComponent* FadeInTimeline;
+	UTimelineComponent* FadeTimeline;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	UCurveFloat* FadeInCurve;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UCurveFloat* FadeOutCurve;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "VFX")
 	UNiagaraSystem* FXOverlap;
