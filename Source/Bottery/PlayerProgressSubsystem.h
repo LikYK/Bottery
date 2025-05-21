@@ -17,26 +17,25 @@ class BOTTERY_API UPlayerProgressSubsystem : public UGameInstanceSubsystem
 public:
     virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
-    // Saves high score on game over.
-    UFUNCTION(BlueprintCallable, Category = Basic)
+    UFUNCTION(BlueprintCallable, Category = "SaveLoad")
     void SaveProgress(float NewScore);
 
-    UFUNCTION(BlueprintPure, Category = Basic)
+    UFUNCTION(BlueprintPure, Category = "HighScore")
     float GetHighScore() const { return HighScore; }
 
-    UFUNCTION(BlueprintPure, Category = Basic)
+    UFUNCTION(BlueprintPure, Category = "MaxHealth")
     float GetMaxHealth() const { return MaxHealth; }
 
 protected:
-    UPROPERTY(VisibleAnywhere, Category = Basic)
+    UPROPERTY(VisibleAnywhere, Category = "HighScore")
     float HighScore = 0;
 
-    UPROPERTY(VisibleAnywhere, Category = Basic)
+    UPROPERTY(VisibleAnywhere, Category = "MaxHealth")
     float MaxHealth = 100;
 
-    UPROPERTY(EditAnywhere, Category = Basic)
+    UPROPERTY(EditAnywhere, Category = "SaveLoad")
     FString SaveSlotName = TEXT("DefaultSaveSlot");
 
-    UPROPERTY(EditAnywhere, Category = Basic)
+    UPROPERTY(EditAnywhere, Category = "SaveLoad")
     uint32 UserIndex = 0;
 };

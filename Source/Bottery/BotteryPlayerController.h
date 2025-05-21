@@ -55,12 +55,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* DashAction;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	//float DashDistance = 1200.f;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	//float DashCooldown = 1.0f;
-
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
@@ -85,52 +79,12 @@ protected:
 
 	// Input handler for dashing
 	void OnDash();
-	//void ResetCanDash();
 
 private:
 	FVector CachedDestination;
 
 	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
-
-	//bool bCanDash = true;
-	//FTimerHandle DashCooldownTimer;
-
-	// UI
-//public:
-//	UFUNCTION(BlueprintCallable, Category = "UI")
-//	void ShowGameOverUI(int32 Score);
-//
-//	UFUNCTION(BlueprintCallable, Category = "UI")
-//	void ShowPauseUI();
-//
-//	UFUNCTION(BlueprintCallable, Category = "UI")
-//	void ShowTutorialUI();
-//
-//protected:
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-//	TSubclassOf<UUserWidget> HUDWidgetClass;
-//
-//	UPROPERTY(BlueprintReadOnly, Category = "UI")
-//	UUserWidget* HUDWidgetInstance;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-//	TSubclassOf<UUserWidget> GameOverWidgetClass;
-//
-//	UPROPERTY(BlueprintReadOnly, Category = "UI")
-//	UUserWidget* GameOverWidgetInstance;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-//	TSubclassOf<UUserWidget> PauseWidgetClass;
-//
-//	UPROPERTY(BlueprintReadOnly, Category = "UI")
-//	UUserWidget* PauseWidgetInstance;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-//	TSubclassOf<UUserWidget> TutorialWidgetClass;
-//
-//	UPROPERTY(BlueprintReadOnly, Category = "UI")
-//	UUserWidget* TutorialWidgetInstance;
 };
 
 

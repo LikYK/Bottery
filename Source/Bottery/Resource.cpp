@@ -12,6 +12,8 @@ void UResource::PostInitProperties()
 {
     Super::PostInitProperties();
 
+    // After properties are loaded from defaults, set current value = base value
+    // This works when the UStat is added in C++ through CreateDefaultObject<>
     InitValue();
 }
 
@@ -19,20 +21,12 @@ void UResource::PostLoad()
 {
     Super::PostLoad();
 
+    // Set current value = base value for instances added through blueprints/editor
     InitValue();
 }
 
-//void UResource::PostDuplicate(bool bDuplicateForPIE)
-//{
-//    Super::PostDuplicate(bDuplicateForPIE);
-//
-//    InitValue();
-//}
-
 void UResource::Tick(float DeltaTime)
 {
-    //if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ResourceTick, bRegen:%d, delta:%f, regenval:%f"), bRegenerate, DeltaTime, RegenRateStat->GetValue()));
-    //UE_LOG(LogTemp, Warning, TEXT("ResourceTick"));
     if (bRegenerate)
     {
         ModifyValue(RegenRateStat->GetValue() * DeltaTime);
@@ -69,6 +63,8 @@ UWorld* UResource::GetTickableGameObjectWorld() const
     return GetWorld();
 }
 
+// Unreal requires an ID for a tickable object in order to profile its ticking performance
+// RETURN_QUICK_DECLARE_CYCLE_STAT macro creates an ID for this class
 TStatId UResource::GetStatId() const
 {
     RETURN_QUICK_DECLARE_CYCLE_STAT(UResource, STATGROUP_Tickables);
@@ -100,7 +96,7 @@ void UResource::SetValue(float NewValue)
         bDepleted = true;
         OnResourceDepleted.Broadcast();
     }
-    else if (CurrentValue > 0.0f)
+    if (CurrentValue > 0.0f && bDepleted)
     {
         bDepleted = false; // If is depleted and value restored to above 0.0f, set depleted back to false
     }
@@ -111,7 +107,7 @@ void UResource::ModifyValue(float ChangeAmount)
     SetValue(CurrentValue + ChangeAmount);
 }
 
-void UResource::SetRegenerate(bool bNewVal)
+void UResource::SetRegen(bool bNewVal)
 {
     bRegenerate = bNewVal;
 }

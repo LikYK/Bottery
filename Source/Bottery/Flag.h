@@ -11,7 +11,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFlagChangedSignature, bool, bCurr
 UENUM(BlueprintType)
 enum class EFlagKey : uint8
 {
-	Polarity    UMETA(DisplayName = "Polarity"),
+	Polarity UMETA(DisplayName = "Polarity"),
 };
 
 UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
@@ -24,38 +24,37 @@ public:
 
 protected:
 	virtual void PostInitProperties() override;
-	//virtual void PostDuplicate(bool bDuplicateForPIE) override;
 	virtual void PostLoad() override;
 
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Flag")
 	bool GetBaseValue() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Flag")
 	bool GetValue() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Flag")
 	void SetValue(bool bNewValue);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Flag")
 	void SwitchValue();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Flag")
 	void RandomizeValue();
 
-	UPROPERTY(BlueprintAssignable)
+	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void InitValue();
+
+	UPROPERTY(BlueprintAssignable, Category = "Flag")
 	FOnFlagChangedSignature OnFlagChanged;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Flag")
 	bool bRandomBaseValue;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (EditCondition = "!bRandomBaseValue", EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Flag", meta = (EditCondition = "!bRandomBaseValue", EditConditionHides))
 	bool bBaseValue;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Flag")
 	bool bValue;
-
-private:
-	void InitValue();
 };

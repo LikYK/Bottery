@@ -56,7 +56,7 @@ public:
 	void ModifyValue(float ChangeAmount);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
-	void SetRegenerate(bool bNewVal);
+	void SetRegen(bool bNewVal);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
 	UStat* GetRegenRateStat();

@@ -19,6 +19,7 @@ void ASpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Setup and start the spawner with the default values
 	UpdateSpawner();
 }
 
@@ -31,24 +32,27 @@ void ASpawner::Tick(float DeltaTime)
 
 void ASpawner::SpawnNew()
 {
+	// If this is not a one-time spawn, make sure currently spawned actors is less than MaxSpawned
 	if (!OneTimeSpawn && MaxSpawned > 0 && SpawnedActors.Num() >= MaxSpawned)
 	{
 		return;
 	}
 
+	// Choose a random index and make sure it is valid before continuing
 	int32 SpawnIndex = ChooseIndex();
 	if (SpawnIndex < 0 || !SpawnTableDataAsset || !SpawnTableDataAsset->SpawnTable.IsValidIndex(SpawnIndex))
 	{
 		return;
 	}
+	// Get the actor to spawn from the spawn table with the index
 	TSubclassOf<AActor> SpawnActor = SpawnTableDataAsset->SpawnTable[SpawnIndex].ActorClass;
 	if (!SpawnActor)
 	{
 		return;
 	}
-	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::Printf(TEXT("Spawning Orb")));
-	FVector SpawnLocation = ChoosePoint();
-	FRotator SpawnRotation = FRotator(0.0f, FMath::FRandRange(0.0f, 360.0f), 0.0f);
+	
+	FVector SpawnLocation = ChoosePoint(); //Random point in SpawnVolume's base/bottom face
+	FRotator SpawnRotation = FRotator(0.0f, FMath::FRandRange(0.0f, 360.0f), 0.0f); // Random yaw rotation
 
 	AActor* NewSpawn = GetWorld()->SpawnActor<AActor>(SpawnActor, SpawnLocation, SpawnRotation);
 
@@ -101,6 +105,7 @@ FVector ASpawner::ChoosePoint()
 
 int32 ASpawner::ChooseIndex()
 {
+	// Make sure there is a spawn table with entries and a valid weight before continuing
 	if (!SpawnTableDataAsset || SpawnTableDataAsset->SpawnTable.Num() == 0 || TotalWeight <= 0.0f)
 	{
 		return -1;
@@ -111,13 +116,18 @@ int32 ASpawner::ChooseIndex()
 
 	for (int32 i = 0; i < SpawnTableDataAsset->SpawnTable.Num(); i++)
 	{
+		// For each entry in spawn table, add its weight to Accum
 		Accum += SpawnTableDataAsset->SpawnTable[i].Weight;
+		// If accumulated weight after adding this entry is higher than the random value, 
+		// that means the random value falls in this entry's weight in the spawn table
 		if (RandPoint <= Accum)
 		{
 			return i;
 		}
 	}
 
+	// Fallback value, this should not run
+	UE_LOG(LogTemp, Warning, TEXT("ASpawner::ChooseIndex: Using fallback value, something is wrong!"));
 	return SpawnTableDataAsset->SpawnTable.Num() - 1;
 }
 

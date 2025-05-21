@@ -50,17 +50,20 @@ protected:
 		const FHitResult& SweepResult
 	);
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
+	UFUNCTION()
 	void HandleHealthDepleted();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY()
 	UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY()
 	UOrbMovementComponent* MovementComponent;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Resource")
+	UPROPERTY()
 	UResourceComponent* ResourceComponent;
+
+	UPROPERTY()
+	UTimelineComponent* FadeTimeline;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* BounceSound;
@@ -71,13 +74,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundAttenuation* EffectSoundAttenuation;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	UTimelineComponent* FadeTimeline;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
 	UCurveFloat* FadeInCurve;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "VFX")
 	UCurveFloat* FadeOutCurve;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "VFX")

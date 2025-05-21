@@ -78,11 +78,13 @@ void ABotteryCharacter::BeginPlay()
 		HealthResource->InitValue();
 	}
 
+	// Link health decay rate to magnitude(multiplier) stat
 	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
 	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
 	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * MagnitudeStat->GetBaseValue());
 	MagnitudeStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleMagnitudeChange);
 
+	// Link stamina regen rate to speed stat
 	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
 	SpeedStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleSpeedChange);
 }
@@ -152,10 +154,9 @@ void ABotteryCharacter::ChangePolarity()
 	// Play audio
 	AudioComponent->SetSound(ChangePolaritySound);
 	AudioComponent->Play();
-
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Emerald, FString::Printf(TEXT("Polarity changed, polarity:%d"), FlagComponent->GetFlag(EFlagKey::Polarity)->GetValue()));
 }
 
+// Attempts to use stamina, return true if successfully used and false otherwise.
 bool ABotteryCharacter::UseStamina(float Amount)
 {
 	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Stamina))
@@ -169,17 +170,17 @@ bool ABotteryCharacter::UseStamina(float Amount)
 		}
 		else
 		{
-			if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("Not enough stamina")));
 			return false;
 		}
 	}
 	else
 	{
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Orange, FString::Printf(TEXT("No stamina resource")));
+		UE_LOG(LogTemp, Warning, TEXT("ABotteryCharacter::UseStamina failed: Character has no stamina resource."));
 		return false;
 	}
 }
 
+// Changes health decay rate with magnitude stat value passed in
 void ABotteryCharacter::HandleMagnitudeChange(float CurrentValue, float BaseValue)
 {
 	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
@@ -187,6 +188,7 @@ void ABotteryCharacter::HandleMagnitudeChange(float CurrentValue, float BaseValu
 	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * CurrentValue);
 }
 
+// Changes stamina regen rate with spped stat value passed in
 void ABotteryCharacter::HandleSpeedChange(float CurrentValue, float BaseValue)
 {
 	UStat* StaminaRegenStat = ResourceComponent->GetResource(EResourceKey::Stamina)->GetRegenRateStat();

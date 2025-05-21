@@ -14,7 +14,7 @@ void UChangeResourceEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	if (!TargetResourceComponent || !TargetResourceComponent->HasResource(TargetResource))
 	{
 		// Target has no target resource, this effect does not apply to it.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResource Target return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResource Target return")));
 		return;
 	}
 
@@ -26,7 +26,7 @@ void UChangeResourceEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		|| (!InitiatorFlagComponent) || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResource initiator return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResource initiator return")));
 		UE_LOG(LogTemp, Error, TEXT("ChangeResourceEffect ApplyEffect failed: Missing required component(s) or data in initiator, this effect will fail to apply on any target!"));
 		return;
 	}
@@ -46,5 +46,5 @@ void UChangeResourceEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		TargetResourceObj->ModifyValue(-Magnitude);
 	}
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResourceEffect end return, Polarity: %d, changeAmt: %f"), InitiatorPolarity, Magnitude));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResourceEffect end return, Polarity: %d, changeAmt: %f"), InitiatorPolarity, Magnitude));
 }

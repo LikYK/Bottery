@@ -13,7 +13,7 @@ void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	if (!TargetStatComponent || !TargetStatComponent->HasStat(TargetStat))
 	{
 		// Target has no speed stat, this effect does not apply to it.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat Target return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat Target return")));
 		return;
 	}
 
@@ -25,7 +25,7 @@ void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		|| !InitiatorFlagComponent || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log a warning.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat initiator return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStat initiator return")));
 		UE_LOG(LogTemp, Error, TEXT("ChangeSpeedEffect ApplyEffect failed: Missing required component(s) or data in initiator, this effect will fail to apply on any target!"));
 		return;
 	}
@@ -45,5 +45,5 @@ void UChangeStatEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		TargetStatComponent->GetStat(TargetStat)->ModifyValue(-Magnitude * BaseVal);
 	}
 	
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStatEffect end return, targetStat: %d, changeAmt: %f"), TargetStat, Magnitude * BaseVal));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeStatEffect end return, targetStat: %d, changeAmt: %f"), TargetStat, Magnitude * BaseVal));
 }

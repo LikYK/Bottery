@@ -49,7 +49,7 @@ public:
 
 protected:
 	// List of materials (indexes) and their parameters (names) that need to be modified
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Colour")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Colour")
 	TArray<FMaterialParamInfo> ParametersToChange;
 
 	// For each material involved, a dynamic instance is created and stored

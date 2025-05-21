@@ -23,7 +23,4 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
 	USoundBase* DamageSound;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
-	//USoundAttenuation* EffectSoundAttenuation;
 };

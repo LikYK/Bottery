@@ -28,15 +28,7 @@ void UBounceEffectComponent::BeginPlay()
 
 void UBounceEffectComponent::HandleProjectileBounce(const FHitResult& ImpactResult, const FVector& ImpactVelocity)
 {
-	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("bounce handler")));
 	AActor* OtherActor = ImpactResult.GetActor();
-
-	//if (!EffectInstance)
-	//{
-	//	CreateEffectInstance();
-	//}
-
-	//PlayEffectSound();
 
 	Effect->ApplyEffect(GetOwner(), OtherActor);
 }

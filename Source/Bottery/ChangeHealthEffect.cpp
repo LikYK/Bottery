@@ -19,7 +19,7 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		|| !TargetFlagComponent || !TargetFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// Target does not have all the data needed, this effect does not apply to it.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth Target return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth Target return")));
 		return;
 	}
 
@@ -31,7 +31,7 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 		|| (!InitiatorFlagComponent) || !InitiatorFlagComponent->HasFlag(EFlagKey::Polarity))
 	{
 		// The initiator is missing data needed to apply this effect, so this effect will not apply on any target, log an error.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth initiator return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealth initiator return")));
 		UE_LOG(LogTemp, Error, TEXT("ChangeHealthEffect ApplyEffect failed: Missing required component(s) or data in initiator, this effect will fail to apply on any target!"));
 		return;
 	}
@@ -46,6 +46,7 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	UResource* TargetHealth = TargetResourceComponent->GetResource(EResourceKey::Health);
 	if (InitiatorPolarity == TargetPolarity)
 	{
+		TargetHealth->ModifyValue(InitiatorMagnitude * TargetMagnitude);
 		if (HealSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(
@@ -58,10 +59,10 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 				nullptr
 			);
 		}
-		TargetHealth->ModifyValue(InitiatorMagnitude * TargetMagnitude);
 	}
 	else
 	{
+		TargetHealth->ModifyValue(-InitiatorMagnitude * TargetMagnitude);
 		if (DamageSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(
@@ -74,8 +75,7 @@ void UChangeHealthEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 				nullptr
 			);
 		}
-		TargetHealth->ModifyValue(-InitiatorMagnitude * TargetMagnitude);
 	}
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealthEffect end return, samePolarity: %d, changeAmt: %f"), InitiatorPolarity == TargetPolarity, InitiatorMagnitude));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeHealthEffect end return, samePolarity: %d, changeAmt: %f"), InitiatorPolarity == TargetPolarity, InitiatorMagnitude));
 }

@@ -22,15 +22,6 @@ void ABotteryGameMode::BeginPlay()
 			Health->OnResourceChanged.AddUniqueDynamic(this, &ABotteryGameMode::HandleHealthChange);
 		}
 	}
-
-	// Bind PlayerProgressSubsystem's save to GameState's GameOver
-	//if (UPlayerProgressSubsystem* Subsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
-	//{
-	//	if (ABotteryGameState* GS = GetGameState<ABotteryGameState>())
-	//	{
-	//		GS->OnGameOver.AddUniqueDynamic(Subsys, &UPlayerProgressSubsystem::SaveProgress);
-	//	}
-	//}
 }
 
 ABotteryGameMode::ABotteryGameMode()

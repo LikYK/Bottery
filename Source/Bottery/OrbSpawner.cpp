@@ -17,17 +17,20 @@ void AOrbSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Listen to score change to update spawn info
 	if (ABotteryGameState* GS = GetWorld()->GetGameState<ABotteryGameState>())
 	{
 		GS->OnScoreUpdated.AddUniqueDynamic(this, &AOrbSpawner::HandleScoreChanged);
 	}
 
+	// If there is a spawn info for score 0, apply it
 	if (SpawnInfos.Contains(0.0f))
 	{
 		SetSpawnInfo(SpawnInfos[0.0f]);
 	}
 	else
 	{
+		// Else fallback to the spawn info in this spawner (copy values into CurrentSpawnInfo so they can be used in HandleScoreChanged)
 		CurrentSpawnInfo.SpawnTableDataAsset = SpawnTableDataAsset;
 		CurrentSpawnInfo.SpawnAmount = SpawnAmount;
 		CurrentSpawnInfo.SpawnInterval = SpawnInterval;
@@ -44,19 +47,22 @@ void AOrbSpawner::Tick(float DeltaTime)
 
 void AOrbSpawner::SetSpawnInfo(FOrbSpawnInfo SpawnInfo)
 {
+	// Update the SpawnInfo property/data member first (it is used in HandleScoreChanged)
 	CurrentSpawnInfo = SpawnInfo;
 
+	// And use it to update the actual spawn info and apply
 	SpawnTableDataAsset = CurrentSpawnInfo.SpawnTableDataAsset;
 	SpawnAmount = CurrentSpawnInfo.SpawnAmount;
 	SpawnInterval = CurrentSpawnInfo.SpawnInterval;
 	MaxSpawned = CurrentSpawnInfo.MaxSpawned;
-	UpdateSpawner();
+	UpdateSpawner(); // Call this function to apply the changes
 }
 
 void AOrbSpawner::HandleScoreChanged(float NewScore)
 {
-	FOrbSpawnInfo TargetSpawnInfo = CurrentSpawnInfo;
+	FOrbSpawnInfo TargetSpawnInfo = CurrentSpawnInfo; // Fallback to the current spawn info if none is found
 	float CurrentScoreDifference = std::numeric_limits<float>::max();
+
 	for (const TPair<float, FOrbSpawnInfo>& Pair : SpawnInfos)
 	{
 		float ScoreDifference = NewScore - Pair.Key;

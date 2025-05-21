@@ -67,12 +67,9 @@ void UColourComponent::ChangeColour(FLinearColor Colour)
 {
 	for (const FMaterialParamInfo& Info : ParametersToChange)
 	{
-		if (DynamicMaterials.Contains(Info.MaterialIndex))
+		if (UMaterialInstanceDynamic* MID = DynamicMaterials[Info.MaterialIndex])
 		{
-			if (UMaterialInstanceDynamic* MID = DynamicMaterials[Info.MaterialIndex])
-			{
-				MID->SetVectorParameterValue(Info.ParameterName, Colour);
-			}
+			MID->SetVectorParameterValue(Info.ParameterName, Colour);
 		}
 	}
 }

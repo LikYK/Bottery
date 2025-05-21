@@ -17,37 +17,45 @@ void ABotteryHUD::BeginPlay()
     {
         GameState->OnGameOver.AddUniqueDynamic(this, &ABotteryHUD::ShowGameOverUI);
     }
+}
 
-    /*for (auto& Pair : WidgetClasses)
+// Show HUD widget, HUD is not added into the UIStack
+void ABotteryHUD::InitHUD()
+{
+    if (WidgetClasses.Contains("HUD"))
     {
-        if (Pair.Value)
+        TSubclassOf<UUserWidget> Class = WidgetClasses["HUD"];
+        UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
+        if (Widget)
         {
-            UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Pair.Value);
-            if (Widget)
-            {
-                Widget->AddToViewport();
-                Widget->SetVisibility(ESlateVisibility::Hidden);
-                WidgetInstances.Add(Pair.Key, Widget);
-            }
+            Widget->AddToViewport();
+            WidgetInstances.Add("HUD", Widget);
+        }
+    }
+}
+
+// Show UI/widget that corresponds to the WidgetKey
+void ABotteryHUD::ShowUI(FName WidgetKey)
+{
+    // If other UI/widget exists in the UIStack, hide the top widget
+    if (UIStack.Num() > 0)
+    {
+        FName TopKey = UIStack.Last();
+        if (UUserWidget* TopWidget = WidgetInstances.FindRef(TopKey))
+        {
+            TopWidget->SetVisibility(ESlateVisibility::Hidden);
         }
     }
 
-    if (WidgetInstances.Contains("HUD"))
-    {
-        ShowUI("HUD");
-    }*/
-}
-
-void ABotteryHUD::ShowUI(FName WidgetKey)
-{
-    // Show widget that corresponds to the WidgetKey
     UUserWidget* Widget = WidgetInstances.FindRef(WidgetKey);
     if (Widget)
     {
+        // If widget instance is already created, toggle its visibility to show
         Widget->SetVisibility(ESlateVisibility::Visible);
     }
     else if (WidgetClasses.Contains(WidgetKey))
     {
+        // Else create an instance from the corresponding class and add to viewport
         TSubclassOf<UUserWidget> Class = WidgetClasses[WidgetKey];
         Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
         if (Widget)
@@ -57,20 +65,12 @@ void ABotteryHUD::ShowUI(FName WidgetKey)
         }
     }
 
-    // Other widget exists in the UIStack, hide the top widget first then add this widget to the stack
-    if (UIStack.Num() > 0) 
-    {
-        FName TopKey = UIStack.Last();
-        if (UUserWidget* TopWidget = WidgetInstances.FindRef(TopKey))
-        {
-            TopWidget->SetVisibility(ESlateVisibility::Hidden);
-        }
-    }
+    // Push the newly added/shown widget to the stack and pause game
     UIStack.Push(WidgetKey);
-
     UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
 
+// Hides the top-most UI currently shown
 void ABotteryHUD::HideUI()
 {
     if (UIStack.Num() == 0)
@@ -79,7 +79,6 @@ void ABotteryHUD::HideUI()
     }
     
     FName TopKey = UIStack.Pop();
-
     if (UUserWidget* TopWidget = WidgetInstances.FindRef(TopKey))
     {
         TopWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -102,37 +101,14 @@ void ABotteryHUD::HideUI()
 
 }
 
-//void ABotteryHUD::HideUI(FName WidgetKey)
-//{
-//    UUserWidget* Widget = WidgetInstances.FindRef(WidgetKey);
-//    if (Widget)
-//    {
-//        Widget->SetVisibility(ESlateVisibility::Hidden);
-//    }
-//}
-
-void ABotteryHUD::InitHUD()
-{
-    if (WidgetClasses.Contains("HUD"))
-    {
-        TSubclassOf<UUserWidget> Class = WidgetClasses["HUD"];
-        UUserWidget* Widget = CreateWidget<UUserWidget>(GetOwningPlayerController(), Class);
-        if (Widget)
-        {
-            Widget->AddToViewport();
-            WidgetInstances.Add("HUD", Widget);
-        }
-    }
-}
-
 void ABotteryHUD::ShowGameOverUI(float Score)
 {
     ShowUI("GameOver");
 }
 
+// Handles ESC key input
 void ABotteryHUD::HandlePauseAction()
 {
-    if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, FString::Printf(TEXT("ESC handler")));
     if (UIStack.Num() == 0)
     {
         ShowUI("Pause");

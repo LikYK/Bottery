@@ -11,20 +11,16 @@ void UFlag::PostInitProperties()
 {
 	Super::PostInitProperties();
 
+	// After properties are loaded from defaults, set current value = base value
+	// This works when the UStat is added in C++ through CreateDefaultObject<>
 	InitValue();
 }
-
-//void UFlag::PostDuplicate(bool bDuplicateForPIE)
-//{
-//	Super::PostDuplicate(bDuplicateForPIE);
-//
-//	InitValue();
-//}
 
 void UFlag::PostLoad()
 {
 	Super::PostLoad();
 
+	// Set current value = base value for instances added through blueprints/editor
 	InitValue();
 }
 
@@ -60,5 +56,5 @@ void UFlag::InitValue()
 	{
 		bBaseValue = FMath::RandBool();
 	}
-	SetValue(bBaseValue);
+	bValue = bBaseValue;
 }

@@ -15,28 +15,28 @@ class BOTTERY_API ABotteryGameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = Basic)
+	UFUNCTION(BlueprintCallable, Category = "Score")
 	void AddScore(float Amount);
 
-	UFUNCTION(BlueprintCallable, Category = Basic)
+	UFUNCTION(BlueprintCallable, Category = "Game Over")
 	void GameOver();
 
-	UFUNCTION(BlueprintCallable, Category = Basic)
+	UFUNCTION(BlueprintCallable, Category = "Score")
 	float GetCurrentScore();
 
-	UFUNCTION(BlueprintCallable, Category = Basic)
+	UFUNCTION(BlueprintCallable, Category = "Game Over")
 	bool IsGameOver();
 
-	UPROPERTY(BlueprintAssignable, Category = Basic)
+	UPROPERTY(BlueprintAssignable, Category = "Game Over")
 	FOnGameOverSignature OnGameOver;
 
-	UPROPERTY(BlueprintAssignable, Category = Basic)
+	UPROPERTY(BlueprintAssignable, Category = "Score")
 	FOnScoreUpdatedSignature OnScoreUpdated;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Score")
 	float CurrentScore = 0;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Basic)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Over")
 	bool bIsGameOver = false;
 };

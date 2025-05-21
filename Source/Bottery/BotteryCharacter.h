@@ -55,14 +55,13 @@ public:
 	void HandleSpeedChange(float CurrentValue, float BaseValue);
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Resource")
+	UPROPERTY()
 	UResourceComponent* ResourceComponent;
 
-	// Stat component stores and manages stat values
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat")
+	UPROPERTY()
 	UStatComponent* StatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Flag")
+	UPROPERTY()
 	UFlagComponent* FlagComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
@@ -77,17 +76,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
 	USoundBase* ChangePolaritySound;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float DashVelocity = 1200.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dash")
 	float DashCooldown = 1.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
 	float DashStamina = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stamina")
-	float ChangePolarityStamina = 30.0f;
+	float ChangePolarityStamina = 20.0f;
 
 private:
 	bool bCanDash = true;

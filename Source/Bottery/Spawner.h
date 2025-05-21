@@ -8,18 +8,6 @@
 #include "SpawnTableDataAsset.h"
 #include "Spawner.generated.h"
 
-//USTRUCT(BlueprintType)
-//struct FSpawnEntry
-//{
-//	GENERATED_BODY()
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-//	TSubclassOf<AActor> ActorClass;
-//
-//	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "0.0"))
-//	float Weight = 1.0f;
-//};
-
 UCLASS()
 class BOTTERY_API ASpawner : public AActor
 {
@@ -55,14 +43,11 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Spawning")
 	void UpdateSpawner();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Spawning")
+	UPROPERTY(BlueprintReadWrite, Instanced, Category = "Spawning")
 	UBoxComponent* SpawnVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	USpawnTableDataAsset* SpawnTableDataAsset;
-
-	//UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Spawning")
-	//TArray<FSpawnEntry> SpawnTable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Spawning")
 	TArray<AActor*> SpawnedActors;
@@ -70,12 +55,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	bool OneTimeSpawn = false;
 
+	// The total number of actors that will be spawned when OneTimeSpawn is true
+	// The number of actors spawned per interval when OneTimeSpawn is false
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (ClampMin = "1"))
 	int32 SpawnAmount = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (EditCondition = "!OneTimeSpawn", EditConditionHides, ClampMin = "0.01"))
 	float SpawnInterval = 1;
 
+	// Maximum number of spawned actors at any time
+	// 0 or -ve value means no limit
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning", meta = (EditCondition = "!OneTimeSpawn", EditConditionHides))
 	int32 MaxSpawned = 0;
 

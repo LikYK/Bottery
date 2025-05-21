@@ -6,8 +6,6 @@
 #include "UObject/NoExportTypes.h"
 #include "Stat.generated.h"
 
-//DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatChangedSignature, float, CurrentValue, float, BaseValue);
 
 UENUM(BlueprintType)
@@ -27,9 +25,7 @@ public:
 
 protected:
 	virtual void PostInitProperties() override;
-	//virtual void PostDuplicate(bool bDuplicateForPIE) override;
 	virtual void PostLoad() override;
-	//virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")
@@ -50,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Stat")
 	void ModifyValue(float ChangeAmount);
 
+	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void InitValue();
+
 	UPROPERTY(BlueprintAssignable, Category = "Stat")
 	FOnStatChangedSignature OnStatChanged;
 
@@ -65,7 +64,4 @@ protected:
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "Stat")
 	float Value;
-
-private:
-	void InitValue();
 };

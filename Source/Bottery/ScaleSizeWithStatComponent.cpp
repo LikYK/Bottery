@@ -52,35 +52,6 @@ void UScaleSizeWithStatComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	// ...
 }
 
-void UScaleSizeWithStatComponent::HandleTargetStatChange(float NewTargetValue, float BaseTargetValue)
-{
-	float TargetMin = TargetStat->GetMinValue();
-	float TargetMax = TargetStat->GetMaxValue();
-	float ScaleMin = ScaleMultiplier->GetMinValue();
-	float ScaleMax = ScaleMultiplier->GetMaxValue();
-	float ScaleBase = ScaleMultiplier->GetBaseValue();
-
-	// GetMappedRangeValueClamped performs inverse-lerp with 3rd and 1st parameter,
-	// and performs lerp with the result and the 2nd parameter
-	if (NewTargetValue < BaseTargetValue)
-	{
-		ScaleMultiplier->SetValue(FMath::GetMappedRangeValueClamped(
-			FVector2D(TargetMin, BaseTargetValue),
-			FVector2D(ScaleMin, ScaleBase),
-			NewTargetValue
-		));
-	}
-	else 
-	{
-		ScaleMultiplier->SetValue(FMath::GetMappedRangeValueClamped(
-			FVector2D(BaseTargetValue, TargetMax),
-			FVector2D(ScaleBase, ScaleMax),
-			NewTargetValue
-		));
-	}
-
-}
-
 void UScaleSizeWithStatComponent::UpdateScale(float NewTargetValue, float BaseTargetValue)
 {
 	TargetComponent->SetRelativeScale3D(OriginalScale * NewTargetValue);
@@ -91,3 +62,30 @@ float UScaleSizeWithStatComponent::GetScale()
 	return ScaleMultiplier->GetValue();
 }
 
+void UScaleSizeWithStatComponent::HandleTargetStatChange(float NewTargetValue, float BaseTargetValue)
+{
+	float TargetMin = TargetStat->GetMinValue();
+	float TargetMax = TargetStat->GetMaxValue();
+	float ScaleMin = ScaleMultiplier->GetMinValue();
+	float ScaleMax = ScaleMultiplier->GetMaxValue();
+	float ScaleBase = ScaleMultiplier->GetBaseValue();
+
+	// GetMappedRangeValueClamped performs inverse-lerp with 3rd and 1st parameter, and performs lerp with the result and the 2nd parameter
+	if (NewTargetValue < BaseTargetValue)
+	{
+		ScaleMultiplier->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(TargetMin, BaseTargetValue),
+			FVector2D(ScaleMin, ScaleBase),
+			NewTargetValue
+		));
+	}
+	else
+	{
+		ScaleMultiplier->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(BaseTargetValue, TargetMax),
+			FVector2D(ScaleBase, ScaleMax),
+			NewTargetValue
+		));
+	}
+
+}

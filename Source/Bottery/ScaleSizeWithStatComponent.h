@@ -27,24 +27,24 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
-	void HandleTargetStatChange(float NewTargetValue, float BaseTargetValue);
-
-	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
 	void UpdateScale(float NewTargetValue, float BaseTargetValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
 	float GetScale();
 
 protected:
+	UFUNCTION(BlueprintCallable, Category = "Size Scaling")
+	void HandleTargetStatChange(float NewTargetValue, float BaseTargetValue);
+
 	// The key of the stat to base the scale on
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Size Scaling")
 	EStatKey TargetStatKey;
 
-	// The stat to base the scale on
+	// Cache of the stat to base the scale on
 	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
 	UStat* TargetStat;
 
-	// The somponent that will be scaled
+	// The component that will be scaled
 	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
 	USceneComponent* TargetComponent;
 
@@ -52,7 +52,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Size Scaling")
 	FVector OriginalScale;
 
-	// Stored here because this stat is used only in this component
+	// A local stat to store and manage the current scale
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Instanced, Category = "Size Scaling")
 	UStat* ScaleMultiplier;
 };

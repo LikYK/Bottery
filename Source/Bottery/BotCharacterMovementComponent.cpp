@@ -16,8 +16,6 @@ void UBotCharacterMovementComponent::BeginPlay()
 		MaxWalkSpeed = SpeedStat->GetBaseValue();
 
 		SpeedStat->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
-
-		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Speed stat set:%d"), MaxWalkSpeed));
 	}
 	else 
 	{
@@ -30,5 +28,4 @@ void UBotCharacterMovementComponent::UpdateSpeed(float NewSpeed, float BaseSpeed
 	// Base speed is not used here, it is used in HUD display. The param allows this func to be bound to the delegate.
 
 	MaxWalkSpeed = NewSpeed;
-	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("New speed")));
 }

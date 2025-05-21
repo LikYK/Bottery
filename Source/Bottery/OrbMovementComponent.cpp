@@ -25,7 +25,7 @@ void UOrbMovementComponent::Init()
 
 		StatComponent->GetStat(EStatKey::Speed)->OnStatChanged.AddUniqueDynamic(this, &UOrbMovementComponent::UpdateSpeed);
 
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb speed stat set:%d"),BaseSpeed));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Orb base speed stat set:%d"),BaseSpeed));
 	}
 	else
 	{
@@ -41,5 +41,5 @@ void UOrbMovementComponent::UpdateSpeed(float NewSpeed, float BaseSpeed)
 	MaxSpeed = NewSpeed;
 	Velocity = Velocity.GetSafeNormal() * NewSpeed;
 	UpdateComponentVelocity();
-	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("New speed")));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("New speed:%f"), NewSpeed));
 }

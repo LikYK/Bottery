@@ -18,7 +18,7 @@ UResourceComponent::UResourceComponent()
 void UResourceComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("ResourceComp"));
+	
 	// ...
 	
 }

@@ -12,7 +12,7 @@ void UChangeFlagEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	if (!TargetFlagComponent || !TargetFlagComponent->HasFlag(TargetFlag))
 	{
 		// Target has no target flag, this effect does not apply to it.
-		if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeFlag Target return")));
+		//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeFlag Target return")));
 		return;
 	}
 
@@ -20,5 +20,5 @@ void UChangeFlagEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	// Switch target flag
 	TargetFlagComponent->GetFlag(TargetFlag)->SwitchValue();
 
-	if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeFlagEffect end return, newValue: %d"), TargetFlagComponent->GetFlag(TargetFlag)->GetValue()));
+	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeFlagEffect end return, newValue: %d"), TargetFlagComponent->GetFlag(TargetFlag)->GetValue()));
 }

@@ -18,16 +18,13 @@ public:
     virtual void BeginPlay() override;
 
     UFUNCTION(BlueprintCallable, Category = "UI")
+    void InitHUD();
+
+    UFUNCTION(BlueprintCallable, Category = "UI")
     void ShowUI(FName WidgetKey);
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     void HideUI();
-
-    //UFUNCTION(BlueprintCallable, Category = "UI")
-    //void HideUI(FName WidgetKey);
-
-    UFUNCTION(BlueprintCallable, Category = "UI")
-    void InitHUD();
 
     UFUNCTION(BlueprintCallable, Category = "UI")
     void ShowGameOverUI(float Score);
@@ -36,7 +33,7 @@ public:
     void HandlePauseAction();
 
 protected:
-    UPROPERTY(EditAnywhere, Category = "UI")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
     TMap<FName, TSubclassOf<UUserWidget>> WidgetClasses;
 
     UPROPERTY()
