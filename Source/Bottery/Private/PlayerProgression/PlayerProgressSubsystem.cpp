@@ -24,6 +24,7 @@ void UPlayerProgressSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     }
     else 
     {
+        bIsFirstLaunch = true;
         //if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Load failed, no save exists")));
     }
 }
@@ -48,6 +49,7 @@ void UPlayerProgressSubsystem::SaveProgress(float NewScore)
         ToSave->HighScore = HighScore;
         ToSave->MaxHealth = MaxHealth;
         UGameplayStatics::SaveGameToSlot(ToSave, SaveSlotName, UserIndex);
+        bIsFirstLaunch = false;
         //if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Save successful, new highscore:%f, new health:%f"), HighScore, MaxHealth));
     }
 }

@@ -66,7 +66,7 @@ void AOrb::BeginPlay()
 	// Stop health decay if there is a health resource
 	if (ResourceComponent && ResourceComponent->HasResource(EResourceKey::Health))
 	{
-		ResourceComponent->GetResource(EResourceKey::Health)->SetRegen(false);
+		ResourceComponent->GetResource(EResourceKey::Health)->SetDecay(false);
 	}
 
 	// Update opacity with timeline (FadeInCurve goes from 0 to 1)
@@ -104,11 +104,11 @@ void AOrb::HandleFadeInFinished()
 		UResource* Health = ResourceComponent->GetResource(EResourceKey::Health);
 
 		// Randomize health decay rate between min and max for a random lifespan
-		UStat* HealthRegen = Health->GetRegenRateStat();
-		HealthRegen->SetValue(FMath::RandRange(HealthRegen->GetMinValue(), HealthRegen->GetMaxValue()));
+		UStat* HealthDecay = Health->GetDecayRateStat();
+		HealthDecay->SetValue(FMath::RandRange(HealthDecay->GetMinValue(), HealthDecay->GetMaxValue()));
 
 		Health->OnResourceDepleted.AddUniqueDynamic(this, &AOrb::HandleHealthDepleted);
-		Health->SetRegen(true);
+		Health->SetDecay(true);
 	}
 
 	// Start movement and bind bounce handler

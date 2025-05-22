@@ -80,8 +80,6 @@ void ABotteryCharacter::BeginPlay()
 
 	// Link health decay rate to magnitude(multiplier) stat
 	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
-	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
-	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * MagnitudeStat->GetBaseValue());
 	MagnitudeStat->OnStatChanged.AddUniqueDynamic(this, &ABotteryCharacter::HandleMagnitudeChange);
 
 	// Link stamina regen rate to speed stat
@@ -183,18 +181,56 @@ bool ABotteryCharacter::UseStamina(float Amount)
 // Changes health decay rate with magnitude stat value passed in
 void ABotteryCharacter::HandleMagnitudeChange(float CurrentValue, float BaseValue)
 {
-	UStat* HealthRegenStat = ResourceComponent->GetResource(EResourceKey::Health)->GetRegenRateStat();
+	UStat* HealthDecayStat = ResourceComponent->GetResource(EResourceKey::Health)->GetDecayRateStat();
+	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
 
-	HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * CurrentValue);
+	/*HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * CurrentValue);*/
+
+	// Remaps magnitude's value onto healthregen based on the current value's position on the min-to-base/max-to-base range
+	if (CurrentValue < BaseValue)
+	{
+		HealthDecayStat->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(MagnitudeStat->GetMinValue(), BaseValue),
+			FVector2D(HealthDecayStat->GetMinValue(), HealthDecayStat->GetBaseValue()),
+			CurrentValue
+		));
+	}
+	else
+	{
+		HealthDecayStat->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(BaseValue, MagnitudeStat->GetMaxValue()),
+			FVector2D(HealthDecayStat->GetBaseValue(), HealthDecayStat->GetMaxValue()),
+			CurrentValue
+		));
+	}
 }
 
-// Changes stamina regen rate with spped stat value passed in
+// Changes stamina regen rate with speed stat value passed in
 void ABotteryCharacter::HandleSpeedChange(float CurrentValue, float BaseValue)
 {
 	UStat* StaminaRegenStat = ResourceComponent->GetResource(EResourceKey::Stamina)->GetRegenRateStat();
-	float Multiplier = CurrentValue / BaseValue;
+	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
 
-	StaminaRegenStat->SetValue(StaminaRegenStat->GetBaseValue() * (1.0f / Multiplier));
+	/*float Multiplier = CurrentValue / BaseValue;
+	StaminaRegenStat->SetValue(StaminaRegenStat->GetBaseValue() * (1.0f / Multiplier));*/
+
+	// Maps speed onto stamina regen, but reversed (map min-base to max-base and vice versa)
+	if (CurrentValue < BaseValue)
+	{
+		StaminaRegenStat->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(SpeedStat->GetMinValue(), BaseValue),
+			FVector2D(StaminaRegenStat->GetMaxValue(), StaminaRegenStat->GetBaseValue()),
+			CurrentValue
+		));
+	}
+	else
+	{
+		StaminaRegenStat->SetValue(FMath::GetMappedRangeValueClamped(
+			FVector2D(BaseValue, SpeedStat->GetMaxValue()),
+			FVector2D(StaminaRegenStat->GetBaseValue(), StaminaRegenStat->GetMinValue()),
+			CurrentValue
+		));
+	}
 }
 
 void ABotteryCharacter::Tick(float DeltaSeconds)

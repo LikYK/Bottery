@@ -6,6 +6,7 @@
 UResource::UResource()
 {
     RegenRateStat = CreateDefaultSubobject<UStat>(TEXT("RegenRateStat"));
+    DecayRateStat = CreateDefaultSubobject<UStat>(TEXT("DecayRateStat"));
 }
 
 void UResource::PostInitProperties()
@@ -30,6 +31,10 @@ void UResource::Tick(float DeltaTime)
     if (bRegenerate)
     {
         ModifyValue(RegenRateStat->GetValue() * DeltaTime);
+    }
+    if (bDecay)
+    {
+        ModifyValue(-DecayRateStat->GetValue() * DeltaTime);
     }
 }
 
@@ -107,9 +112,19 @@ void UResource::ModifyValue(float ChangeAmount)
     SetValue(CurrentValue + ChangeAmount);
 }
 
-void UResource::SetRegen(bool bNewVal)
+void UResource::SetRegenerate(bool bNewVal)
 {
     bRegenerate = bNewVal;
+}
+
+void UResource::SetDecay(bool bNewVal)
+{
+    bDecay = bNewVal;
+}
+
+UStat* UResource::GetDecayRateStat()
+{
+    return DecayRateStat;
 }
 
 UStat* UResource::GetRegenRateStat()

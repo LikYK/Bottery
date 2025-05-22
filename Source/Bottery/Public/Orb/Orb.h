@@ -53,16 +53,16 @@ protected:
 	UFUNCTION()
 	void HandleHealthDepleted();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UStaticMeshComponent* MeshComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UOrbMovementComponent* MovementComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UResourceComponent* ResourceComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	UTimelineComponent* FadeTimeline;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")

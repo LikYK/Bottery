@@ -26,12 +26,18 @@ public:
     UFUNCTION(BlueprintPure, Category = "MaxHealth")
     float GetMaxHealth() const { return MaxHealth; }
 
+    UFUNCTION(BlueprintPure, Category = "FirstLaunch")
+    bool IsFirstLaunch() const { return bIsFirstLaunch; }
+
 protected:
     UPROPERTY(VisibleAnywhere, Category = "HighScore")
     float HighScore = 0;
 
     UPROPERTY(VisibleAnywhere, Category = "MaxHealth")
     float MaxHealth = 100;
+
+    UPROPERTY(VisibleAnywhere, Category = "FirstLaunch")
+    bool bIsFirstLaunch;
 
     UPROPERTY(EditAnywhere, Category = "SaveLoad")
     FString SaveSlotName = TEXT("DefaultSaveSlot");

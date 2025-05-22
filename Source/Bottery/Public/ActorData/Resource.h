@@ -56,10 +56,16 @@ public:
 	void ModifyValue(float ChangeAmount);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
-	void SetRegen(bool bNewVal);
+	void SetRegenerate(bool bNewVal);
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
 	UStat* GetRegenRateStat();
+
+	UFUNCTION(BlueprintCallable, Category = "Resource")
+	void SetDecay(bool bNewVal);
+
+	UFUNCTION(BlueprintCallable, Category = "Resource")
+	UStat* GetDecayRateStat();
 
 	UFUNCTION(BlueprintCallable, Category = "Resource")
 	void InitValue();
@@ -83,6 +89,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
 	bool bRegenerate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Resource")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Resource", meta = (EditCondition = "bRegenerate", EditConditionHides))
 	UStat* RegenRateStat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
+	bool bDecay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Instanced, Category = "Resource", meta = (EditCondition = "bDecay", EditConditionHides))
+	UStat* DecayRateStat;
 };

@@ -55,13 +55,13 @@ public:
 	void HandleSpeedChange(float CurrentValue, float BaseValue);
 
 protected:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Resource")
 	UResourceComponent* ResourceComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stat")
 	UStatComponent* StatComponent;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Flag")
 	UFlagComponent* FlagComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dash")

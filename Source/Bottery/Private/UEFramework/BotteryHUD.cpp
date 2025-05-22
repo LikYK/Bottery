@@ -3,6 +3,7 @@
 
 #include "UEFramework/BotteryHUD.h"
 #include "UEFramework/BotteryGameState.h"
+#include "PlayerProgression/PlayerProgressSubsystem.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -11,6 +12,15 @@ void ABotteryHUD::BeginPlay()
     Super::BeginPlay();
     
     InitHUD();
+
+    // If this is a first launch (no saves exist), show tutorial on game start
+    if (UPlayerProgressSubsystem* ProgressSubsys = GetGameInstance()->GetSubsystem<UPlayerProgressSubsystem>())
+    {
+        if (ProgressSubsys->IsFirstLaunch() && WidgetClasses.Contains("Tutorial"))
+        {
+            ShowUI("Tutorial");
+        }
+    }
 
     // Show game over UI on game over
     if (ABotteryGameState* GameState = Cast<ABotteryGameState>(GetWorld()->GetGameState()))
