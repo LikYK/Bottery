@@ -14,7 +14,7 @@ struct FTutorialPage
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UTexture2D* Image;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (MultiLine = true))
     FText Text;
 };
 
