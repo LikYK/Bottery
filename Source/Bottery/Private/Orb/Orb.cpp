@@ -103,10 +103,6 @@ void AOrb::HandleFadeInFinished()
 	{
 		UResource* Health = ResourceComponent->GetResource(EResourceKey::Health);
 
-		// Randomize health decay rate between min and max for a random lifespan
-		UStat* HealthDecay = Health->GetDecayRateStat();
-		HealthDecay->SetValue(FMath::RandRange(HealthDecay->GetMinValue(), HealthDecay->GetMaxValue()));
-
 		Health->OnResourceDepleted.AddUniqueDynamic(this, &AOrb::HandleHealthDepleted);
 		Health->SetDecay(true);
 	}

@@ -54,6 +54,9 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+	bool bRandomInitialValue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float BaseValue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")

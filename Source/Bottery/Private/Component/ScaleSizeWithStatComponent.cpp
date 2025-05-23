@@ -41,6 +41,9 @@ void UScaleSizeWithStatComponent::BeginPlay()
 
 	// Update the actual scale of the target component automatically when ScaleMultiplier changes
 	ScaleMultiplier->OnStatChanged.AddUniqueDynamic(this, &UScaleSizeWithStatComponent::UpdateScale);
+
+	// Scale to initial stat value
+	HandleTargetStatChange(TargetStat->GetValue(), TargetStat->GetBaseValue());
 }
 
 

@@ -41,9 +41,12 @@ void UResource::Tick(float DeltaTime)
 bool UResource::IsTickable() const
 {
     // Only tick when game is running
-    if (UWorld* World = GetWorld())
+    if (IsValid(this))
     {
-        return World->IsGameWorld();
+        if (UWorld* World = GetWorld())
+        {
+            return World->IsGameWorld();
+        }
     }
     return false;
 }

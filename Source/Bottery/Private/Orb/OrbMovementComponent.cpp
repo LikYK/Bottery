@@ -17,7 +17,7 @@ void UOrbMovementComponent::Init()
 
 	if (StatComponent && StatComponent->HasStat(EStatKey::Speed))
 	{
-		float BaseSpeed = StatComponent->GetStat(EStatKey::Speed)->GetBaseValue();
+		float BaseSpeed = StatComponent->GetStat(EStatKey::Speed)->GetValue();
 		InitialSpeed = BaseSpeed;
 		MaxSpeed = BaseSpeed;
 		Velocity = GetOwner()->GetActorForwardVector() * BaseSpeed;

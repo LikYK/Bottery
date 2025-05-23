@@ -57,5 +57,12 @@ void UStat::ModifyValue(float ChangeAmount)
 
 void UStat::InitValue()
 {
-	Value = BaseValue;
+	if (bRandomInitialValue)
+	{
+		Value = FMath::RandRange(MinValue, MaxValue);
+	}
+	else 
+	{
+		Value = BaseValue;
+	}
 }

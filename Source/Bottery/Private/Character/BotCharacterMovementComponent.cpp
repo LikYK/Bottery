@@ -13,7 +13,7 @@ void UBotCharacterMovementComponent::BeginPlay()
 	{
 		UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
 
-		MaxWalkSpeed = SpeedStat->GetBaseValue();
+		MaxWalkSpeed = SpeedStat->GetValue();
 
 		SpeedStat->OnStatChanged.AddUniqueDynamic(this, &UBotCharacterMovementComponent::UpdateSpeed);
 	}
