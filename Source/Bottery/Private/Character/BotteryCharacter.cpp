@@ -184,8 +184,6 @@ void ABotteryCharacter::HandleMagnitudeChange(float CurrentValue, float BaseValu
 	UStat* HealthDecayStat = ResourceComponent->GetResource(EResourceKey::Health)->GetDecayRateStat();
 	UStat* MagnitudeStat = StatComponent->GetStat(EStatKey::Magnitude);
 
-	/*HealthRegenStat->SetValue(HealthRegenStat->GetBaseValue() * CurrentValue);*/
-
 	// Remaps magnitude's value onto healthregen based on the current value's position on the min-to-base/max-to-base range
 	if (CurrentValue < BaseValue)
 	{
@@ -210,9 +208,6 @@ void ABotteryCharacter::HandleSpeedChange(float CurrentValue, float BaseValue)
 {
 	UStat* StaminaRegenStat = ResourceComponent->GetResource(EResourceKey::Stamina)->GetRegenRateStat();
 	UStat* SpeedStat = StatComponent->GetStat(EStatKey::Speed);
-
-	/*float Multiplier = CurrentValue / BaseValue;
-	StaminaRegenStat->SetValue(StaminaRegenStat->GetBaseValue() * (1.0f / Multiplier));*/
 
 	// Maps speed onto stamina regen, but reversed (map min-base to max-base and vice versa)
 	if (CurrentValue < BaseValue)
