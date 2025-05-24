@@ -19,6 +19,12 @@ public:
 	virtual void ApplyEffect(AActor* Initiator, AActor* Target) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Stat Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Resource Effect")
 	EResourceKey TargetResource;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* PositiveChangeSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sound")
+	USoundBase* NegativeChangeSound;
 };

@@ -5,6 +5,7 @@
 #include "ActorData/ResourceComponent.h"
 #include "ActorData/StatComponent.h"
 #include "ActorData/FlagComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 void UChangeResourceEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 {
@@ -40,10 +41,34 @@ void UChangeResourceEffect::ApplyEffect(AActor* Initiator, AActor* Target)
 	if (InitiatorPolarity)
 	{
 		TargetResourceObj->ModifyValue(Magnitude);
+		if (PositiveChangeSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				PositiveChangeSound,
+				Initiator->GetActorLocation(),
+				1.0f,
+				1.0f,
+				0.0f,
+				nullptr
+			);
+		}
 	}
 	else
 	{
 		TargetResourceObj->ModifyValue(-Magnitude);
+		if (NegativeChangeSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				NegativeChangeSound,
+				Initiator->GetActorLocation(),
+				1.0f,
+				1.0f,
+				0.0f,
+				nullptr
+			);
+		}
 	}
 
 	//if (GEngine)GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("ChangeResourceEffect end return, Polarity: %d, changeAmt: %f"), InitiatorPolarity, Magnitude));

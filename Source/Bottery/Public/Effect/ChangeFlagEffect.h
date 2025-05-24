@@ -19,6 +19,6 @@ public:
 	virtual void ApplyEffect(AActor* Initiator, AActor* Target) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Stat Effect")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Change Flag Effect")
 	EFlagKey TargetFlag;
 };
