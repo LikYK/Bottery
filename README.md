@@ -6,7 +6,7 @@ With this project, I hope to show that I:
 - can implement gameplay mechanics using a component-based architecture
   - flags, resources and stats storing components that can be reused across unrelated actors like the player controlled character and orbs
 - know data-driven programming
-  - data assets for orbs spawn tables and tutorial entries, which are used in OrbSpawner clas and Tutorial widget blueprint
+  - data assets for orbs spawn tables and tutorial entries, which are used in OrbSpawner class and Tutorial widget blueprint
 - can utilize a game engine's features to create interesting effects that enhance gameplay experience
   - simple particle effect made with UE's Niagara that plays when the player collects an orb
   - orb materials with rainbow colours and world position offsets created in Material Graph
