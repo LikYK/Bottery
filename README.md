@@ -2,7 +2,20 @@
 This is a game about dodging and catching balls, made in Unreal Engine. It features components that manage the parent actor's flags, stats and resources like speed and health(aka battery). The balls(aka orbs) carry effect components that affects these values on collision.
 
 ## Purpose
-With this project, I hope to show that I can implement gameplay mechanics using a component-based architecture.
+With this project, I hope to show that I:
+- can implement gameplay mechanics using a component-based architecture
+  - flags, resources and stats storing components that can be reused across unrelated actors like the player controlled character and orbs
+- know data-driven programming
+  - data assets for orbs spawn tables and tutorial entries, which are used in OrbSpawner clas and Tutorial widget blueprint
+- can utilize a game engine's features to create interesting effects that enhance gameplay experience
+  - simple particle effect made with UE's Niagara that plays when the player collects an orb
+  - orb materials with rainbow colours and world position offsets created in Material Graph
+  - 3D sounds with Sound Attenuation assets
+- can adapt myself to different coding standards and conventions
+  - start type names with a prefix like U for classes that inherit from UObject and A for classes inheriting from AActor
+  - start variable names with capital letters (PascalCase) like DashSound, Dash()
+  - use macros like UPROPERTY, UFUNCTION, UCLASS to utilize Unreal's reflection/property system
+  - use Unreal's types like int32, FName, TMap
 
 ## How to use
 1. Clone the repository
