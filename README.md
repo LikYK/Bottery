@@ -8,13 +8,13 @@ With this project, I hope to show that I:
 - know data-driven programming
   - data assets for orbs spawn tables and tutorial entries, which are used in OrbSpawner class and Tutorial widget blueprint
 - can utilize a game engine's features to create interesting effects that enhance gameplay experience
-  - simple particle effect made with UE's Niagara that plays when the player collects an orb
+  - simple particle effect made with [UE's Niagara System](https://dev.epicgames.com/documentation/en-us/unreal-engine/creating-visual-effects-in-niagara-for-unreal-engine) that plays when the player collects an orb
   - orb materials with rainbow colours and world position offsets created in Material Graph
   - 3D sounds with Sound Attenuation assets
 - can adapt myself to different coding standards and conventions
   - start type names with a prefix like U for classes that inherit from UObject and A for classes inheriting from AActor
   - start variable names with capital letters (PascalCase) like DashSound, Dash()
-  - use macros like UPROPERTY, UFUNCTION, UCLASS to utilize Unreal's reflection/property system
+  - use macros like UPROPERTY, UFUNCTION, UCLASS to utilize [Unreal's reflection system](https://dev.epicgames.com/documentation/en-us/unreal-engine/reflection-system-in-unreal-engine)
   - use Unreal's types like int32, FName, TMap
 
 ## How to use
